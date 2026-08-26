@@ -1,0 +1,39 @@
+name: 'Build'
+
+on:
+  workflow_call:
+    inputs:
+      image:
+        description: 'Docker image to be used in workflow.'
+        required: true
+        type: string
+      gh-pages-slug:
+        description: 'Deploy target slug (e.g. "nightly", "pr-123"), used as the base path segment.'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  BRANCH_BASE_PATH: ${{ inputs.gh-pages-slug }}
+
+jobs:
+  ui-testing:
+    name: 'UI Testing'
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ inputs.image }}
+      options: --user 1001
+    steps:
+      - uses: actions/checkout@v4
+      - name: 'Install'
+        uses: ./.github/actions/install
+      - run: npm run build:ui-testing
+        env:
+          NEXT_PUBLIC_BASE_PATH: "/testing/${{ env.BRANCH_BASE_PATH }}/ui-testing"
+        shell: bash
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-ui-testing
+          path: ./ui-testing/dist/
