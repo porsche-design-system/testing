@@ -172,15 +172,14 @@ When adding a new testing package:
 Current deployment (ui-testing) follows this slug pattern:
 
 - **PR branches** → Deployed to `pr-<number>` slug
-- **main branch** → Deployed to `nightly` slug
+- **main branch** → Deployed without a slug (directly at root)
 - **Other branches** → Deployed with branch name as slug
 
 ### GitHub Pages
 
-The ui-testing app is automatically deployed to GitHub Pages at:
-```
-https://porsche-design-system.github.io/testing/<slug>/ui-testing/
-```
+The ui-testing app is automatically deployed to GitHub Pages:
+- **main branch**: `https://porsche-design-system.github.io/testing/ui-testing/`
+- **PR / other branches**: `https://porsche-design-system.github.io/testing/<slug>/ui-testing/`
 
 
 ## 🤝 Contributing

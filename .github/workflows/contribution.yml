@@ -32,7 +32,7 @@ jobs:
     #
     # Strategy:
     #   - pull_request → "pr-<number>"
-    #   - push to main → "nightly"
+    #   - push to main → "" (no slug, deployed at root)
     #   - push to other branches (v*) → branch name
     runs-on: ubuntu-latest
     outputs:
@@ -44,7 +44,7 @@ jobs:
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
             gh_pages_slug="pr-${{ github.event.pull_request.number }}"
           elif [[ "${{ github.ref_name }}" == "main" ]]; then
-            gh_pages_slug="nightly"
+            gh_pages_slug=""
           else
             gh_pages_slug="${{ github.ref_name }}"
           fi
