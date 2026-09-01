@@ -40,7 +40,7 @@ A Next.js 15+ demo shop and technical baseline for testing Porsche Design System
 - `/newsletter/`, `/contact/` — Form demos
 - Locale support: `en`, `de`
 
-**For more details, see [`ui-testing/README.md`](./ui-testing/README.md)**
+**For more details, see** [**`ui-testing/README.md`**](./ui-testing/README.md)
 
 ---
 
@@ -89,7 +89,7 @@ npm install
 To work on a specific package, navigate to its directory:
 
 ```bash
-# Start dev server for ui-testing
+# Start dev server for e.g. ui-testing
 cd ui-testing
 npm run dev
 
@@ -140,65 +140,6 @@ npm run test --workspace=ui-testing
 
 The **Contribution** workflow (`.github/workflows/contribution.yml`) automatically runs all tests on every PR and push to protected branches. See [CI/CD](#cicd) for details.
 
-## 🌍 Internationalization
-
-Internationalization support depends on the package. Refer to each package's README for details.
-
-**ui-testing** supports:
-- `en` — English (default)
-- `de` — Deutsch
-
-Locale switching is available in the application footer.
-
-## 📖 Features
-
-Features depend on the testing package. Each package may showcase different aspects:
-
-### ui-testing
-
-- **Demo Shop** — Product catalog, filtering, search, favorites
-- **Forms** — Newsletter subscription, contact form, inquiry flyout
-- **Internationalization** — Multiple locale support (EN, DE)
-- **Accessibility** — WCAG 2.2 (AA) compliance focus
-- **Testing** — Unit, E2E, and automated accessibility tests
-- **Static Export** — Simple hosting via GitHub Pages
-- **Responsive Design** — Desktop and mobile viewports
-
-For a complete feature list and technical highlights, see [`ui-testing/README.md`](./ui-testing/README.md).
-
-## 🔧 Build & Deployment
-
-Each package has its own build and deployment configuration. Refer to each package's README for specific build options and deployment targets.
-
-### ui-testing Build Modes
-
-**ui-testing** supports the following build modes:
-
-#### Static Export (Default)
-
-```bash
-cd ui-testing
-npm run build
-```
-
-Outputs a static site to `dist/` with trailing slashes, suitable for GitHub Pages hosting.
-
-#### Server-Side Rendering (SSR)
-
-```bash
-NEXT_OUTPUT_MODE=ssr npm run build
-```
-
-Disables static export and uses standard SSR output.
-
-#### Custom Base Path
-
-```bash
-NEXT_PUBLIC_BASE_PATH=/testing/pr-1/ui-testing npm run build
-```
-
-Deploys to a sub-path with correct asset references.
-
 ## 🔄 CI/CD
 
 ### Workflows
@@ -233,87 +174,6 @@ The ui-testing app is automatically deployed to GitHub Pages at:
 https://porsche-design-system.github.io/testing/<slug>/ui-testing/
 ```
 
-## 📦 Docker
-
-Docker support depends on the package. Most testing packages use Docker in CI/CD for consistent test automation.
-
-### ui-testing Docker Support
-
-The ui-testing package CI/CD uses:
-
-```
-mcr.microsoft.com/playwright:v1.61.0-noble
-```
-
-This ensures identical results across different machines, especially for visual regression testing and E2E tests.
-
-To run tests locally with Docker:
-
-```bash
-# Build the app and run tests (CI reproduction)
-cd ui-testing
-docker run --rm -v $(pwd):/workspace -w /workspace mcr.microsoft.com/playwright:v1.61.0-noble /bin/bash -c "npm install && npm run build && npm run test"
-```
-
-For other packages, refer to their documentation.
-
-## 🛠️ IDE Setup
-
-IDE setup recommendations vary by package. Most packages support common code editors and formatters.
-
-### ui-testing IDE Setup
-
-#### WebStorm
-
-##### Prettier (Formatter)
-
-1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Prettier**
-2. Enable **Automatic Prettier configuration**
-3. Set **Run for files** to `**/*.{md,mdx}`
-4. Enable **Run on save**
-
-##### Biome (Formatter + Linter)
-
-1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Biome**
-2. Configure path and enable accordingly
-
-#### VS Code
-
-Install recommended extensions:
-- **Prettier** — Code formatter
-- **ESLint** — Linting
-- **Tailwind CSS IntelliSense** — CSS class completion
-
-For other packages, refer to their respective README files.
-
-## 📚 Project Structure
-
-Project structure varies by package. Each testing package maintains its own structure based on its technology stack and requirements.
-
-### ui-testing Structure
-
-For details on the ui-testing project structure, see [`ui-testing/README.md`](./ui-testing/README.md#project-structure).
-
-```
-ui-testing/
-├── app/              # Next.js App Router (routes, layouts, pages)
-├── components/       # React components organized by feature
-├── data/             # Static data and helpers
-├── hooks/            # Custom React hooks
-├── i18n/             # Internationalization configuration
-├── lib/              # Utility functions and helpers
-├── public/           # Static assets
-├── tests/            # Test suites (unit, E2E, a11y)
-└── README.md         # Package-specific documentation
-```
-
-### Naming Conventions (ui-testing)
-
-- **PascalCase** `.tsx` — React components under `app/components/<feature>/`
-- **kebab-case** `.ts` — Utilities in `app/lib/`, `app/data/`, `app/i18n/`
-- **`use-*.ts`** — Client hooks in `app/hooks/`
-
-For other packages, refer to their respective documentation.
 
 ## 🤝 Contributing
 
@@ -346,9 +206,6 @@ This repository is maintained by the [Porsche Design System](https://designsyste
 ## 🔗 Links
 
 - **Porsche Design System** — https://designsystem.porsche.com/
-- **PDS Components** — https://designsystem.porsche.com/v3/components/introduction
-- **PDS Tailwind CSS** — https://designsystem.porsche.com/v3/tailwindcss/introduction
-- **Porsche Brand** — https://brand.porsche.com/
 - **Examples Repository** — https://github.com/porsche-design-system/examples
 
 ---
