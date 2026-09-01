@@ -185,6 +185,14 @@ docker run --rm -v $(pwd):/workspace -w /workspace mcr.microsoft.com/playwright:
 
 This ensures identical test results across different machines and matches the CI/CD environment exactly.
 
+## FullStory / Usetiful
+
+GitHub Pages builds set `NEXT_PUBLIC_FULLSTORY_ORG_ID` so the survey widget and session replay load on the deployed demo. Local `next dev`, Playwright e2e, and a11y rebuilds omit the scripts unless you set the variable:
+
+```bash
+NEXT_PUBLIC_FULLSTORY_ORG_ID=o-ARNQ-eu1 npm run dev
+```
+
 ## 🤝 Contributing
 
 1. Create a feature branch from `main`

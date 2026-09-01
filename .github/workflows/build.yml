@@ -32,6 +32,8 @@ jobs:
       - run: npm run build:ui-testing
         env:
           NEXT_PUBLIC_BASE_PATH: "/testing/${{ env.BRANCH_BASE_PATH }}/ui-testing"
+          # Public FullStory/Usetiful snippet id; omitted from local/dev and Playwright builds.
+          NEXT_PUBLIC_FULLSTORY_ORG_ID: 'o-ARNQ-eu1'
         shell: bash
       - uses: actions/upload-artifact@v4
         with:
