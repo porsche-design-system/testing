@@ -1,6 +1,6 @@
-# PDS UI Testing (Next.js)
+# UI Testing
 
-Demo shop and technical baseline for Porsche Design System integration with Next.js App Router, static export, and i18n. It exercises catalog browsing, product detail, session favorites, header search, a multi-step inquiry flyout, and footer-linked newsletter and contact demo forms.
+A Next.js demo shop and technical baseline for testing Porsche Design System components. It showcases WCAG 2.2 (AA) compliant integration patterns with App Router, static export, internationalization (i18n), product catalog browsing, detail views, session favorites, search, inquiry flyout, and multi-step forms.
 
 ## Routes
 
@@ -62,23 +62,24 @@ Inside `[locale]/`, route groups switch the header variant without affecting URL
 
 ## Commands
 
-Run from the repository root:
+Run from the `ui-testing/` directory:
 
 ```bash
-npm run dev:pds-ui-testing
-npm run build:pds-ui-testing
-npm run preview:pds-ui-testing
-npm run test:unit:pds-ui-testing
-npm run test:e2e:pds-ui-testing
-npm run test:a11y:pds-ui-testing
+npm run dev        # Start dev server with live reload
+npm run build      # Build static export
+npm run preview    # Preview the built static site locally
+npm run test       # Run all tests (unit, E2E, a11y)
+npm run test:unit  # Run unit tests only
+npm run test:e2e   # Run E2E tests only
+npm run test:a11y  # Run accessibility tests only
 ```
 
-From this package directory:
+**From the monorepo root** (if configured with workspace scripts):
 
 ```bash
-npm run test:unit
-npm run test:e2e
-npm run test:a11y
+npm run dev --workspace=ui-testing
+npm run build --workspace=ui-testing
+npm run test --workspace=ui-testing
 ```
 
 ### Testing
@@ -97,12 +98,14 @@ CI runs all three in the **Contribution** workflow (`.github/workflows/contribut
 
 For moderated testing with assistive technology users (screen readers, keyboard-only, zoom), use **[ACCESSIBILITY-TEST-PLAN.md](./ACCESSIBILITY-TEST-PLAN.md)**. It describes session goals, demo-app limitations, step-by-step flows for every page area and PDS component, and how to record findings. Automated axe tests complement but do not replace that plan.
 
-## Static export default
+## Build Modes
 
-Static export is the default mode and is used for simple hosting:
+### Static Export (Default)
+
+Static export is the default mode and is used for simple hosting on GitHub Pages:
 
 ```bash
-npm run build:pds-ui-testing
+npm run build
 ```
 
 `next.config.ts` defaults to:
@@ -111,21 +114,87 @@ npm run build:pds-ui-testing
 - `trailingSlash: true`
 - `distDir: 'dist'`
 
-## Switching to SSR mode
+### Server-Side Rendering (SSR)
 
-To run and build in SSR mode, set:
+To run and build in SSR mode, set the environment variable:
 
 ```bash
-NEXT_OUTPUT_MODE=ssr npm run dev:pds-ui-testing
-NEXT_OUTPUT_MODE=ssr npm run build:pds-ui-testing
+NEXT_OUTPUT_MODE=ssr npm run dev
+NEXT_OUTPUT_MODE=ssr npm run build
 ```
 
 When `NEXT_OUTPUT_MODE=ssr`, `next.config.ts` disables static export behavior and uses standard SSR output.
 
-## Optional base path
+### Custom Base Path
 
-To serve under a sub-path:
+To serve under a sub-path (e.g., for PR previews on GitHub Pages):
 
 ```bash
-NEXT_PUBLIC_BASE_PATH=/examples/v4/pds-ui-testing npm run build:pds-ui-testing
+NEXT_PUBLIC_BASE_PATH=/testing/pr-1/ui-testing npm run build
 ```
+
+## 🌍 Internationalization
+
+This application supports multiple locales:
+
+- `en` — English (default)
+- `de` — Deutsch
+
+Locale switching is available in the application footer. The i18n setup uses static params with locale routing under `app/[locale]/`.
+
+## 📦 Features
+
+- **Demo Shop** — Product catalog with filtering, search, sorting, and favorites management
+- **Forms** — Newsletter subscription, contact form, inquiry flyout with validation
+- **Internationalization** — Multi-locale support with footer language switcher
+- **Accessibility** — WCAG 2.2 (AA) compliance with automated accessibility testing
+- **Testing** — Comprehensive unit (Vitest), E2E (Playwright), and a11y test coverage
+- **Static Export** — Simple GitHub Pages hosting via static export
+- **Responsive Design** — Mobile and desktop viewport support
+
+## 🛠️ IDE Setup
+
+### WebStorm
+
+#### Prettier (Formatter)
+
+1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Prettier**
+2. Enable **Automatic Prettier configuration**
+3. Set **Run for files** to `**/*.{md,mdx}`
+4. Enable **Run on save**
+
+#### Biome (Formatter + Linter)
+
+1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Biome**
+2. Configure path and enable accordingly
+
+### VS Code
+
+Install recommended extensions:
+- **Prettier** — Code formatter
+- **ESLint** — Linting
+- **Tailwind CSS IntelliSense** — CSS class completion
+
+## 📦 Docker
+
+To run tests in Docker (matching CI environment):
+
+```bash
+docker run --rm -v $(pwd):/workspace -w /workspace mcr.microsoft.com/playwright:v1.61.0-noble /bin/bash -c "npm install && npm run build && npm run test"
+```
+
+This ensures identical test results across different machines and matches the CI/CD environment exactly.
+
+## 🤝 Contributing
+
+1. Create a feature branch from `main`
+2. Make your changes and commit with clear messages
+3. Open a pull request — CI runs automatically
+4. Address any review feedback
+5. Merge when all checks pass
+
+All PRs automatically get:
+- Build verification
+- Unit, E2E, and accessibility test runs
+- Automated deployment to GitHub Pages for preview
+- Link to the preview environment in the PR
