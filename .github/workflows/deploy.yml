@@ -19,7 +19,7 @@ jobs:
     name: 'UI Testing'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           ref: 'gh-pages'
       - name: 'Ensure .nojekyll exists'
@@ -30,7 +30,7 @@ jobs:
           rm -rf "./${{ env.BRANCH_BASE_PATH }}"
         shell: bash
       - name: 'Download artifact "UI Testing"'
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: build-ui-testing
           path: "./${{ env.BRANCH_BASE_PATH }}/ui-testing/"
