@@ -4,7 +4,7 @@ on:
   workflow_call:
     inputs:
       gh-pages-slug:
-        description: 'Deploy target slug (e.g. "nightly", "pr-123"), used as the gh-pages folder.'
+        description: 'Deploy target slug (e.g. "pr-123"), used as the gh-pages folder. Empty string for main branch (no slug).'
         required: true
         type: string
 
@@ -25,15 +25,26 @@ jobs:
       - name: 'Ensure .nojekyll exists'
         run: touch .nojekyll
         shell: bash
+      - name: 'Resolve deploy path'
+        id: deploy-path
+        run: |
+          if [[ -n "${{ env.BRANCH_BASE_PATH }}" ]]; then
+            echo "clean-target=./${{ env.BRANCH_BASE_PATH }}" >> "$GITHUB_OUTPUT"
+            echo "artifact-path=./${{ env.BRANCH_BASE_PATH }}/ui-testing/" >> "$GITHUB_OUTPUT"
+          else
+            echo "clean-target=./ui-testing" >> "$GITHUB_OUTPUT"
+            echo "artifact-path=./ui-testing/" >> "$GITHUB_OUTPUT"
+          fi
+        shell: bash
       - name: 'Clean'
         run: |
-          rm -rf "./${{ env.BRANCH_BASE_PATH }}"
+          rm -rf "${{ steps.deploy-path.outputs.clean-target }}"
         shell: bash
       - name: 'Download artifact "UI Testing"'
         uses: actions/download-artifact@v8
         with:
           name: build-ui-testing
-          path: "./${{ env.BRANCH_BASE_PATH }}/ui-testing/"
+          path: "${{ steps.deploy-path.outputs.artifact-path }}"
       - name: 'Deploy'
         run: |
           git config --global user.name "${GITHUB_ACTOR}"

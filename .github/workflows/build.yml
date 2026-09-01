@@ -8,7 +8,7 @@ on:
         required: true
         type: string
       gh-pages-slug:
-        description: 'Deploy target slug (e.g. "nightly", "pr-123"), used as the base path segment.'
+        description: 'Deploy target slug (e.g. "pr-123"), used as the base path segment. Empty string for main branch (no slug).'
         required: true
         type: string
 
@@ -29,9 +29,18 @@ jobs:
       - uses: actions/checkout@v7
       - name: 'Install'
         uses: ./.github/actions/install
+      - name: 'Resolve base path'
+       id: base-path
+       run: |
+         if [[ -n "${{ env.BRANCH_BASE_PATH }}" ]]; then
+           echo "value=/testing/${{ env.BRANCH_BASE_PATH }}/ui-testing" >> "$GITHUB_OUTPUT"
+         else
+           echo "value=/testing/ui-testing" >> "$GITHUB_OUTPUT"
+         fi
+       shell: bash
       - run: npm run build:ui-testing
-        env:
-          NEXT_PUBLIC_BASE_PATH: "/testing/${{ env.BRANCH_BASE_PATH }}/ui-testing"
+       env:
+         NEXT_PUBLIC_BASE_PATH: "${{ steps.base-path.outputs.value }}"
           # Public FullStory/Usetiful snippet id; omitted from local/dev and Playwright builds.
           NEXT_PUBLIC_FULLSTORY_ORG_ID: 'o-ARNQ-eu1'
         shell: bash
