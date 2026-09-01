@@ -2,7 +2,7 @@
 
 A monorepo for testing applications and test suites for the [Porsche Design System](https://designsystem.porsche.com/).
 
-This repository provides a centralized platform for building and maintaining testing applications that showcase WCAG 2.2 (AA) compliant [Porsche Design System Components](https://designsystem.porsche.com/v3/components/introduction) with various integration patterns, demo scenarios, and testing strategies.
+This repository provides a centralized platform for building and maintaining testing applications that showcase WCAG 2.2 (AA) compliant **Porsche Design System Components** with various integration patterns, demo scenarios, and testing strategies.
 
 ## 📦 Repository Structure
 
@@ -24,6 +24,14 @@ The following testing packages are available in this monorepo:
 ### `ui-testing/` — UI Testing Application
 
 A Next.js 15+ demo shop and technical baseline for testing Porsche Design System components.
+
+
+#### GitHub Pages
+
+The ui-testing app is automatically deployed to GitHub Pages at:
+```
+https://porsche-design-system.github.io/testing/ui-testing/
+```
 
 **What it includes:**
 - Product catalog with filtering and search
