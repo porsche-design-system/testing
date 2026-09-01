@@ -1,0 +1,24 @@
+{
+  "name": "@porsche-design-system/testing",
+  "version": "0.0.0",
+  "private": true,
+  "workspaces": [
+    "ui-testing"
+  ],
+  "type": "module",
+  "scripts": {
+    "dev:ui-testing": "npm run dev --workspace=@porsche-design-system/pds-ui-testing",
+    "build:ui-testing": "npm run build --workspace=@porsche-design-system/pds-ui-testing",
+    "preview:ui-testing": "npm run preview --workspace=@porsche-design-system/pds-ui-testing",
+    "test:unit:ui-testing": "npm run test:unit --workspace=@porsche-design-system/pds-ui-testing",
+    "test:e2e:ui-testing": "npm run test:e2e --workspace=@porsche-design-system/pds-ui-testing",
+    "test:a11y:ui-testing": "npm run test:a11y --workspace=@porsche-design-system/pds-ui-testing",
+    "npm:install": "npm install",
+    "npm:remove": "find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \\;",
+    "npm:clean": "npm cache clean --force"
+  },
+  "volta": {
+    "node": "24.15.0",
+    "npm": "11.12.1"
+  }
+}
