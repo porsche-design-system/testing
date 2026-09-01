@@ -2,6 +2,13 @@
 
 A Next.js demo shop and technical baseline for testing Porsche Design System components. It showcases WCAG 2.2 (AA) compliant integration patterns with App Router, static export, internationalization (i18n), product catalog browsing, detail views, session favorites, search, inquiry flyout, and multi-step forms.
 
+## GitHub Pages
+
+The ui-testing app is automatically deployed to GitHub Pages at:
+```
+https://porsche-design-system.github.io/testing/ui-testing/
+```
+
 ## Routes
 
 - `/` — server-side redirect to the default locale home (statically exported)
@@ -37,28 +44,6 @@ app/
   i18n/                 # Locale config, dictionaries, href builders
   lib/                  # Pure logic (query, search, form validation, a11y scroll)
 ```
-
-### Naming conventions
-
-- **PascalCase** `.tsx` — React components under `app/components/<feature>/`
-- **kebab-case** `.ts` — utilities in `app/lib/`, `app/data/`, `app/i18n/`
-- **`use-*.ts`** — client hooks in `app/hooks/`
-
-### App router layout
-
-Two root layouts live under `app/` (no single `app/layout.tsx`):
-
-- `app/(entry)/` — minimal root for `/` (renders the redirect only)
-- `app/[locale]/` — root for all localized routes; sets `<html lang={locale}>`, loads PDS partials, and renders the shared footer
-
-Inside `[locale]/`, route groups switch the header variant without affecting URLs:
-
-- `app/[locale]/(home)/` — transparent overlay header (only the `/[locale]/` home page)
-- `app/[locale]/(default)/` — opaque default header (products, newsletter, contact, company, legal)
-
-`dynamicParams = false` on `[locale]/layout.tsx` rejects unknown locale segments at build time.
-
-`<base href>` in the locale layout supports optional `NEXT_PUBLIC_BASE_PATH`; the skip link uses programmatic focus (`app/lib/skip-to-page-heading.ts`) because hash navigation is unreliable with a base URL.
 
 ## Commands
 
@@ -151,47 +136,6 @@ Locale switching is available in the application footer. The i18n setup uses sta
 - **Testing** — Comprehensive unit (Vitest), E2E (Playwright), and a11y test coverage
 - **Static Export** — Simple GitHub Pages hosting via static export
 - **Responsive Design** — Mobile and desktop viewport support
-
-## 🛠️ IDE Setup
-
-### WebStorm
-
-#### Prettier (Formatter)
-
-1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Prettier**
-2. Enable **Automatic Prettier configuration**
-3. Set **Run for files** to `**/*.{md,mdx}`
-4. Enable **Run on save**
-
-#### Biome (Formatter + Linter)
-
-1. Go to **Preferences** → **Languages and Frameworks** → **JavaScript** → **Biome**
-2. Configure path and enable accordingly
-
-### VS Code
-
-Install recommended extensions:
-- **Prettier** — Code formatter
-- **ESLint** — Linting
-- **Tailwind CSS IntelliSense** — CSS class completion
-
-## 📦 Docker
-
-To run tests in Docker (matching CI environment):
-
-```bash
-docker run --rm -v $(pwd):/workspace -w /workspace mcr.microsoft.com/playwright:v1.61.0-noble /bin/bash -c "npm install && npm run build && npm run test"
-```
-
-This ensures identical test results across different machines and matches the CI/CD environment exactly.
-
-## FullStory / Usetiful
-
-GitHub Pages builds set `NEXT_PUBLIC_FULLSTORY_ORG_ID` so the survey widget and session replay load on the deployed demo. Local `next dev`, Playwright e2e, and a11y rebuilds omit the scripts unless you set the variable:
-
-```bash
-NEXT_PUBLIC_FULLSTORY_ORG_ID=o-ARNQ-eu1 npm run dev
-```
 
 ## 🤝 Contributing
 
