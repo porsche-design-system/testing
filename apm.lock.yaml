@@ -1,0 +1,225 @@
+lockfile_version: '1'
+apm_version: 0.30.0
+dependencies:
+- repo_url: porsche-design-system/skills
+  name: web-accessibility-codegen
+  host: github.com
+  resolved_commit: 5ff0382bd754299fd8ee04f458e10644c2f46c96
+  resolved_ref: web-accessibility-codegen--v0.2.0
+  version: 0.2.0
+  virtual_path: packages/web-accessibility-codegen
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/accessible-frontend
+  - .agents/skills/accessible-frontend/INDEX.md
+  - .agents/skills/accessible-frontend/SKILL.md
+  - .agents/skills/accessible-frontend/references/topics/aria-widgets.md
+  - .agents/skills/accessible-frontend/references/topics/cognitive-timing-and-input.md
+  - .agents/skills/accessible-frontend/references/topics/dialogs-and-overlays.md
+  - .agents/skills/accessible-frontend/references/topics/en-301-549.md
+  - .agents/skills/accessible-frontend/references/topics/forms.md
+  - .agents/skills/accessible-frontend/references/topics/framework-integration.md
+  - .agents/skills/accessible-frontend/references/topics/images-and-media.md
+  - .agents/skills/accessible-frontend/references/topics/keyboard-and-focus.md
+  - .agents/skills/accessible-frontend/references/topics/links-and-navigation.md
+  - .agents/skills/accessible-frontend/references/topics/live-regions.md
+  - .agents/skills/accessible-frontend/references/topics/routing-and-dynamic-ui.md
+  - .agents/skills/accessible-frontend/references/topics/structure-landmarks-headings.md
+  - .agents/skills/accessible-frontend/references/topics/tables-and-grids.md
+  - .agents/skills/accessible-frontend/references/topics/visual-hcm-zoom-contrast.md
+  - .cursor/rules/frontend-a11y.mdc
+  - .github/instructions/frontend-a11y.instructions.md
+  deployed_file_hashes:
+    .agents/skills/accessible-frontend/INDEX.md: sha256:33dc5e61c1ff0703b0f8c69bf60afeadc206791a27d9a4879ca6990970de7b6f
+    .agents/skills/accessible-frontend/SKILL.md: sha256:9ae34e27405f8db69e841b440ad65e0c3fbed6e68579b4e3e263b7ec344332d1
+    .agents/skills/accessible-frontend/references/topics/aria-widgets.md: sha256:35ad637b5e0c2b880e18168270d2613dc421e314db6a20f563422ccfa3ecd7ca
+    .agents/skills/accessible-frontend/references/topics/cognitive-timing-and-input.md: sha256:d4d263f8be31f38b450ef019dc77b1823ee673c9ee0742bdd0cff01b95db3291
+    .agents/skills/accessible-frontend/references/topics/dialogs-and-overlays.md: sha256:8cc0e16e686b765e0ee98dc3540132e882b928f7afcfd8999bb489bfe47b05d6
+    .agents/skills/accessible-frontend/references/topics/en-301-549.md: sha256:e009709d420702925e073e278036878bb06fae30cc515e09ea30195db5126bef
+    .agents/skills/accessible-frontend/references/topics/forms.md: sha256:eb8359bab7b70a61daafa0771d423137e1f99d2325475ee0c596b306c80d09eb
+    .agents/skills/accessible-frontend/references/topics/framework-integration.md: sha256:5fe92357ca8b4509c7d8ca543a3a63eb328c142d401de474330346dd8b730abc
+    .agents/skills/accessible-frontend/references/topics/images-and-media.md: sha256:11bf45512a0e7d79064736ffc3a77fd549807ed3f22b3ee0e620eb1c630f1747
+    .agents/skills/accessible-frontend/references/topics/keyboard-and-focus.md: sha256:2a6141f6a703a7ab5f7c83f6d083c9ac0e054204928cfcb32ff42c478b801186
+    .agents/skills/accessible-frontend/references/topics/links-and-navigation.md: sha256:855b34b7e9f09244bd91cf4f62567a5ac3d87bb7d2518530d596fb4c7a1aa7cf
+    .agents/skills/accessible-frontend/references/topics/live-regions.md: sha256:cee8be0cfbefe30afcfacf2cfcd8487b66abc191863dcd2223f923ac0be86da5
+    .agents/skills/accessible-frontend/references/topics/routing-and-dynamic-ui.md: sha256:82bbda95f0e60336b57e5ca2b786a18a40fa1a88323f8d2b827e164ddc8f44b1
+    .agents/skills/accessible-frontend/references/topics/structure-landmarks-headings.md: sha256:504a5100f3af15d270484dd6ced9cad9f9293e9183eab45c1b97dae14ddf9fc5
+    .agents/skills/accessible-frontend/references/topics/tables-and-grids.md: sha256:543969b8c71cf4001af93025ed66e027cabd78eb676e947dc9c61d513cb57136
+    .agents/skills/accessible-frontend/references/topics/visual-hcm-zoom-contrast.md: sha256:4a40a5b030ccdefa1d7ec01f5fcb3306af3153ddfec2dc530485ee68843d5730
+    .cursor/rules/frontend-a11y.mdc: sha256:77bd29047602f8e8151a497c70ecb1ff40045df8d4228e2036a9f610b8771976
+    .github/instructions/frontend-a11y.instructions.md: sha256:e851b03f1b6ff4dc81d297ff8f67038730c6ebfc8d5fdf4b43275f2eed503ed1
+  content_hash: sha256:b0cab78a8df5fbcea81b6b1ff1af1af8a8c43362402c57f7fc7559904454433b
+  declared_license: MIT
+deployments:
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: null
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/INDEX.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:33dc5e61c1ff0703b0f8c69bf60afeadc206791a27d9a4879ca6990970de7b6f
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:9ae34e27405f8db69e841b440ad65e0c3fbed6e68579b4e3e263b7ec344332d1
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/aria-widgets.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:35ad637b5e0c2b880e18168270d2613dc421e314db6a20f563422ccfa3ecd7ca
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/cognitive-timing-and-input.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:d4d263f8be31f38b450ef019dc77b1823ee673c9ee0742bdd0cff01b95db3291
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/dialogs-and-overlays.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:8cc0e16e686b765e0ee98dc3540132e882b928f7afcfd8999bb489bfe47b05d6
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/en-301-549.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:e009709d420702925e073e278036878bb06fae30cc515e09ea30195db5126bef
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/forms.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:eb8359bab7b70a61daafa0771d423137e1f99d2325475ee0c596b306c80d09eb
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/framework-integration.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:5fe92357ca8b4509c7d8ca543a3a63eb328c142d401de474330346dd8b730abc
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/images-and-media.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:11bf45512a0e7d79064736ffc3a77fd549807ed3f22b3ee0e620eb1c630f1747
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/keyboard-and-focus.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:2a6141f6a703a7ab5f7c83f6d083c9ac0e054204928cfcb32ff42c478b801186
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/links-and-navigation.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:855b34b7e9f09244bd91cf4f62567a5ac3d87bb7d2518530d596fb4c7a1aa7cf
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/live-regions.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:cee8be0cfbefe30afcfacf2cfcd8487b66abc191863dcd2223f923ac0be86da5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/routing-and-dynamic-ui.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:82bbda95f0e60336b57e5ca2b786a18a40fa1a88323f8d2b827e164ddc8f44b1
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/structure-landmarks-headings.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:504a5100f3af15d270484dd6ced9cad9f9293e9183eab45c1b97dae14ddf9fc5
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/tables-and-grids.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:543969b8c71cf4001af93025ed66e027cabd78eb676e947dc9c61d513cb57136
+- kind: project-relative
+  target: copilot
+  value: .agents/skills/accessible-frontend/references/topics/visual-hcm-zoom-contrast.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:4a40a5b030ccdefa1d7ec01f5fcb3306af3153ddfec2dc530485ee68843d5730
+- kind: project-relative
+  target: copilot
+  value: .github/instructions/frontend-a11y.instructions.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:e851b03f1b6ff4dc81d297ff8f67038730c6ebfc8d5fdf4b43275f2eed503ed1
+- kind: project-relative
+  target: cursor
+  value: .cursor/rules/frontend-a11y.mdc
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:77bd29047602f8e8151a497c70ecb1ff40045df8d4228e2036a9f610b8771976
