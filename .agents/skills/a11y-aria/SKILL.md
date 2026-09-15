@@ -353,44 +353,15 @@ When reviewing any component, check:
 12. Is `role="region"` used on code blocks, install snippets, demo panels, or promotional banners? If so, remove it -- these are not navigable destinations.
 13. Will a screen reader announce this component in a way that makes sense?
 
-## Structured Output for Sub-Agent Use
+## Scored findings
 
-When used during a a11y-audit agent audit phase:
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `apg-widget-incomplete`. When Phase 1 completed, do not emit axe ARIA validity rules. In code-review-only mode, definitive source defects may use the exact catalog IDs (`aria-roles`, `aria-required-attr`, `aria-valid-attr`, `aria-hidden-focus`, `button-name`, and the remaining `owner: axe` ARIA IDs).
 
-Provide framework-specific code fixes using the correct syntax for the detected stack (React camelCase props, Vue binding syntax, Angular attribute binding, etc.).
-
-Return each issue in this exact structure so the wizard can aggregate, deduplicate, and score results:
-
-```text
-### [N]. [Brief one-line description]
-
-- **Severity:** [critical | serious | moderate | minor]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line, or CSS selector, or component name]
-
-**Current code:**
-[code block showing the problem]
-
-**Recommended fix:**
-[code block showing the corrected code in the detected framework syntax]
-```
-
-**Confidence rules:**
-- **high** - definitively wrong: missing required ARIA attribute, invalid role, broken ID reference, confirmed structural issue
-- **medium** - likely wrong: unusual pattern, probable issue, may need browser verification to confirm
-- **low** - possibly wrong: context-dependent, may be intentional, flagged for human review
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
+Chat summary (optional, not scored):
 
 ```text
 ## ARIA Findings Summary
 - **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
 ```
 
 Always explain your reasoning. Developers need to understand why, not just what.

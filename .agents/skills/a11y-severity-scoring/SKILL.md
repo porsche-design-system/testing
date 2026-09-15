@@ -8,7 +8,7 @@ user-invocable: false
 
 This skill is the **sole scoring authority** for `a11y-audit`. Do not use a different formula from memory, from the agent body, or from any other skill.
 
-Before collecting findings, read [finding-schema.md](references/finding-schema.md) — scoring depends on every finding carrying a `severity`, `confidence`, and complete `source` list.
+Before collecting findings, read [finding-schema.md](references/finding-schema.md) and [rule-catalog.md](references/rule-catalog.md) — scoring depends on every finding carrying a catalog `rule_id`, a `severity`, a `confidence`, and a complete `source` list.
 
 During a full audit, scoring and report assembly run in **Phase 11** only, after every selected testing phase has a `DONE`, `SKIPPED`, or `FAILED` status. Complete normalization, deduplication, scoring, and summary export before returning counts to the agent; partial phase results must not be presented as the final score.
 
@@ -18,13 +18,13 @@ Prefer the script. `scripts/normalize-findings.py` parses scanner output into th
 
 ```bash
 # Score one or more scanner outputs (axe CLI, @axe-core/playwright, or a11y-scan.mjs)
-python3 scripts/normalize-findings.py $SCRATCH/scan-axe.json $SCRATCH/scan-playwright.json --out $RUN/findings.json
+python3 scripts/normalize-findings.py $SCRATCH/scan-axe-page-1.json $SCRATCH/scan-playwright-page-1.json --out $RUN/findings.json
 
 # Scorecard ready to paste into the report
 python3 scripts/normalize-findings.py *.json --format markdown
 
 # Compare against a previous audit
-python3 scripts/normalize-findings.py $SCRATCH/scan-axe.json --baseline .a11y/runs/<previous>/findings.json
+python3 scripts/normalize-findings.py $SCRATCH/scan-axe-page-1.json --baseline .a11y/runs/<previous>/findings.json
 ```
 ## Dismissing false positives
 
@@ -48,6 +48,12 @@ python3 scripts/normalize-findings.py $SCRATCH/scan-*.json \
 
 It accepts `--profile balanced|strict|advisory` and emits per-page scores, grades, severity counts, merged findings, and a remediation delta. Hand-computed scores drift between runs; the script does not.
 
+Closed-list code-review findings (ambiguous link names, generic alt, template names) come from `scripts/static-review.py` so those identities do not depend on the model:
+
+```bash
+python3 scripts/static-review.py $SCRATCH/scan-axe-page-1.json --out $SCRATCH/findings-static-page-1.json
+```
+
 For code review or a scanner without a native parser, write an intermediate batch under `$SCRATCH` and pass it to the same script:
 
 ```json
@@ -55,6 +61,7 @@ For code review or a scanner without a native parser, write an intermediate batc
   "type": "a11y-finding-batch",
   "url": "https://example.test/page",
   "source": "agent-review",
+  "phase": "2",
   "findings": [
     {
       "rule_id": "heading-order",
@@ -65,14 +72,16 @@ For code review or a scanner without a native parser, write an intermediate batc
       "impact": "Screen-reader heading navigation does not reflect the page hierarchy.",
       "remediation": "Use an h2 for the section heading.",
       "wcag": "1.3.1",
-      "wcag_level": "A",
-      "phase": "2"
+      "wcag_level": "A"
     }
   ]
 }
 ```
 
-Use `source: lighthouse` for normalized Lighthouse violations. Never calculate a code-review-only score by hand.
+Use `source: lighthouse` for normalized Lighthouse violations (`lighthouse-ci`
+is accepted as an input alias only). Axe and Lighthouse count as one
+confidence source because Lighthouse accessibility audits use axe-core. Never
+calculate a code-review-only score by hand.
 
 ## Severity Scoring Formula
 
@@ -82,7 +91,7 @@ The script is the executable form of this table. If you change one, change both.
 Page Score = 100 - (sum of weighted findings)
 
 Weights:
-  Critical (confirmed, all three sources):   -18 points
+  Critical (confirmed, three source families): -18 points
   Critical (high confidence, both sources):  -15 points
   Critical (high confidence, single source): -10 points
   Critical (medium confidence):               -7 points
@@ -122,7 +131,8 @@ for each finding:
 ```
 
 The values in the lookup table above are **base deductions** (pre-multiplier).
-"Confirmed" findings (validated by all three sources: axe-core + agent review + Playwright) apply an additional 1.2× multiplier.
+"Confirmed" findings (validated by three independent source families on one
+exact catalog identity) apply an additional 1.2× multiplier.
 
 **Example:** One Critical finding at confirmed confidence = 18 (base) × 1.2 = **21.6 points** deducted → page score 78.
 
@@ -150,9 +160,9 @@ Update coefficients quarterly from confirmed outcomes. Avoid changing coefficien
 
 | Score | Grade | Meaning |
 |-------|-------|---------|
-| 90-100 | A | Excellent - minor or no issues, meets WCAG AA |
-| 75-89 | B | Good - some issues, mostly meets WCAG AA |
-| 50-74 | C | Needs Work - multiple issues, partial WCAG AA compliance |
+| 90-100 | A | Minor or no issues in the checks that ran; not a conformance claim |
+| 75-89 | B | Some measured issues; manual checks still required |
+| 50-74 | C | Multiple measured issues need work |
 | 25-49 | D | Poor - significant accessibility barriers |
 | 0-24 | F | Failing - critical barriers, likely unusable with AT |
 
@@ -160,22 +170,21 @@ Update coefficients quarterly from confirmed outcomes. Avoid changing coefficien
 
 | Level | Weight | When to Use |
 |-------|--------|-------------|
-| Confirmed | 120% | Validated by all three sources: axe-core + agent review + Playwright behavioral testing |
-| High | 100% | Confirmed by axe-core + agent, or definitively structural (missing alt, no labels, no lang) |
+| Confirmed | 120% | Same exact catalog identity validated by three independent source families |
+| High | 100% | Catalog default for definitive checks, or two independent source families |
 | Medium | 70% | Found by one source, likely issue (heading edge cases, questionable ARIA, possible keyboard traps) |
 | Low | 30% | Possible issue, needs human review (alt text quality, reading order, context-dependent link text) |
 
 ### Source Correlation
 
-Issues found by both axe-core AND agent review are automatically upgraded to **high confidence** regardless of individual confidence ratings.
+Correlation applies only to the same `(rule_id, URL, canonical location)`.
+Different instances of one rule never upgrade each other.
 
-Issues found by all three sources (axe-core + agent review + Playwright behavioral testing) are upgraded to **confirmed confidence** with a 1.2x weight multiplier. This applies when:
-
-- axe-core reports a violation
-- Agent code review identifies the same issue
-- Playwright behavioral scan confirms the issue at runtime (e.g., keyboard trap confirmed by actual Tab traversal, contrast failure confirmed by rendered CSS computation)
-
-When Playwright is not available, the maximum achievable confidence remains **High (100%)**. The confirmed tier is additive — it never downgrades findings.
+Axe and Lighthouse count as one source family because Lighthouse
+accessibility audits use axe-core. Agent duplicates of scanner-owned rules are
+dropped when that scanner ran, so optional LLM repetition cannot change a
+score. Otherwise two independent families upgrade to **high** and three upgrade
+to **confirmed**. Input order never affects this reduction.
 
 ### Confidence Drift Guard
 
@@ -230,7 +239,7 @@ Include these fields in generated score artifacts for reproducibility:
 scoring:
   model: a11y-severity-scoring-v2
   profile: balanced
-  calibrationVersion: 2026-q2
+  catalogVersion: 2026-q3
   confidenceSources:
     - axe-core
     - agent-review
@@ -306,6 +315,8 @@ Return structured findings to the orchestrating audit agent.
 Read only the reference files needed for the current reporting step. Do not load every reference by default.
 
 - [Finding schema](references/finding-schema.md) — required fields for findings, scores, and fix results; read once at audit start before collecting findings
+- [Rule catalog](references/rule-catalog.md) — allowed `rule_id` values, owners, default severity; read before writing any finding batch
+- [Finding batch](references/finding-batch.md) — JSON agents must write under `$SCRATCH`
 - [Help URL reference](references/help-urls.md) — map findings to Accessibility Insights / WCAG Understanding help URLs (Phase 11 reporting, CSV export)
 - [Cross-page analysis](references/cross-page-analysis.md) — pattern classification, tree diffing, keyboard flow comparison, remediation tracking; multi-page audits and baseline comparisons only
 - [WCAG guide](references/wcag-guide.md) — criterion explanations when the user asks “why?” or on deep-dive audits

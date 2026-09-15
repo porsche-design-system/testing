@@ -256,39 +256,9 @@ When reviewing any modal:
 - `aria-hidden="true"` left on the modal container after opening
 - Scrollable modal content not reachable by keyboard
 
-## Structured Output for Sub-Agent Use
+## Scored findings
 
-When used during a a11y-audit agent audit phase:
-
-```text
-### [severity]: [Brief description]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or CSS selector or component name]
-
-**Current code:**
-[code block showing the problem]
-
-**Recommended fix:**
-[code block showing the corrected code in the detected framework syntax]
-```
-
-**Confidence rules:**
-- **high** - definitively wrong: no focus trap, focus not returned on close, Escape not handled, focusable elements outside trap, confirmed by code review
-- **medium** - likely wrong: focus lands on heading instead of first control, trigger missing `aria-haspopup`, pattern probably wrong but needs browser verification
-- **low** - possibly wrong: focus order inside modal may be intentional, stacking context behaviors require manual verification
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
-
-```text
-## Modal Findings Summary
-- **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
-```
+If inventory `hasDialogs` is false, return an empty `findings` array and stop. Otherwise return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `modal-focus-return`, `modal-escape`. Do not emit `keyboard-trap` (Phase 10).
 
 Always explain your reasoning. Developers need to understand why, not just what.
 

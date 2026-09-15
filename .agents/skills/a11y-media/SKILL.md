@@ -115,6 +115,6 @@ For static images, SVG, and icon alternatives, use `a11y-alt-text-headings` inst
 | Autoplay with audio that cannot be stopped quickly | Serious |
 | Embed present but caption availability unknown | Moderate (flag for manual verify) |
 
-## Output
+## Scored findings
 
-Return structured findings only. Include media URL/selector, track presence, and whether a transcript link exists. Recommend concrete fixes (add VTT tracks, enable host captions, link transcript, replace inaccessible player).
+If inventory `hasMedia` is false, do not load this skill. Otherwise return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `audio-description-missing`, `transcript-missing`. When Phase 1 completed, do not emit `video-caption` or `no-autoplay-audio`; in code-review-only mode they may use those exact IDs when source evidence is definitive.

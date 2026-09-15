@@ -23,6 +23,10 @@
  *   --viewports <list>     Comma-separated widths (default: 320,768,1024,1440)
  *   --max-tabs <n>         Tab presses during keyboard traversal (default: 100)
  *   --timeout <ms>         Navigation timeout (default: 30000)
+ *   --load-delay <ms>      Wait after load before measuring (default: 2000)
+ *   --ready-selector <css>  Wait for this selector before the stability window
+ *   --stability-window <ms> Quiet DOM period before measuring (default: 500)
+ *   --best-effort-readiness Continue when the DOM never becomes stable
  *
  * Exit codes: 0 scan completed (violations may exist), 1 scan could not run.
  *
@@ -32,9 +36,26 @@
 
 import { parseArgs } from 'node:util';
 import { createRequire } from 'node:module';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
+
+const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
+const catalogPath = path.resolve(
+  scriptDirectory, '..', '..', 'a11y-severity-scoring', 'references', 'rule-catalog.json',
+);
+const catalog = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+const scannerConfig = catalog.scanner;
+if (!scannerConfig) {
+  console.error(`Error: rule catalog has no scanner contract: ${catalogPath}`);
+  process.exit(1);
+}
+const EXPECTED_AXE_CORE_VERSION = scannerConfig.axe_core_version;
+const EXPECTED_AXE_PLAYWRIGHT_VERSION = scannerConfig.axe_playwright_version;
+const MODE_ORDER = ['axe', 'tree', 'coverage', 'keyboard', 'viewport'];
+const SUPPORTED_AXE_TAGS = scannerConfig.tags;
+const DISABLED_AXE_RULES = scannerConfig.disabled_axe_rules;
+const projectRequire = createRequire(path.join(process.cwd(), 'package.json'));
 
 /**
  * Resolve a dependency from the audited project first.
@@ -44,13 +65,33 @@ import path from 'node:path';
  * own (empty) node_modules. Try the working directory first, then fall back.
  */
 async function importFromProject(pkg) {
-  const require = createRequire(path.join(process.cwd(), 'package.json'));
-  for (const resolve of [() => require.resolve(pkg), () => pkg]) {
+  for (const resolve of [() => projectRequire.resolve(pkg), () => pkg]) {
     try {
       const target = resolve();
       return await import(target.startsWith('.') || path.isAbsolute(target) ? pathToFileURL(target).href : target);
     } catch {
       // Try the next resolution strategy.
+    }
+  }
+  return null;
+}
+
+function packageVersion(pkg) {
+  try {
+    return projectRequire(`${pkg}/package.json`).version;
+  } catch {
+    try {
+      let current = path.dirname(projectRequire.resolve(pkg));
+      while (current !== path.dirname(current)) {
+        const manifest = path.join(current, 'package.json');
+        if (fs.existsSync(manifest)) {
+          const data = JSON.parse(fs.readFileSync(manifest, 'utf8'));
+          if (data.name === pkg) return data.version;
+        }
+        current = path.dirname(current);
+      }
+    } catch {
+      // Caller reports a missing version as unavailable.
     }
   }
   return null;
@@ -67,6 +108,10 @@ const { values } = parseArgs({
     viewports: { type: 'string', default: '320,768,1024,1440' },
     'max-tabs': { type: 'string', default: '100' },
     timeout: { type: 'string', default: '30000' },
+    'load-delay': { type: 'string', default: '2000' },
+    'ready-selector': { type: 'string' },
+    'stability-window': { type: 'string', default: '500' },
+    'best-effort-readiness': { type: 'boolean', default: false },
   },
 });
 
@@ -75,12 +120,26 @@ if (!values.url) {
   process.exit(1);
 }
 
-const modes = values.mode === 'all'
-  ? ['axe', 'keyboard', 'tree', 'viewport', 'coverage']
+const requestedModes = values.mode === 'all'
+  ? MODE_ORDER
   : values.mode.split(',').map((m) => m.trim()).filter(Boolean);
+const unknownModes = requestedModes.filter((mode) => !MODE_ORDER.includes(mode));
+if (unknownModes.length) {
+  console.error(`Error: unknown mode(s): ${unknownModes.join(', ')}`);
+  process.exit(1);
+}
+const modes = MODE_ORDER.filter((mode) => requestedModes.includes(mode));
+const requestedTags = values.tags.split(',').map((tag) => tag.trim()).filter(Boolean);
+const unsupportedTags = requestedTags.filter((tag) => !SUPPORTED_AXE_TAGS.includes(tag));
+if (unsupportedTags.length) {
+  console.error(`Error: unsupported axe tag(s) for this catalog: ${unsupportedTags.join(', ')}`);
+  process.exit(1);
+}
 
 const timeout = Number(values.timeout);
 const maxTabs = Number(values['max-tabs']);
+const loadDelay = Number(values['load-delay']);
+const stabilityWindow = Number(values['stability-window']);
 
 const playwright = await importFromProject('playwright');
 if (!playwright) {
@@ -97,13 +156,37 @@ const { chromium } = playwright.chromium ? playwright : playwright.default;
 // Optional. axe-dependent modes report as skipped when this is absent.
 const axeModule = await importFromProject('@axe-core/playwright');
 const AxeBuilder = axeModule ? (axeModule.default ?? axeModule) : null;
+const axeCoreModule = await importFromProject('axe-core');
+const axeCore = axeCoreModule ? (axeCoreModule.default ?? axeCoreModule) : null;
+const playwrightVersion = packageVersion('playwright');
+const axePlaywrightVersion = packageVersion('@axe-core/playwright');
+const axeCoreVersion = packageVersion('axe-core');
 
 const results = {
   url: values.url,
   scannedAt: new Date().toISOString(),
   modes,
   axeAvailable: Boolean(AxeBuilder),
+  axeCoreVersion,
+  axePlaywrightVersion,
+  playwrightVersion,
+  browserVersion: null,
+  catalogVersion: catalog.version,
+  tags: requestedTags,
+  selector: values.selector || null,
+  storageState: values['storage-state'] || null,
+  viewports: values.viewports.split(',').map((value) => Number(value.trim())),
+  maxTabs,
+  timeout,
+  loadDelay,
+  readiness: {
+    readySelector: values['ready-selector'] || null,
+    stabilityWindow,
+    bestEffort: values['best-effort-readiness'],
+    results: {},
+  },
   scans: {},
+  inventory: null,
 };
 
 // The package can be installed while its browser binary is not, so this needs
@@ -111,6 +194,7 @@ const results = {
 let browser;
 try {
   browser = await chromium.launch();
+  results.browserVersion = browser.version();
 } catch (error) {
   const missingBrowser = /Executable doesn't exist|playwright install/i.test(error.message);
   console.error(JSON.stringify({
@@ -123,9 +207,16 @@ try {
   process.exit(1);
 }
 
-const context = await browser.newContext(
-  values['storage-state'] ? { storageState: values['storage-state'] } : {}
-);
+const contextOptions = {
+  locale: 'en-US',
+  timezoneId: 'UTC',
+  colorScheme: 'light',
+  viewport: { width: 1440, height: 900 },
+};
+if (values['storage-state']) {
+  contextOptions.storageState = values['storage-state'];
+}
+const context = await browser.newContext(contextOptions);
 
 // Web-component design systems (Porsche Design System, Lightning, Shoelace, and
 // anything built on custom elements) render their real content inside shadow
@@ -158,6 +249,43 @@ await context.addInitScript(() => {
     return el;
   };
 
+  // Stable, unique, shadow-aware path used as finding identity. IDs win;
+  // otherwise nth-of-type makes repeated links/images distinct.
+  window.a11ySelector = (element) => {
+    if (!element) return null;
+    const parts = [];
+    let node = element;
+    while (node && node.nodeType === Node.ELEMENT_NODE) {
+      if (node.id) {
+        parts.unshift(`${node.tagName.toLowerCase()}#${CSS.escape(node.id)}`);
+        const idRoot = node.getRootNode();
+        if (!(idRoot instanceof ShadowRoot)) break;
+        parts.unshift('>>');
+        node = idRoot.host;
+        continue;
+      }
+      const tag = node.tagName.toLowerCase();
+      const parent = node.parentElement;
+      if (parent) {
+        const siblings = [...parent.children].filter((candidate) => candidate.tagName === node.tagName);
+        const index = siblings.indexOf(node) + 1;
+        parts.unshift(siblings.length > 1 ? `${tag}:nth-of-type(${index})` : tag);
+        node = parent;
+        continue;
+      }
+      const root = node.getRootNode();
+      if (root instanceof ShadowRoot) {
+        parts.unshift(tag);
+        parts.unshift('>>');
+        node = root.host;
+        continue;
+      }
+      parts.unshift(tag);
+      break;
+    }
+    return parts.join(' > ').replaceAll(' > >> > ', ' >> ');
+  };
+
   // Stable per-node identity for tab traversal. Identifying focus stops by
   // tag/id/text mistakes distinct elements for one element whenever text
   // repeats — nine links reading "1.4.3", a row of "Read more" links, or
@@ -170,16 +298,128 @@ await context.addInitScript(() => {
     if (!nodeIds.has(el)) nodeIds.set(el, nextNodeId++);
     return nodeIds.get(el);
   };
+
+  window.a11yFindById = (id, fromEl) => {
+    if (!id) return null;
+    try {
+      const selector = `#${CSS.escape(id)}`;
+      const root = fromEl?.getRootNode?.() || document;
+      const local = root.getElementById?.(id) || root.querySelector?.(selector);
+      if (local) return local;
+      return window.deepQueryAll(document, selector)[0] || null;
+    } catch {
+      return null;
+    }
+  };
+
+  window.a11yNameFromContents = (el) => {
+    const chunks = [];
+    const visit = (node) => {
+      if (!node) return;
+      if (node.nodeType === Node.TEXT_NODE) {
+        chunks.push(node.textContent || '');
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+      if (node.getAttribute('aria-hidden') === 'true' || node.hidden) return;
+      const ariaLabel = (node.getAttribute('aria-label') || '').trim();
+      if (ariaLabel && node !== el) {
+        chunks.push(ariaLabel);
+        return;
+      }
+      const tag = node.tagName;
+      if (tag === 'IMG' || tag === 'AREA' || (tag === 'INPUT' && node.type === 'image')) {
+        const alt = node.getAttribute('alt');
+        if (alt) chunks.push(alt);
+        return;
+      }
+      if (tag === 'SVG') {
+        const title = node.querySelector(':scope > title');
+        if (title) chunks.push(title.textContent || '');
+      }
+      if (tag === 'SLOT') {
+        for (const assigned of node.assignedNodes({ flatten: true })) visit(assigned);
+        return;
+      }
+      for (const child of node.childNodes) visit(child);
+      if (node.shadowRoot) {
+        for (const child of node.shadowRoot.childNodes) visit(child);
+      }
+    };
+    visit(el);
+    return chunks.join(' ').replace(/\s+/g, ' ').trim();
+  };
+
+  // AccName approximation used when axe-core is not injected: labelledby
+  // resolves inside shadow trees, and image-only links include img[alt].
+  window.a11yAccessibleName = (el) => {
+    if (!el || el.nodeType !== Node.ELEMENT_NODE) return '';
+    const labelledBy = el.getAttribute('aria-labelledby');
+    if (labelledBy) {
+      const joined = labelledBy.split(/\s+/)
+        .map((id) => {
+          const ref = window.a11yFindById(id, el);
+          return ref ? window.a11yNameFromContents(ref) : '';
+        })
+        .filter(Boolean)
+        .join(' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (joined) return joined;
+    }
+    const ariaLabel = (el.getAttribute('aria-label') || '').trim();
+    if (ariaLabel) return ariaLabel;
+    if (el.tagName === 'IMG' || el.tagName === 'AREA' || (el.tagName === 'INPUT' && el.type === 'image')) {
+      const alt = el.getAttribute('alt');
+      if (alt != null) return alt.trim();
+    }
+    return window.a11yNameFromContents(el);
+  };
 });
 
 const page = await context.newPage();
 
-try {
-  await page.goto(values.url, { waitUntil: 'networkidle', timeout });
-} catch (error) {
-  await browser.close();
-  console.error(JSON.stringify({ status: 'unreachable', url: values.url, error: error.message }, null, 2));
-  process.exit(1);
+async function gotoPage(mode) {
+  await page.goto(values.url, { waitUntil: 'load', timeout });
+  if (values['ready-selector']) {
+    await page.locator(values['ready-selector']).waitFor({ state: 'attached', timeout });
+  }
+  if (loadDelay > 0) {
+    await new Promise((resolve) => setTimeout(resolve, loadDelay));
+  }
+  let stability = 'disabled';
+  if (stabilityWindow > 0) {
+    stability = await page.evaluate(({ quietMs, maximumMs }) => new Promise((resolve) => {
+      let quietTimer;
+      let maximumTimer;
+      let finished = false;
+      const finish = (result) => {
+        if (finished) return;
+        finished = true;
+        observer.disconnect();
+        clearTimeout(quietTimer);
+        clearTimeout(maximumTimer);
+        resolve(result);
+      };
+      const observer = new MutationObserver(() => {
+        clearTimeout(quietTimer);
+        quietTimer = setTimeout(() => finish('stable'), quietMs);
+      });
+      observer.observe(document.documentElement, {
+        attributes: true, childList: true, characterData: true, subtree: true,
+      });
+      quietTimer = setTimeout(() => finish('stable'), quietMs);
+      maximumTimer = setTimeout(() => finish('maximum-time-reached'), maximumMs);
+    }), { quietMs: stabilityWindow, maximumMs: Math.min(timeout, 5000) });
+  }
+  results.readiness.results[mode] ??= [];
+  results.readiness.results[mode].push(stability);
+  if (stability === 'maximum-time-reached' && !values['best-effort-readiness']) {
+    throw new Error(
+      `DOM did not remain stable for ${stabilityWindow}ms; `
+      + 'use --ready-selector or explicitly opt into --best-effort-readiness',
+    );
+  }
 }
 
 /** axe-core scan of the page (or a subtree). */
@@ -187,7 +427,32 @@ async function runAxe() {
   if (!AxeBuilder) {
     return { status: 'skipped', reason: '@axe-core/playwright not installed' };
   }
-  let builder = new AxeBuilder({ page }).withTags(values.tags.split(','));
+  if (axePlaywrightVersion !== EXPECTED_AXE_PLAYWRIGHT_VERSION
+      || axeCoreVersion !== EXPECTED_AXE_CORE_VERSION) {
+    return {
+      status: 'error',
+      reason: `scanner version mismatch: expected @axe-core/playwright ${EXPECTED_AXE_PLAYWRIGHT_VERSION} `
+        + `and axe-core ${EXPECTED_AXE_CORE_VERSION}; found `
+        + `${axePlaywrightVersion || 'missing'} and ${axeCoreVersion || 'missing'}`,
+      install: `npm install -D @axe-core/playwright@${EXPECTED_AXE_PLAYWRIGHT_VERSION} `
+        + `axe-core@${EXPECTED_AXE_CORE_VERSION}`,
+    };
+  }
+  const actualRuleIds = axeCore.getRules(SUPPORTED_AXE_TAGS)
+    .map((rule) => rule.ruleId)
+    .sort();
+  const expectedRuleIds = [...scannerConfig.axe_rule_ids].sort();
+  if (JSON.stringify(actualRuleIds) !== JSON.stringify(expectedRuleIds)) {
+    return {
+      status: 'error',
+      reason: 'axe rule catalog parity check failed',
+      expectedRuleIds,
+      actualRuleIds,
+    };
+  }
+  await gotoPage('axe');
+  let builder = new AxeBuilder({ page }).withTags(requestedTags);
+  builder = builder.disableRules(DISABLED_AXE_RULES);
   if (values.selector) builder = builder.include(values.selector);
   const axe = await builder.analyze();
   return {
@@ -208,7 +473,7 @@ async function runAxe() {
 
 /** Tab traversal: focus order, tab stop count, and genuine keyboard traps. */
 async function runKeyboard() {
-  await page.goto(values.url, { waitUntil: 'networkidle', timeout });
+  await gotoPage('keyboard');
   const describe = () => page.evaluate(() => {
     const host = document.activeElement;
     if (!host || host === document.body) return null;
@@ -271,7 +536,7 @@ async function runKeyboard() {
  * a high score imply conformance.
  */
 async function runCoverage() {
-  await page.goto(values.url, { waitUntil: 'networkidle', timeout });
+  await gotoPage('coverage');
 
   const notChecked = [
     {
@@ -326,18 +591,29 @@ async function runCoverage() {
 
 /** Document structure as assistive technology exposes it: landmarks, headings, names. */
 async function runTree() {
+  await gotoPage('tree');
+  if (axeCore?.source) {
+    try {
+      await page.addScriptTag({ content: axeCore.source });
+      await page.evaluate(() => {
+        if (window.axe?.setup) window.axe.setup(document);
+      });
+    } catch {
+      // Tree names fall back to window.a11yAccessibleName.
+    }
+  }
   const structure = await page.evaluate(() => {
     const accessibleName = (el) => {
-      const label = el.getAttribute('aria-label');
-      if (label) return label.trim();
-      const labelledBy = el.getAttribute('aria-labelledby');
-      if (labelledBy) {
-        return labelledBy.split(/\s+/)
-          .map((id) => document.getElementById(id)?.textContent?.trim() || '')
-          .join(' ')
-          .trim();
+      let name = '';
+      try {
+        if (window.axe?.commons?.text?.accessibleText) {
+          name = window.axe.commons.text.accessibleText(el) || '';
+        }
+      } catch {
+        name = '';
       }
-      return (el.textContent || '').trim().slice(0, 60);
+      if (!name) name = window.a11yAccessibleName(el);
+      return String(name).replace(/\s+/g, ' ').trim();
     };
 
     // A header/footer is only a landmark when not scoped inside sectioning content.
@@ -368,6 +644,7 @@ async function runTree() {
         ? parseInt(el.getAttribute('aria-level'), 10)
         : parseInt(el.tagName.slice(1), 10) || null,
       name: accessibleName(el),
+      selector: window.a11ySelector(el),
     }));
 
     const roleCounts = {};
@@ -376,6 +653,23 @@ async function runTree() {
       roleCounts[role] = (roleCounts[role] || 0) + 1;
     }
 
+    const links = [...window.deepQueryAll(document, 'a[href]')].map((el) => ({
+      selector: window.a11ySelector(el),
+      name: accessibleName(el).slice(0, 80),
+      href: el.getAttribute('href'),
+      target: el.getAttribute('target'),
+    }));
+
+    const images = [...window.deepQueryAll(document, 'img')].map((el) => ({
+      selector: window.a11ySelector(el),
+      alt: el.getAttribute('alt'),
+      src: el.getAttribute('src'),
+    }));
+
+    const customWidgetRoles = ['combobox', 'listbox', 'tablist', 'tree', 'grid', 'menu', 'menubar', 'slider', 'spinbutton'];
+    const hasCustomWidgets = customWidgetRoles.some((role) => (roleCounts[role] || 0) > 0)
+      || window.deepQueryAll(document, '[aria-expanded], [aria-haspopup]').length > 0;
+
     return {
       title: document.title,
       lang: document.documentElement.lang || null,
@@ -383,6 +677,22 @@ async function runTree() {
       headings,
       roleCounts,
       hasSkipLink: Boolean(document.querySelector('a[href^="#"]')),
+      inventory: {
+        hasTables: window.deepQueryAll(document, 'table, [role="table"], [role="grid"]').length > 0,
+        hasForms: window.deepQueryAll(
+          document,
+          'form, input, select, textarea, [role="form"], [role="textbox"], [role="searchbox"], [role="combobox"]',
+        ).length > 0,
+        hasMedia: window.deepQueryAll(document, 'video, audio, iframe[src*="youtube"], iframe[src*="vimeo"], iframe[src*="wistia"]').length > 0,
+        hasDialogs: window.deepQueryAll(
+          document,
+          'dialog, [role="dialog"], [role="alertdialog"], [aria-haspopup="dialog"]',
+        ).length > 0,
+        hasLiveRegions: window.deepQueryAll(document, '[aria-live], [role="status"], [role="alert"], [role="log"]').length > 0,
+        hasCustomWidgets,
+        links,
+        images,
+      },
     };
   });
 
@@ -403,7 +713,7 @@ async function runTree() {
   const required = ['banner', 'main', 'contentinfo'];
   const present = new Set(structure.landmarks.map((l) => l.role));
 
-  return {
+  const treeResult = {
     status: 'ok',
     ...structure,
     h1Count: structure.headings.filter((h) => h.level === 1).length,
@@ -411,6 +721,11 @@ async function runTree() {
     missingLandmarks: required.filter((r) => !present.has(r)),
     ariaSnapshot,
   };
+  const { inventory, ...treeWithoutInventory } = treeResult;
+  if (inventory) {
+    results.inventory = inventory;
+  }
+  return inventory ? treeWithoutInventory : treeResult;
 }
 
 /** Reflow (1.4.10) and target size (2.5.8) across viewport widths. */
@@ -420,36 +735,64 @@ async function runViewport() {
 
   for (const width of widths) {
     await page.setViewportSize({ width, height: 800 });
-    await page.goto(values.url, { waitUntil: 'networkidle', timeout });
+    await gotoPage(`viewport-${width}`);
 
     const measurements = await page.evaluate(() => {
       const minTarget = 24; // WCAG 2.5.8 Level AA, CSS pixels
 
-      const targets = [...window.deepQueryAll(document, 'a[href], button, input, select, textarea, [role="button"]')]
+      const targets = [...window.deepQueryAll(document, [
+        'a[href]', 'button', 'input', 'select', 'textarea', 'summary',
+        '[onclick]', '[tabindex]:not([tabindex="-1"])',
+        '[role="button"]', '[role="link"]', '[role="checkbox"]', '[role="radio"]',
+        '[role="switch"]', '[role="tab"]', '[role="menuitem"]',
+        '[role="menuitemcheckbox"]', '[role="menuitemradio"]', '[role="option"]',
+        '[role="slider"]', '[role="spinbutton"]', '[role="treeitem"]',
+        '[role="gridcell"]',
+      ].join(', '))]
         .map((el) => ({ el, rect: el.getBoundingClientRect(), style: getComputedStyle(el) }))
         .filter(({ rect, style }) => rect.width > 0 && rect.height > 0
           && style.display !== 'none' && style.visibility !== 'hidden');
 
-      // SC 2.5.8 exception "spacing": an undersized target conforms when a
-      // 24px-diameter circle centred on it does not intersect the circle of any
-      // other target. Two circles of radius 12 clear each other at 24px apart.
+      // SC 2.5.8 exception "spacing": a 24px-diameter circle centred on an
+      // undersized target must not intersect another undersized target's
+      // circle or the bounding box of a target that is already at least 24px.
       const centre = (r) => ({ x: r.left + r.width / 2, y: r.top + r.height / 2 });
+      const distanceToRect = (point, rect) => {
+        const dx = Math.max(rect.left - point.x, 0, point.x - rect.right);
+        const dy = Math.max(rect.top - point.y, 0, point.y - rect.bottom);
+        return Math.hypot(dx, dy);
+      };
       const hasClearance = (subject) => {
         const a = centre(subject.rect);
         return targets.every((other) => {
           if (other.el === subject.el) return true;
-          const b = centre(other.rect);
-          return Math.hypot(a.x - b.x, a.y - b.y) >= minTarget;
+          const otherIsSmall = other.rect.width < minTarget || other.rect.height < minTarget;
+          if (otherIsSmall) {
+            const b = centre(other.rect);
+            return Math.hypot(a.x - b.x, a.y - b.y) >= minTarget;
+          }
+          return distanceToRect(a, other.rect) >= minTarget / 2;
         });
+      };
+
+      const isInlineTextException = (target) => {
+        if (target.style.display !== 'inline') return false;
+        const container = target.el.closest('p, li, dd, dt, figcaption, label');
+        if (!container) return false;
+        const surrounding = (container.textContent || "")
+          .replace(target.el.textContent || "", "")
+          .trim();
+        return surrounding.length > 0;
       };
 
       const smallTargets = targets
         .filter(({ rect }) => rect.width < minTarget || rect.height < minTarget)
         .map((t) => {
-          // SC 2.5.8 exception "inline": the target sits in a text flow, so its
-          // box is set by line-height rather than by the author's hit area.
-          const inline = t.style.display.startsWith('inline');
+          // SC 2.5.8 inline exception applies to sentence/block text, not every
+          // inline or inline-block control.
+          const inline = isInlineTextException(t);
           return {
+            selector: window.a11ySelector(t.el),
             tag: t.el.tagName.toLowerCase(),
             id: t.el.id || null,
             name: (t.el.getAttribute('aria-label') || t.el.textContent || '').trim().slice(0, 40),
@@ -468,15 +811,7 @@ async function runViewport() {
       };
     });
 
-    const entry = { width, ...measurements };
-
-    if (AxeBuilder) {
-      const axe = await new AxeBuilder({ page }).withTags(values.tags.split(',')).analyze();
-      entry.axeViolationCount = axe.violations.length;
-      entry.axeViolationIds = [...new Set(axe.violations.map((v) => v.id))];
-    }
-
-    perViewport.push(entry);
+    perViewport.push({ width, ...measurements });
   }
 
   return {
@@ -519,6 +854,7 @@ results.behavioralConfidence = ratio === 1 ? 'High' : ratio >= 0.6 ? 'Medium' : 
 results.coverage = { notChecked: results.scans.coverage?.notChecked ?? [] };
 
 results.summary = {
+  status: completed === modes.length ? 'ok' : completed ? 'partial' : 'failed',
   axeViolations: results.scans.axe?.violationCount ?? null,
   keyboardTraps: results.scans.keyboard?.keyboardTraps?.length ?? null,
   tabStops: results.scans.keyboard?.tabStopCount ?? null,
@@ -532,4 +868,9 @@ if (values.out) {
   console.log(JSON.stringify({ writtenTo: values.out, ...results.summary, behavioralConfidence: results.behavioralConfidence }, null, 2));
 } else {
   console.log(JSON.stringify(results, null, 2));
+}
+
+const axeFailed = modes.includes('axe') && results.scans.axe?.status !== 'ok';
+if (completed === 0 || axeFailed) {
+  process.exitCode = 1;
 }

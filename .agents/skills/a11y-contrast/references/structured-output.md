@@ -1,41 +1,9 @@
-# Structured Output
+# Scored findings
 
-## Structured Output for Sub-Agent Use
+Chat may summarize counts. Return finding objects to the orchestrator; the only scored artifacts are its immutable phase/page `a11y-finding-batch` JSON files. Follow `a11y-severity-scoring/references/finding-batch.md` and `a11y-severity-scoring/references/rule-catalog.md`.
 
-When used during a a11y-audit agent audit phase:
+**May emit:** `color-only-meaning`, `prefers-reduced-motion`
 
-For dark mode support, check `dark:` Tailwind variants or CSS `prefers-color-scheme`. Provide replacement colors that pass the required contrast ratio while staying as close as possible to the design's original palette intent.
+**When the scanner completed, do not emit:** `color-contrast`, `color-contrast-enhanced`, `link-in-text-block`, `target-size`, `reflow`. Do not re-measure contrast; axe-core owns it.
 
-Return each issue in this exact structure so the wizard can aggregate, deduplicate, and score results:
-
-```text
-### [N]. [Brief one-line description]
-
-- **Severity:** [critical | serious | moderate | minor]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or CSS rule selector]
-
-**Current:** foreground `[#hex]` on background `[#hex]` - ratio [X.X]:1 (requires [Y.Y]:1 for [text size])
-
-**Recommended fix:**
-[code block showing replacement color value that passes, with the new ratio]
-```
-
-**Confidence rules:**
-- **high** - measured failure: exact hex values extracted, ratio calculated below threshold
-- **medium** - probable failure: color defined by variable or dynamic theming, estimated below threshold
-- **low** - possible failure: color appears low-contrast visually but cannot be precisely measured (e.g., gradient background)
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
-
-```text
-## Contrast Master Findings Summary
-- **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
-```
-
+Severity and WCAG come from the catalog. Location identity is `file`. The orchestrator writes `"findings": []` when nothing matches `emit_if`. In code-review-only mode, definitive source defects may use exact scanner-owned catalog IDs.

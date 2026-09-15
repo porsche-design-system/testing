@@ -31,7 +31,7 @@ All summary numbers are recomputed from the findings list rather than read from
 the file, and a findings file whose declared counts disagree with its findings is
 rejected outright. No export can silently disagree with the data behind it.
 
-Exit codes: 0 written, 1 nothing to export, 2 bad or inconsistent input.
+Exit codes: 0 written (including a clean zero-finding report), 2 bad or inconsistent input.
 """
 
 import argparse
@@ -731,6 +731,62 @@ def write_summary(data, out_dir, basename):
                      f'{page_counts["critical"]} | {page_counts["serious"]} | '
                      f'{page_counts["moderate"]} | {page_counts["minor"]} |')
 
+    scoring = data.get("scoring") or {}
+    executed = scoring.get("executedSourcesByPage") or {}
+    checks = scoring.get("executedChecksByPage") or {}
+    reviewed = scoring.get("reviewedPhasesByPage") or {}
+    metadata = scoring.get("scannerMetadata") or []
+    lines += [
+        "",
+        "### Reproducibility",
+        "",
+        f'- **Scoring model:** `{scoring.get("model") or "unknown"}`',
+        f'- **Profile:** `{scoring.get("profile") or "unknown"}`',
+        f'- **Rule catalog:** `{scoring.get("catalogVersion") or "unknown"}`',
+        "",
+        "| Page | Executed checks | Reviewed phases | Modes | Axe | Playwright | Browser | Readiness |",
+        "|------|-----------------|-----------------|-------|-----|------------|---------|-----------|",
+    ]
+    metadata_by_url = defaultdict(list)
+    for entry in metadata:
+        metadata_by_url[entry.get("url")].append(entry)
+    for page in data.get("pages", []):
+        url = page.get("url")
+        entries = metadata_by_url.get(url) or [{}]
+        modes = sorted({mode for entry in entries for mode in (entry.get("modes") or [])})
+        axe_versions = sorted({entry.get("axeCoreVersion") for entry in entries
+                               if entry.get("axeCoreVersion")})
+        playwright_versions = sorted({entry.get("playwrightVersion") for entry in entries
+                                      if entry.get("playwrightVersion")})
+        browser_versions = sorted({entry.get("browserVersion") for entry in entries
+                                   if entry.get("browserVersion")})
+        readiness_values = []
+        for entry in entries:
+            readiness = entry.get("readiness") or {}
+            readiness_states = sorted({
+                state
+                for states in (readiness.get("results") or {}).values()
+                for state in states
+            })
+            readiness_values.append(
+                f'delay={entry.get("loadDelay", "n/a")}ms, '
+                f'stable={readiness.get("stabilityWindow", "n/a")}ms, '
+                f'selector={readiness.get("readySelector") or "none"}, '
+                f'result={",".join(readiness_states) or "n/a"}'
+            )
+        values = [
+            url or "",
+            ", ".join(checks.get(url) or executed.get(url) or []) or "none",
+            ", ".join(reviewed.get(url) or []) or "none",
+            ", ".join(modes) or "none",
+            ", ".join(axe_versions) or "n/a",
+            ", ".join(playwright_versions) or "n/a",
+            ", ".join(browser_versions) or "n/a",
+            "; ".join(sorted(set(readiness_values))) or "n/a",
+        ]
+        values = [str(value).replace("|", "\\|").replace("\n", " ") for value in values]
+        lines.append("| " + " | ".join(values) + " |")
+
     if dismissed:
         lines += ["", "### Dismissed Findings", "",
                   "| Rule | Location | Reason |", "|------|----------|--------|"]
@@ -777,10 +833,6 @@ def main():
     except (OSError, json.JSONDecodeError, ValueError) as error:
         print(f"Error reading {args.findings}: {error}", file=sys.stderr)
         return 2
-
-    if not data["findings"]:
-        print("No findings to export.", file=sys.stderr)
-        return 1
 
     os.makedirs(args.out_dir, exist_ok=True)
     basename = args.basename.rstrip("-_. ") or "ACCESSIBILITY-AUDIT"

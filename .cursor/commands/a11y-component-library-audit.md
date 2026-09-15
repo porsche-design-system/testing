@@ -19,13 +19,20 @@ When the target provides the **a11y-audit** agent, use it. Otherwise execute thi
 
 ### Step 1: Discovery
 
-1. Scan the directory for component files (`.jsx`, `.tsx`, `.vue`, `.svelte`, `.astro`)
-2. List all discovered components by name
-3. Group components by type (forms, navigation, modals, data display, layout)
+1. Create `$RUN=.a11y/runs/<timestamp>` and `$SCRATCH=$(mktemp -d)`.
+2. Read the finding schema, rule catalog, and finding-batch contract.
+3. Scan the directory for component files (`.jsx`, `.tsx`, `.vue`, `.svelte`, `.astro`).
+4. Sort paths lexicographically, assign page numbers, and use
+   `component://<workspace-relative-posix-path>` as each component URL.
+5. Group components by type (forms, navigation, modals, data display, layout).
 
 ### Step 2: Per-Component Audit
 
-Use the **a11y-audit** review mode: Read domain skills (`a11y-aria`, `a11y-keyboard`, `a11y-forms`, `a11y-contrast`, `a11y-modal`, `a11y-live-regions`, `a11y-tables`, `a11y-links`, `a11y-alt-text-headings`, `a11y-text-quality`, `a11y-media`, `a11y-design-system` as relevant) and check:
+Use the **a11y-audit component-library batch mode**. Read domain skills
+(`a11y-aria`, `a11y-keyboard`, `a11y-forms`, `a11y-contrast`,
+`a11y-modal`, `a11y-live-regions`, `a11y-tables`, `a11y-links`,
+`a11y-alt-text-headings`, `a11y-text-quality`, `a11y-media`,
+`a11y-design-system` as relevant) and check:
 
 - **ARIA correctness** — Valid roles, states, properties for the component type
 - **Keyboard interaction** — All interactive elements focusable and operable
@@ -37,9 +44,23 @@ Use the **a11y-audit** review mode: Read domain skills (`a11y-aria`, `a11y-keybo
 - **Link text** — No ambiguous "click here" link text
 - **Media** — Captions/transcripts when video/audio are present
 
+Domain skills return catalog-valid finding objects; they do not write files.
+After each applicable phase and component, the orchestrator writes:
+
+```text
+$SCRATCH/findings-agent-phase-<N>-page-<M>.json
+```
+
+Use `source: agent-review`. Since no runtime scanner ran, definitive source
+findings may use scanner-owned catalog IDs. Do not infer runtime-only behavior,
+rendered contrast, focus visibility, or reading order. Write at least one empty
+batch for every clean component.
+
 ### Step 3: Scorecard Generation
 
-Score each component with **`a11y-severity-scoring` only**. For each component, produce:
+Pass every immutable batch to `normalize-findings.py` and write
+`$RUN/findings.json`. Score each component with **`a11y-severity-scoring`
+only**. Never calculate or transcribe counts manually.
 
 | Field | Value |
 |-------|-------|
@@ -61,9 +82,13 @@ Identify shared patterns:
 
 ### Step 5: Report
 
-Sort by score ascending (worst components first) and write the audit report with:
+Run `export-findings.py --format summary`, paste its numeric block unchanged,
+then write `$RUN/ACCESSIBILITY-AUDIT.md`. Sort by score ascending (worst
+components first) and include:
 
 1. Summary table of all components with scores
 2. Per-component findings with remediation guidance
 3. Template-level issues section
 4. Priority fix list (highest-impact fixes first)
+
+Delete `$SCRATCH` and print the full report path.

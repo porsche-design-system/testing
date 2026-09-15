@@ -20,7 +20,7 @@ Exports read the normalized findings file produced by `a11y-severity-scoring`:
 
 ```bash
 python3 <a11y-severity-scoring>/scripts/normalize-findings.py \
-  $SCRATCH/scan-axe.json $SCRATCH/scan-playwright.json --out $RUN/findings.json
+  $SCRATCH/scan-axe-page-1.json $SCRATCH/scan-playwright-page-1.json --out $RUN/findings.json
 ```
 
 If `findings.json` does not exist yet, produce it first. Never export from the markdown report — it is a rendering of the findings, not the source of truth.

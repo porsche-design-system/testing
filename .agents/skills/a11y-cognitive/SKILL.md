@@ -217,22 +217,9 @@ For each finding:
 ```text
 ## [CRITERION] - [STATUS: FAIL | WARN | PASS | N/A]
 **SC:** [WCAG SC number and name]
-**Severity:** Critical | High | Medium | Low | Advisory
-**Location:** [element, page, URL, component name]
-**Issue:** [Clear description of the problem]
-**Impact:** [Who is affected and how]
-**Remediation:** [Specific code or content change]
-**Example:**
-Before: [current code/text]
-After:  [corrected code/text]
-```
+## Scored findings
 
-Severity mapping:
-- **Critical** - Level A failures or 3.3.8 (blocks authentication entirely)
-- **High** - Level AA failures (3.3.7, 2.2.1, 3.3.2, 3.3.4)
-- **Medium** - Advisory AAA items with significant practical impact (reading level, error message quality)
-- **Low** - Minor consistency or labeling issues
-- **Advisory** - COGA guidance, plain language recommendations
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `timeout-no-warning`, `accessible-auth`. Do not invent severity labels such as High/Advisory — catalog severity applies. COGA/plain-language notes belong in report prose, not as scored findings.
 
 ---
 

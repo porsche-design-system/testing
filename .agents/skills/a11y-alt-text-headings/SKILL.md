@@ -43,8 +43,9 @@ You own everything related to text alternatives and document structure:
 ## Validation Checklist
 
 ### Images
-1. Does every `<img>` have an `alt` attribute?
-2. Do meaningful images have descriptive alt text (verified by visual analysis)?
+1. Scanner-owned (`image-alt`) — do not duplicate it when Phase 1 ran; emit
+   that exact ID for a definitive code-review-only failure.
+2. Do meaningful images have descriptive alt text (verified by visual analysis)? Emit `alt-text-quality` only when alt is in `lists.generic_alt` or is a filename.
 3. Do decorative images have `alt=""`?
 4. Do functional images (in links/buttons) describe the action?
 5. Do complex images have extended descriptions?
@@ -55,18 +56,24 @@ You own everything related to text alternatives and document structure:
 10. Has the user been asked about ambiguous images?
 
 ### Headings
-11. Is there exactly one H1 per page?
-12. Are heading levels sequential (no skipped levels)?
+11. Scanner-owned (`page-has-heading-one`) — do not duplicate it when Phase 1
+    ran; code-review-only may use the exact ID.
+12. Scanner-owned (`heading-order`) — do not duplicate it when Phase 1 ran;
+    code-review-only may use the exact ID.
 13. Do headings describe their section content?
 14. Are heading levels chosen for structure, not appearance?
 15. Do modal headings start at H2?
 16. Does the heading outline make sense as a table of contents?
 
 ### Document Structure
-17. Is `<html lang="...">` set correctly?
-18. Is `<title>` descriptive and unique?
-19. Are landmarks used correctly (header, nav, main, footer)?
-20. Is there a skip link to main content?
+17. Scanner-owned (`html-has-lang`, `html-lang-valid`) — do not duplicate it
+    when Phase 1 ran; code-review-only may use the exact IDs.
+18. Scanner-owned (`document-title`) — do not duplicate it when Phase 1 ran;
+    code-review-only may use the exact ID. Existing title quality is prose only.
+19. Scanner-owned (`landmark-missing`) — do not duplicate it when Phase 1 ran;
+    code-review-only may use the exact ID.
+20. Scanner-owned (`bypass`) — do not duplicate it when Phase 1 ran;
+    code-review-only may use the exact ID.
 21. Are language changes within content marked with `lang`?
 22. For SPAs: does the title update on route changes?
 
@@ -94,8 +101,9 @@ You own everything related to text alternatives and document structure:
 - Missing `lang` attribute on `<html>`
 - Charts and graphs with `alt="chart"` instead of describing the data
 
-## How to Report Issues
+## Scored findings
 
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `alt-text-quality`, `language-of-parts`. When Phase 1 completed, do not emit missing `alt`, skipped headings, missing `lang`, missing title, or landmarks. In code-review-only mode, emit their exact scanner-owned catalog IDs only when source evidence is definitive.
 
 ## Progressive disclosure
 
@@ -105,5 +113,5 @@ Read only the reference files needed for the current page/features. Do not load 
 - [Alt text patterns](references/alt-text-patterns.md) — img/picture/CSS backgrounds/logos/image buttons
 - [SVG, icons, media, figures](references/svg-icons-media.md) — SVG, icon fonts, video/audio alternatives, figure/figcaption
 - [Headings, landmarks, titles, language](references/headings-landmarks.md) — document outline, page title, lang, landmarks
-- [Structured output templates](references/structured-output.md) — formatting findings for the audit report
+- [Scored findings](references/structured-output.md) — catalog `rule_id` values and JSON batch contract
 

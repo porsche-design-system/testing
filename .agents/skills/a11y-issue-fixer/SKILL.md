@@ -24,7 +24,7 @@ This skill is the checklist/procedure module for applying accessibility fixes fr
 
 ## Fix Categories
 
-### Auto-Fixable (apply without asking)
+### Batch-Eligible Auto-Fixes (apply only after preview and confirmation)
 
 These are safe, deterministic fixes with no risk of breaking behavior:
 
@@ -107,17 +107,21 @@ Fix #[n]: [issue description]
 
 ### Role
 
-This skill is a procedure module for `a11y-audit`. This skill may modify source when applying approved fixes. Every modification requires user confirmation.
+This skill is a procedure module for `a11y-audit`. This skill may modify source
+when applying approved fixes. A previewed batch of safe auto-fixable changes may
+receive one explicit confirmation; every human-judgment change requires
+individual confirmation.
 
 ### Action Constraints
 
 You may:
-- Apply auto-fixable changes (missing alt attributes, ARIA labels, missing form labels, semantic element swaps) ONLY after user confirms each fix
+- Apply a previewed batch of genuinely auto-fixable changes after one explicit
+  batch confirmation
 - Determine framework-correct syntax before editing
 - Report before/after for each change
 
 You may NOT:
-- Apply fixes without user confirmation
+- Apply fixes without explicit per-batch or per-item confirmation
 - Modify files outside the scope provided by `a11y-audit`
 - Change application logic or behavior beyond accessibility fixes
 - Remove existing functionality to resolve an accessibility issue

@@ -290,53 +290,24 @@ Scrollable regions that are not natively focusable (e.g., a `<div>` with `overfl
 1. Can every interactive element be reached by Tab?
 2. Can every interactive element be activated by Enter or Space?
 3. Does tab order match visual layout?
-4. No positive `tabindex` values?
+4. Scanner-owned (`tabindex`) — do not emit positive tabindex.
 5. Focus managed on route changes?
 6. Focus managed when content is added or removed?
-7. No keyboard traps (except intentional modal traps)?
-8. Skip link present and working?
+7. Scanner-owned (`keyboard-trap`) — do not emit traps; Phase 10 measures them.
+8. Scanner-owned (`bypass`) — do not emit a missing skip link.
 9. Arrow keys work in tabs, menus, comboboxes?
 10. Escape closes overlays and returns focus?
-11. Focus indicators visible on every interactive element?
+11. Not verified (`2.4.7`) — do not emit missing focus indicators.
 
-## Structured Output for Sub-Agent Use
+## Scored findings
 
-When used during a a11y-audit agent audit phase:
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `spa-focus-on-route-change`. When Phase 1 completed, do not emit `tabindex` or `bypass`; in code-review-only mode they may use those exact catalog IDs. Never infer `keyboard-trap` or focus-indicator visibility from source (`2.4.7` remains not verified).
 
-Provide framework-specific code fixes. For SPA route changes, provide the correct focus management pattern for the detected framework (React Router `useEffect`, Vue Router `afterEach`, Angular `Router.events`, etc.).
-
-Return each issue in this exact structure so the wizard can aggregate, deduplicate, and score results:
+Chat summary (optional, not scored):
 
 ```text
-### [N]. [Brief one-line description]
-
-- **Severity:** [critical | serious | moderate | minor]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or CSS selector or component name]
-
-**Current code:**
-[code block showing the problem]
-
-**Recommended fix:**
-[code block showing the corrected code in the detected framework syntax]
-```
-
-**Confidence rules:**
-- **high** - definitively wrong: positive tabindex found, `outline: none` with no alternative, missing skip link confirmed by code review
-- **medium** - likely wrong: focus indicator potentially removed, tab order likely breaks visual flow, SPA route change without focus management (inferred from router usage)
-- **low** - possibly wrong: focus order may be intentional, custom keyboard shortcut conflicts require manual verification
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
-
-```text
-## Keyboard Navigator Findings Summary
+## Keyboard Findings Summary
 - **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
 ```
 
 ## How to Report Issues

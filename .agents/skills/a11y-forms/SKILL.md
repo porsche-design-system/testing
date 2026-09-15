@@ -40,14 +40,16 @@ You own everything related to form accessibility:
 
 ## Validation Checklist
 
-1. Does every input have a programmatically associated label?
+1. Scanner-owned (`label`) — do not duplicate it when Phase 1 ran; emit that
+   exact ID for a definitive code-review-only failure. Emit
+   `placeholder-only-label` when placeholder is the only naming method.
 2. Are required fields indicated with `required` attribute and visible indicator?
 3. Do error messages identify the specific problem and how to fix it?
 4. Are errors linked to fields via `aria-describedby`?
 5. Does `aria-invalid="true"` appear on fields with errors?
 6. Does focus move to error summary or first error on submit?
 7. Are related inputs grouped with `<fieldset>` and `<legend>`?
-8. Do inputs have appropriate `autocomplete` attributes?
+8. Emit `autocomplete-missing` on identity/payment fields with no `autocomplete` attribute. Invalid values are scanner-owned (`autocomplete-valid`).
 9. Can the entire form be completed by keyboard alone?
 10. Are password show/hide toggles accessible buttons?
 11. Are file upload constraints described and status announced?
@@ -71,15 +73,9 @@ You own everything related to form accessibility:
 - `disabled` used when `aria-disabled` would be more appropriate
 - Tab order broken by CSS positioning that differs from DOM order
 
-## How to Report Issues
+## Scored findings
 
-For each finding:
-- File path and line number
-- Which form control is affected
-- What the screen reader experience would be
-- The specific WCAG criterion violated
-- Code fix with corrected markup
-
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `placeholder-only-label`, `error-not-associated`, `autocomplete-missing`, `wizard-step-focus`. When Phase 1 completed, do not emit missing labels, unlabeled buttons/selects, or invalid autocomplete. In code-review-only mode, emit their exact scanner-owned catalog IDs only when source evidence is definitive.
 
 ## Progressive disclosure
 
@@ -89,5 +85,5 @@ Read only the reference files needed for the current page/features. Do not load 
 - [Errors and autocomplete](references/errors-and-autocomplete.md) — validation errors, error summary, autocomplete attributes
 - [Control types](references/control-types.md) — select, checkbox/radio, password, file upload, search, date/time
 - [Wizards and advanced patterns](references/wizards-and-patterns.md) — multi-step forms, combobox, accessible auth, redundant entry, custom controls
-- [Structured output templates](references/structured-output.md) — formatting findings for the audit report
+- [Scored findings](references/structured-output.md) — catalog `rule_id` values and JSON batch contract
 

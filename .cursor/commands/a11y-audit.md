@@ -27,26 +27,48 @@ When the target provides the **a11y-audit** agent, use it. Otherwise execute thi
 
 Use the single phase map (phases 0–12). Execute phases in numerical order:
 
-1. Complete Phase 0 setup without discovery questions — use the settings above, create `$RUN` and `$SCRATCH`, load the finding schema, and Read `a11y-framework` if the stack is detectable.
-2. Phase 1 is the first test. For a public page, run axe-core against the URL before any other scanner or code-review pass:
+1. Complete Phase 0 setup without discovery questions — use the settings above,
+   create `$RUN` and `$SCRATCH`, load the finding schema, rule catalog, and
+   finding-batch contract, and Read `a11y-framework` if the stack is detectable.
+2. Phase 1 is the first test. Run the shipped scanner (public or authenticated; add `--storage-state` when needed):
 
    ```bash
-   npx @axe-core/cli ${input:pageUrl} --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe.json
+   node <a11y-playwright>/scripts/a11y-scan.mjs \
+     --url ${input:pageUrl} --mode axe,tree,coverage \
+     --out $SCRATCH/scan-axe-page-1.json
    ```
 
-   If the page requires authentication, follow `a11y-web-scanning`'s authenticated Phase 1 procedure instead: establish storage state, verify the intended page loaded, and run the shipped `a11y-playwright` scanner with `--mode axe --storage-state <file>`. Do not run `@axe-core/cli` against an authenticated route.
+   Skip later phases from the scan's `inventory` flags. Do not run unpinned `@axe-core/cli`.
+   If `scans.axe.status` is not `ok` on a public page, run the pinned CLI and
+   engine to `$SCRATCH/scan-axe-cli-page-1.json` (never overwrite the primary
+   scan):
 
-3. Run code-review phases 2–9 one at a time by Reading domain skills and applying their checklists:
-   - 2: `a11y-alt-text-headings`, `a11y-text-quality` (+ `a11y-media` if media present)
-   - 3: `a11y-keyboard` (+ `a11y-modal` if overlays)
-   - 4: `a11y-forms`
+   ```bash
+   npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+     ${input:pageUrl} --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
+     --save $SCRATCH/scan-axe-cli-page-1.json
+   ```
+
+   Do not use this unauthenticated fallback for an authenticated route.
+
+3. Run code-review phases 2–9 one at a time by Reading domain skills and
+   applying catalog `rule_id`s only. Domain skills return objects; the
+   orchestrator writes one immutable
+   `$SCRATCH/findings-agent-phase-<N>-page-1.json` batch after each selected
+   phase, including empty batches. Never invent a `rule_id`. Since Phase 1 ran,
+   do not emit axe- or Playwright-owned rules.
+   - 2: `a11y-alt-text-headings`, `a11y-text-quality` (+ `a11y-media` if `inventory.hasMedia`)
+   - 3: `a11y-keyboard` (+ `a11y-modal` if `inventory.hasDialogs`)
+   - 4: `a11y-forms` (skip if not `inventory.hasForms`)
    - 5: `a11y-contrast` (+ `a11y-design-system` if tokens)
-   - 6: `a11y-live-regions`
-   - 7: `a11y-aria`
-   - 8: `a11y-tables` (skip if none)
+   - 6: `a11y-live-regions` (skip if no live regions or async UI)
+   - 7: `a11y-aria` (skip if not `inventory.hasCustomWidgets`)
+   - 8: `a11y-tables` (skip if not `inventory.hasTables`)
    - 9: `a11y-links`
-4. Phase 10: Read `a11y-playwright` and run CLI behavioral scans when Playwright is available
-5. Phase 11: Read `a11y-severity-scoring` (and its `references/help-urls.md` for finding help links); write `$RUN/ACCESSIBILITY-AUDIT.md`
+4. Phase 10: Read `a11y-playwright` and run `--mode keyboard,viewport` into
+   `$SCRATCH/scan-playwright-page-1.json` when Playwright is available. Do not
+   re-run axe.
+5. Phase 11: Read `a11y-severity-scoring` (catalog + `references/help-urls.md`); run `static-review.py`; write `$RUN/ACCESSIBILITY-AUDIT.md`. Do not write `dismissals.json` unless the user supplied one.
 6. Offer Phase 12 interactive fix mode via `a11y-issue-fixer`
 
 ## Progress Transparency

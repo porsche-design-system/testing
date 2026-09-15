@@ -22,7 +22,11 @@ When the target provides the **a11y-audit** agent, use it. Otherwise execute thi
 
 Use the phase map 0–12:
 
-1. Complete Phase 0 setup: create `$RUN` (`.a11y/runs/<YYYY-MM-DD-HHMMSS>`) and `$SCRATCH` (`mktemp -d`) before any scan or report write. Prefer askQuestions when available; otherwise ask the same structured options in chat:
+1. Complete Phase 0 setup: create `$RUN`
+   (`.a11y/runs/<YYYY-MM-DD-HHMMSS>`) and `$SCRATCH` (`mktemp -d`) before any
+   scan or report write. Read the finding schema, rule catalog, and batch
+   contract. Prefer askQuestions when available; otherwise ask the same
+   structured options in chat:
    - "What is the base URL of your application?"
    - "Which pages should I audit? List the paths (e.g., /, /login, /dashboard, /settings)"
    - "What framework/tech stack?" - Options: React, Vue, Angular, Next.js, Svelte, Vanilla HTML/CSS/JS
@@ -30,13 +34,15 @@ Use the phase map 0–12:
    - "Thoroughness?" - Quick / Standard / Deep dive
 
 2. Advance the audit phases globally across the page set; do not restart phase numbering for each page:
-   - **Automated baseline (Phase 1, runtime or both):** For every public page, run `npx @axe-core/cli <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe-page-<N>.json` before Phase 2 starts on any page
-   - **Authenticated baseline (Phase 1, runtime or both):** Follow `a11y-web-scanning`'s authenticated procedure and use the shipped `a11y-playwright` scanner with `--mode axe --storage-state <file> --out $SCRATCH/scan-axe-page-<N>.json`; verify each intended page loaded and never scan an authenticated route with `@axe-core/cli`
-   - **Code review (Phases 2–9, code review or both):** For each phase, Read its domain skills and apply that phase to every page before advancing
-   - **Behavioral (Phase 10, runtime or both):** Read `a11y-playwright` (CLI), write `$SCRATCH/scan-playwright-page-<N>.json` for every eligible page, and finish all pages before Phase 11
+   - **Automated baseline (Phase 1, runtime or both):** For every page, run `node <a11y-playwright>/scripts/a11y-scan.mjs --url <URL> --mode axe,tree,coverage --out $SCRATCH/scan-axe-page-<N>.json` (add `--storage-state` when authenticated) before Phase 2 starts on any page. If a public page's axe mode is non-OK, run `npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe-cli-page-<N>.json` without overwriting the primary scan. Skip later phases from each page's `inventory`.
+   - **Code review (Phases 2–9, code review or both):** For each phase, Read its domain skills and apply that phase to every page before advancing. Skills return objects; the orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches, including empty batches.
+   - **Behavioral (Phase 10, runtime or both):** Read `a11y-playwright`, run `--mode keyboard,viewport`, write `$SCRATCH/scan-playwright-page-<N>.json` for every eligible page, and finish all pages before Phase 11
    - Mark profile-omitted or inapplicable phases `SKIPPED` in their numerical position
 
-3. Compute per-page severity scores (0-100) and letter grades via **`a11y-severity-scoring` only**
+3. Pass all scanner and immutable batch files to `normalize-findings.py`, write
+   `$RUN/findings.json`, and compute per-page scores and grades via
+   **`a11y-severity-scoring` only**. Run `export-findings.py --format summary`
+   and copy its numbers unchanged.
 
 4. Generate the comparative report to `$RUN/ACCESSIBILITY-AUDIT.md` including:
    - **Page Scorecard** - side-by-side comparison table

@@ -161,13 +161,15 @@ Flag when an image and a text link sit next to each other and go to the same des
 
 ### Rule 6: Links Opening in New Windows
 
-Flag links that open in a new window/tab without warning the user.
+Opening an explicitly activated link in a new tab is **not** a WCAG 3.2.2
+failure. Mention a missing new-tab cue in chat as best-practice advice only.
+Do not emit a scored `rule_id` for it.
 
 ```html
-<!-- FLAGGED: No indication of new window -->
+<!-- ADVICE only: no new-tab cue, not a scored WCAG failure -->
 <a href="https://example.com" target="_blank">Example Site</a>
 
-<!-- FIXED: User is warned -->
+<!-- BETTER: User is warned -->
 <a href="https://example.com" target="_blank" rel="noopener noreferrer">
   Example Site (opens in new tab)
 </a>
@@ -375,7 +377,7 @@ Use the `download` attribute for file downloads and always indicate file type an
 8. Are icon-only links labeled with `aria-label`?
 
 ### New Windows and Resources
-9. Do links opening in new tabs warn the user (visible text or `aria-label`)?
+9. Do links opening in new tabs warn the user (visible text or `aria-label`)? Mention in chat only; do not score.
 10. Do links to non-HTML files indicate the file type and size?
 
 ### Adjacent Links
@@ -399,44 +401,15 @@ Use the `download` attribute for file downloads and always indicate file type an
 - "Read more" links inside `<article>` elements that rely on the article heading for context without programmatic association
 - File download links that don't indicate file type or size
 
-## Structured Output for Sub-Agent Use
+## Scored findings
 
-When used during a a11y-audit agent audit phase:
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `link-name-ambiguous`. Emit it only when the accessible name lowercased is in `lists.ambiguous_link_names`. New-tab cues are unscored advice. When Phase 1 completed, do not emit `link-name`; in code-review-only mode it may be emitted for a definitively empty accessible name.
 
-For each ambiguous link, always check whether `aria-label` or visually hidden text is already present before flagging it. Report the full link context (surrounding text, card pattern, list item) to help the wizard understand whether the issue is in a shared component.
-
-Return each issue in this exact structure so the wizard can aggregate, deduplicate, and score results:
-
-```text
-### [N]. [Brief one-line description]
-
-- **Severity:** [critical | serious | moderate | minor]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or component name]
-
-**Current code:**
-[code block showing the problem link]
-
-**Recommended fix:**
-[code block showing corrected link with descriptive text or aria-label]
-```
-
-**Confidence rules:**
-- **high** - definitively ambiguous: exact match to "click here", "read more", "learn more", "here", or a raw URL as visible text; new-tab link with no warning
-- **medium** - likely ambiguous: short non-descriptive text in a card context, repeated link text detected across the page
-- **low** - possibly ambiguous: link text is short but may have sufficient context from surrounding content - needs human review
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
+Chat summary (optional, not scored):
 
 ```text
 ## Link Checker Findings Summary
 - **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
 ```
 
 ## How to Report Issues

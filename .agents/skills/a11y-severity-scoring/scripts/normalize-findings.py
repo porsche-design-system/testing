@@ -3,8 +3,8 @@
 
 Turns raw scanner JSON into the shape defined in references/finding-schema.md,
 merges findings that several sources agree on, and applies the scoring formula
-from SKILL.md. Running this instead of doing the arithmetic by hand keeps scores
-reproducible across audits.
+from SKILL.md. Rule ids, severities, and WCAG criteria come from
+references/rule-catalog.json so identical inputs score identically.
 
 Usage:
     normalize-findings.py <file> [<file> ...] [options]
@@ -28,9 +28,11 @@ Exit codes: 0 scored, 1 no findings could be parsed, 2 bad input.
 import argparse
 import json
 import os
+import posixpath
 import re
 import sys
 from collections import defaultdict
+from urllib.parse import urlsplit, urlunsplit
 
 # --- Scoring model: the executable form of the table in SKILL.md ------------
 # Keep these values in sync with "Severity Scoring Formula" in SKILL.md.
@@ -63,6 +65,175 @@ CALIBRATION = {
 }
 
 GRADE_BANDS = [(90, "A"), (75, "B"), (50, "C"), (25, "D"), (0, "F")]
+
+SEVERITY_RANK = ["critical", "serious", "moderate", "minor"]
+VALID_CONFIDENCE = {"confirmed", "high", "medium", "low"}
+VALID_SOURCES = {"axe", "agent-review", "lighthouse", "playwright"}
+SOURCE_ALIASES = {"lighthouse-ci": "lighthouse"}
+CODE_REVIEW_ONLY_GAPS = (
+    {
+        "criterion": "Runtime semantics, names, and rendered contrast",
+        "reason": "Code review cannot compute the browser accessibility tree or rendered colors.",
+        "verifyBy": "Run Phase 1 axe, tree, and coverage scans on the rendered page.",
+    },
+    {
+        "criterion": "Keyboard behavior, focus, reflow, and target geometry",
+        "reason": "Static source does not prove runtime interaction or layout behavior.",
+        "verifyBy": "Run Phase 10 keyboard and viewport scans, then test focus visibility manually.",
+    },
+)
+
+CATALOG_PATH = os.path.normpath(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "references", "rule-catalog.json"))
+
+LINE_SUFFIX = re.compile(r":\d+(?::\d+)?$")
+
+
+def load_catalog(path=CATALOG_PATH):
+    try:
+        with open(path, encoding="utf-8") as handle:
+            catalog = json.load(handle)
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"could not read rule catalog {path}: {error}") from error
+    if not isinstance(catalog, dict) or not isinstance(catalog.get("rules"), dict):
+        raise ValueError(f"rule catalog {path} is missing a 'rules' object")
+    required = {
+        "rule_id", "owner", "severity", "confidence", "wcag", "wcag_level",
+        "phase", "location_key", "emit_if", "check",
+    }
+    for rule_id, rule in catalog["rules"].items():
+        missing_fields = sorted(required - set(rule))
+        if missing_fields:
+            raise ValueError(
+                f"rule catalog {path}: {rule_id} missing {', '.join(missing_fields)}")
+        if rule["rule_id"] != rule_id:
+            raise ValueError(f"rule catalog {path}: key/id mismatch for {rule_id}")
+        if rule["confidence"] not in VALID_CONFIDENCE:
+            raise ValueError(
+                f"rule catalog {path}: {rule_id} has invalid confidence")
+        if rule["severity"] not in SEVERITY_RANK:
+            raise ValueError(
+                f"rule catalog {path}: {rule_id} has invalid severity")
+        if rule["location_key"] not in {"selector", "file", "document"}:
+            raise ValueError(
+                f"rule catalog {path}: {rule_id} has invalid location_key")
+    scanner = catalog.get("scanner") or {}
+    missing = sorted(set(scanner.get("axe_rule_ids") or []) - set(catalog["rules"]))
+    if missing:
+        raise ValueError(
+            f"rule catalog {path} is missing configured axe rules: {', '.join(missing)}")
+    disabled = set(scanner.get("disabled_axe_rules") or [])
+    wrong_owner = sorted(
+        rule_id for rule_id in scanner.get("axe_rule_ids") or []
+        if rule_id not in disabled and catalog["rules"][rule_id].get("owner") != "axe"
+    )
+    if wrong_owner:
+        raise ValueError(
+            f"configured axe rules have a non-axe owner: {', '.join(wrong_owner)}")
+    return catalog
+
+
+def canonical_url(value):
+    """Normalize scheme/host/default port while preserving route state exactly."""
+    value = (value or "").strip()
+    if not value:
+        return value
+    parts = urlsplit(value)
+    if not parts.scheme:
+        return value
+    scheme = parts.scheme.lower()
+    hostname = (parts.hostname or "").lower()
+    port = parts.port
+    if port and not ((scheme == "http" and port == 80) or (scheme == "https" and port == 443)):
+        hostname = f"{hostname}:{port}"
+    path = parts.path or "/"
+    return urlunsplit((scheme, hostname, path, parts.query, parts.fragment))
+
+
+def canonical_file(value):
+    value = LINE_SUFFIX.sub("", (value or "").replace("\\", "/").strip())
+    if not value:
+        return value
+    normalized = posixpath.normpath(value)
+    return normalized[2:] if normalized.startswith("./") else normalized
+
+
+def canonical_location(finding, catalog):
+    """Stable identity fragment: selector, file path, or 'document' — never a line number."""
+    meta = (catalog.get("rules") or {}).get(finding.get("rule_id") or "", {})
+    key = meta.get("location_key") or "selector"
+    location = finding.get("location") or {}
+    if key == "document":
+        return "document"
+    if key == "file":
+        path = canonical_file(location.get("file"))
+        return f"file:{path}" if path else "document"
+    selector = (location.get("selector") or "").strip()
+    if selector:
+        return f"selector:{selector}"
+    path = canonical_file(location.get("file"))
+    return f"file:{path}" if path else "document"
+
+
+def identity_key(finding, catalog):
+    location = finding.get("location") or {}
+    return (finding.get("rule_id"), location.get("url"), canonical_location(finding, catalog))
+
+
+def apply_catalog(finding, catalog):
+    rid = finding.get("rule_id")
+    meta = (catalog.get("rules") or {}).get(rid)
+    if not meta:
+        raise ValueError(f"unknown rule_id: {rid!r}")
+    finding["severity"] = meta["severity"]
+    finding["wcag"] = meta["wcag"]
+    finding["wcag_level"] = meta["wcag_level"]
+    finding["confidence"] = meta["confidence"]
+    finding["phase"] = str(meta["phase"])
+    for field in ("description", "impact", "remediation"):
+        value = finding.get(field)
+        if not isinstance(value, str) or not value.strip():
+            if is_agent_only(finding):
+                raise ValueError(f"finding {rid!r}: {field!r} is required")
+            finding[field] = (
+                f"Review {rid} scanner evidence and follow its help URL."
+                if field == "remediation"
+                else finding.get("description") or rid
+            )
+    location = finding.get("location")
+    if not isinstance(location, dict):
+        raise ValueError(f"finding {rid!r}: 'location' must be an object")
+    location.pop("line", None)
+    location["url"] = canonical_url(location.get("url"))
+    if location.get("file"):
+        location["file"] = canonical_file(location["file"])
+    location_key = meta.get("location_key")
+    if location_key == "document":
+        location["selector"] = location.get("selector") or "document"
+    elif not (location.get(location_key) or
+              (is_agent_only(finding) and (location.get("selector") or location.get("file")))):
+        raise ValueError(
+            f"finding {rid!r}: location requires {location_key!r}")
+    finding["location"] = location
+    return finding
+
+
+def is_agent_only(finding):
+    sources = [s for s in (finding.get("sources") or []) if s]
+    return sources == ["agent-review"]
+
+
+def drop_agent_scanner_duplicates(findings, catalog, executed_checks):
+    """Drop agent re-scores only when the authoritative scanner actually ran."""
+    kept = []
+    for finding in findings:
+        meta = (catalog.get("rules") or {}).get(finding.get("rule_id") or "", {})
+        owner = meta.get("owner")
+        if (is_agent_only(finding) and owner in ("axe", "playwright")
+                and meta.get("check") in executed_checks):
+            continue
+        kept.append(finding)
+    return kept
 
 # Maps axe rule id prefixes to the calibration families above.
 RULE_FAMILIES = {
@@ -185,19 +356,17 @@ def parse_behavioural(scans, url):
         seen_targets = set()
         for entry in viewport.get("viewports", []):
             for target in entry.get("undersizedTargets", []):
-                key = f'{target.get("tag")}#{target.get("id") or ""}{target.get("name")}'
-                if key in seen_targets:
+                selector = target.get("selector")
+                if not selector or selector in seen_targets:
                     continue
-                seen_targets.add(key)
-                # Medium: the scanner applies the inline and spacing exceptions,
-                # but "essential" and "equivalent control" need human judgement.
+                seen_targets.add(selector)
                 findings.append(make_finding(
-                    rule_id="target-size", severity="moderate", confidence="medium",
-                    location={"url": url, "selector": key},
+                    rule_id="target-size-measured", severity="moderate", confidence="medium",
+                    location={"url": url, "selector": selector},
                     description=(f'Target "{target.get("name")}" is '
-                                 f'{target.get("width")}x{target.get("height")}px, below 24x24, '
-                                 "and is neither inline nor spaced clear of other targets."),
-                    impact="Users with motor impairments may miss or mis-tap this control.",
+                                 f'{target.get("width")}x{target.get("height")} CSS pixels, '
+                                 "below 24x24 with no inline or spacing exception."),
+                    impact="Users with motor impairments may miss or mistap this control.",
                     remediation="Increase the target to at least 24x24 CSS pixels, or add spacing.",
                     wcag="2.5.8", wcag_level="AA", sources=["playwright"],
                     help_url="https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html",
@@ -215,35 +384,37 @@ def parse_behavioural(scans, url):
                 remediation="Add exactly one H1 describing the page.",
                 wcag="1.3.1", wcag_level="A", sources=["playwright"],
                 help_url="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html",
-                phase="10",
+                phase="1",
             ))
         for skip in tree.get("skippedHeadingLevels", []):
             findings.append(make_finding(
                 rule_id="heading-order", severity="moderate", confidence="high",
-                location={"url": url, "selector": f'heading "{skip["to"]["name"]}"'},
+                location={"url": url, "selector": skip["to"].get("selector")
+                          or f'heading "{skip["to"]["name"]}"'},
                 description=(f'Heading level jumps from H{skip["from"]["level"]} '
                              f'to H{skip["to"]["level"]}.'),
                 impact="Screen reader users navigating by heading perceive a gap in structure.",
                 remediation="Use sequential heading levels; style visually rather than skipping.",
                 wcag="1.3.1", wcag_level="A", sources=["playwright"],
                 help_url="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html",
-                phase="10",
+                phase="1",
             ))
         for role in tree.get("missingLandmarks", []):
             findings.append(make_finding(
                 rule_id="landmark-missing", severity="minor", confidence="medium",
-                location={"url": url, "selector": "document"},
+                location={"url": url, "selector": f'document[missing-landmark="{role}"]'},
                 description=f'No "{role}" landmark on the page.',
                 impact="Screen reader users lose a navigation shortcut to this region.",
                 remediation=f'Add the appropriate element or role="{role}".',
                 wcag="1.3.1", wcag_level="A", sources=["playwright"],
                 help_url="https://www.w3.org/WAI/WCAG22/Understanding/info-and-relationships.html",
-                phase="10",
+                phase="1",
             ))
     return findings
 
 
-def parse_file(path, not_checked=None):
+def parse_file(path, not_checked=None, execution=None, executed_checks=None,
+               scanner_metadata=None, reviewed_phases=None):
     """Detect the input shape and return [(url, findings)].
 
     `not_checked` collects the criteria a scanner declined to judge, so the
@@ -259,20 +430,79 @@ def parse_file(path, not_checked=None):
             if entry not in not_checked:
                 not_checked.append(entry)
 
+    def mark(url, source, check):
+        if execution is not None:
+            execution[canonical_url(url)].add(source)
+        if executed_checks is not None:
+            executed_checks[canonical_url(url)].add(check)
+
+    def record_scanner(data):
+        if scanner_metadata is None:
+            return
+        metadata = {
+            "url": canonical_url(data.get("url")),
+            "runner": "a11y-scan",
+            "catalogVersion": data.get("catalogVersion"),
+            "axeStatus": ((data.get("scans") or {}).get("axe") or {}).get("status"),
+            "axeCoreVersion": data.get("axeCoreVersion"),
+            "axePlaywrightVersion": data.get("axePlaywrightVersion"),
+            "playwrightVersion": data.get("playwrightVersion"),
+            "browserVersion": data.get("browserVersion"),
+            "modes": data.get("modes"),
+            "tags": data.get("tags"),
+            "selector": data.get("selector"),
+            "storageState": data.get("storageState"),
+            "viewports": data.get("viewports"),
+            "maxTabs": data.get("maxTabs"),
+            "timeout": data.get("timeout"),
+            "loadDelay": data.get("loadDelay"),
+            "readiness": data.get("readiness"),
+        }
+        if metadata not in scanner_metadata:
+            scanner_metadata.append(metadata)
+
     # Previously normalized output
     if isinstance(data, dict) and "findings" in data and "pages" in data:
         record_gaps(data.get("coverage", {}).get("not_checked"))
-        return [(p["url"], [f for f in data["findings"] if f.get("location", {}).get("url") == p["url"]])
+        scoring = data.get("scoring") or {}
+        if execution is not None:
+            for page_url, sources in (scoring.get("executedSourcesByPage") or {}).items():
+                execution[canonical_url(page_url)].update(sources)
+        if executed_checks is not None:
+            for page_url, checks in (scoring.get("executedChecksByPage") or {}).items():
+                executed_checks[canonical_url(page_url)].update(checks)
+        if reviewed_phases is not None:
+            for page_url, phases in (scoring.get("reviewedPhasesByPage") or {}).items():
+                reviewed_phases[canonical_url(page_url)].update(str(phase) for phase in phases)
+        if scanner_metadata is not None:
+            for metadata in scoring.get("scannerMetadata") or []:
+                if metadata not in scanner_metadata:
+                    scanner_metadata.append(metadata)
+        return [(canonical_url(p["url"]),
+                 [f for f in data["findings"]
+                  if canonical_url(f.get("location", {}).get("url")) == canonical_url(p["url"])])
                 for p in data["pages"]]
 
     # Shared finding batch from agent review or a scanner without a native parser.
     if isinstance(data, dict) and data.get("type") == "a11y-finding-batch":
-        url = data.get("url", path)
-        source = data.get("source")
+        url = canonical_url(data.get("url", path))
+        source = SOURCE_ALIASES.get(data.get("source"), data.get("source"))
+        if source not in VALID_SOURCES:
+            raise ValueError(f"finding batch has unknown source: {source!r}")
+        if source == "agent-review" and data.get("phase") is not None and reviewed_phases is not None:
+            reviewed_phases[url].add(str(data["phase"]))
         findings = []
         for index, raw in enumerate(data.get("findings", [])):
             if not isinstance(raw, dict) or not raw.get("rule_id"):
                 raise ValueError(f"finding batch entry {index}: 'rule_id' is required")
+            for field in ("location", "description", "impact", "remediation"):
+                if not raw.get(field):
+                    raise ValueError(
+                        f"finding batch entry {index}: {field!r} is required")
+            if "source" in raw or "sources" in raw:
+                raise ValueError(
+                    f"finding batch entry {index}: per-item 'source'/'sources' is not allowed; "
+                    "use the batch-level 'source' only")
             finding = make_finding()
             finding.update(raw)
             location = finding.get("location")
@@ -281,15 +511,9 @@ def parse_file(path, not_checked=None):
             elif not isinstance(location, dict):
                 location = {}
             finding["location"] = dict(location, url=location.get("url") or url)
-            item_source = finding.pop("source", None) or source
-            sources = finding.get("sources")
-            if not sources:
-                sources = item_source if isinstance(item_source, list) else ([item_source] if item_source else [])
-            if isinstance(sources, str):
-                sources = [sources]
-            if not sources:
-                raise ValueError(f"finding batch entry {index}: 'source' or 'sources' is required")
-            finding["sources"] = sorted(set(sources))
+            finding.pop("source", None)
+            finding.pop("sources", None)
+            finding["sources"] = [source]
             finding["phase"] = str(finding["phase"]) if finding.get("phase") is not None else None
             findings.append(finding)
         record_gaps(data.get("not_checked"))
@@ -297,25 +521,48 @@ def parse_file(path, not_checked=None):
 
     # a11y-scan.mjs
     if isinstance(data, dict) and "scans" in data:
-        url = data.get("url", path)
+        url = canonical_url(data.get("url", path))
+        record_scanner(data)
         findings = parse_behavioural(data["scans"], url)
         record_gaps(data.get("coverage", {}).get("notChecked"))
         axe = data["scans"].get("axe", {})
         if axe.get("status") == "ok":
+            mark(url, "axe", "axe")
             findings += parse_axe_violations(axe.get("violations"), url, "axe", "1")
+        for mode in ("tree", "keyboard", "viewport", "coverage"):
+            if (data["scans"].get(mode) or {}).get("status") == "ok":
+                mark(url, "playwright", mode)
         return [(url, findings)]
 
     # axe CLI: a list of page results
     if isinstance(data, list):
         pages = []
         for entry in data:
-            url = entry.get("url", path)
+            url = canonical_url(entry.get("url", path))
+            mark(url, "axe", "axe")
+            if scanner_metadata is not None:
+                scanner_metadata.append({
+                    "url": url,
+                    "runner": "axe-cli",
+                    "axeStatus": "ok",
+                    "axeCoreVersion": (entry.get("testEngine") or {}).get("version"),
+                    "modes": ["axe"],
+                })
             pages.append((url, parse_axe_violations(entry.get("violations"), url, "axe", "1")))
         return pages
 
     # @axe-core/playwright: single result object
     if isinstance(data, dict) and "violations" in data:
-        url = data.get("url", path)
+        url = canonical_url(data.get("url", path))
+        mark(url, "axe", "axe")
+        if scanner_metadata is not None:
+            scanner_metadata.append({
+                "url": url,
+                "runner": "axe-playwright-raw",
+                "axeStatus": "ok",
+                "axeCoreVersion": (data.get("testEngine") or {}).get("version"),
+                "modes": ["axe"],
+            })
         return [(url, parse_axe_violations(data["violations"], url, "axe", "1"))]
 
     raise ValueError(f"unrecognised scanner output: {path}")
@@ -326,46 +573,41 @@ def parse_file(path, not_checked=None):
 SEVERITY_ORDER = ["minor", "moderate", "serious", "critical"]
 
 
-def merge_findings(findings):
-    """Collapse duplicates, then correlate agreement across sources.
-
-    Two passes are needed because scanners describe the same element with
-    different selectors — axe emits a short CSS selector, the behavioural
-    scanner emits a tag/id pair — so exact-location matching alone would
-    leave genuine agreement undetected.
-
-    Pass 1 merges findings that share rule, page, and location exactly.
-    Pass 2 correlates by rule and page: when independent sources flag the same
-    rule on the same page, every instance of that rule gains confidence, per
-    the source correlation rule in SKILL.md.
-    """
+def merge_findings(findings, catalog):
+    """Collapse exact identities and derive confidence without input-order effects."""
     buckets = defaultdict(list)
     for finding in findings:
-        location = finding.get("location") or {}
-        buckets[(finding.get("rule_id"), location.get("url"), location.get("selector"))].append(finding)
+        buckets[identity_key(finding, catalog)].append(finding)
 
     merged = []
-    for group in buckets.values():
-        primary = dict(group[0])
-        primary["sources"] = sorted({s for f in group for s in f.get("sources", [])})
-        primary["severity"] = max((f["severity"] for f in group),
-                                  key=lambda s: SEVERITY_ORDER.index(s) if s in SEVERITY_ORDER else 0)
+    for identity in sorted(buckets, key=lambda item: tuple(value or "" for value in item)):
+        group = buckets[identity]
+        primary = dict(min(
+            group,
+            key=lambda finding: (
+                ",".join(finding.get("sources") or []),
+                finding.get("description") or "",
+                finding.get("impact") or "",
+                finding.get("remediation") or "",
+            ),
+        ))
+        sources = sorted({source for finding in group
+                          for source in finding.get("sources", [])})
+        confidence_sources = {
+            "axe" if source in {"axe", "lighthouse"} else source
+            for source in sources
+        }
+        meta = catalog["rules"][primary["rule_id"]]
+        confidence = meta["confidence"]
+        if len(confidence_sources) >= 3:
+            confidence = "confirmed"
+        elif len(confidence_sources) >= 2:
+            confidence = "high"
+        primary["sources"] = sources
+        primary["source_count"] = len(confidence_sources)
+        primary["corroborated_by"] = sources
+        primary["confidence"] = confidence
         merged.append(primary)
-
-    sources_by_rule = defaultdict(set)
-    for finding in merged:
-        key = (finding.get("rule_id"), (finding.get("location") or {}).get("url"))
-        sources_by_rule[key].update(finding.get("sources", []))
-
-    for finding in merged:
-        key = (finding.get("rule_id"), (finding.get("location") or {}).get("url"))
-        corroborating = sources_by_rule[key]
-        finding["source_count"] = len(corroborating)
-        finding["corroborated_by"] = sorted(corroborating)
-        if len(corroborating) >= 3:
-            finding["confidence"] = "confirmed"
-        elif len(corroborating) == 2 and finding["confidence"] != "confirmed":
-            finding["confidence"] = "high"
 
     return merged
 
@@ -404,12 +646,9 @@ def score_page(findings, profile):
     return round(score)
 
 
-def remediation_delta(current, baseline):
-    def key(f):
-        location = f.get("location") or {}
-        return (f.get("rule_id"), location.get("url"), location.get("selector"))
-
-    now, before = {key(f) for f in current}, {key(f) for f in baseline}
+def remediation_delta(current, baseline, catalog):
+    now = {identity_key(f, catalog) for f in current}
+    before = {identity_key(f, catalog) for f in baseline}
     return {
         "fixed": len(before - now),
         "new": len(now - before),
@@ -494,6 +733,14 @@ def apply_dismissals(findings, dismissals):
     return kept, dismissed
 
 
+def finding_sort_key(finding, catalog):
+    severity = finding.get("severity")
+    rank = SEVERITY_RANK.index(severity) if severity in SEVERITY_RANK else len(SEVERITY_RANK)
+    location = finding.get("location") or {}
+    return (rank, finding.get("rule_id") or "", location.get("url") or "",
+            canonical_location(finding, catalog))
+
+
 def main():
     parser = argparse.ArgumentParser(description="Normalize and score accessibility scanner output.")
     parser.add_argument("files", nargs="+")
@@ -501,9 +748,17 @@ def main():
     parser.add_argument("--baseline")
     parser.add_argument("--dismiss", metavar="FILE",
                         help="JSON file of verified false positives, each with a reason")
+    parser.add_argument("--catalog", metavar="FILE", default=CATALOG_PATH,
+                        help="rule catalog JSON (default: packaged references/rule-catalog.json)")
     parser.add_argument("--out")
     parser.add_argument("--format", choices=["json", "markdown"], default="json")
     args = parser.parse_args()
+
+    try:
+        catalog = load_catalog(args.catalog)
+    except ValueError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 2
 
     dismissals = []
     if args.dismiss:
@@ -514,14 +769,26 @@ def main():
             return 2
 
     by_page = defaultdict(list)
+    execution_by_page = defaultdict(set)
+    executed_checks_by_page = defaultdict(set)
+    reviewed_phases_by_page = defaultdict(set)
+    scanner_metadata = []
     not_checked = []
     for path in args.files:
         if not os.path.exists(path):
             print(f"Error: no such file: {path}", file=sys.stderr)
             return 2
         try:
-            for url, findings in parse_file(path, not_checked):
-                by_page[url].extend(findings)
+            for url, findings in parse_file(
+                    path, not_checked, execution_by_page, executed_checks_by_page,
+                    scanner_metadata,
+                    reviewed_phases_by_page):
+                url = canonical_url(url)
+                prepared = []
+                for finding in findings:
+                    apply_catalog(finding, catalog)
+                    prepared.append(finding)
+                by_page[url].extend(prepared)
         except (ValueError, json.JSONDecodeError, KeyError) as error:
             print(f"Error parsing {path}: {error}", file=sys.stderr)
             return 2
@@ -529,10 +796,32 @@ def main():
     if not by_page:
         print("No findings could be parsed from the given files.", file=sys.stderr)
         return 1
+    for metadata in scanner_metadata:
+        scanner_catalog = metadata.get("catalogVersion")
+        if scanner_catalog and scanner_catalog != catalog.get("version"):
+            print(
+                f"Error: scanner catalog {scanner_catalog} does not match "
+                f"normalizer catalog {catalog.get('version')}",
+                file=sys.stderr,
+            )
+            return 2
+        axe_version = metadata.get("axeCoreVersion")
+        if (metadata.get("axeStatus") == "ok" and axe_version
+                and axe_version != (catalog.get("scanner") or {}).get("axe_core_version")):
+            print(
+                f"Error: scanner axe-core {axe_version} does not match catalog "
+                f"{(catalog.get('scanner') or {}).get('axe_core_version')}",
+                file=sys.stderr,
+            )
+            return 2
 
     pages, all_findings, all_dismissed = [], [], []
     for url, findings in by_page.items():
-        merged = merge_findings(findings)
+        merged = merge_findings(
+            drop_agent_scanner_duplicates(
+                findings, catalog, executed_checks_by_page.get(url, set())),
+            catalog,
+        )
         # Dismissals are applied before counting and scoring, so counts, score,
         # and the findings list can never disagree about what is active.
         merged, dismissed = apply_dismissals(merged, dismissals)
@@ -544,27 +833,68 @@ def main():
         pages.append({"url": url, "score": score, "grade": grade_for(score),
                       "counts": counts, "finding_count": len(merged),
                       "dismissed_count": len(dismissed)})
+    pages.sort(key=lambda page: (page["score"], page["url"]))
 
     average = round(sum(p["score"] for p in pages) / len(pages))
     totals = {s: sum(p["counts"][s] for p in pages)
               for s in ("critical", "serious", "moderate", "minor")}
+    for url in reviewed_phases_by_page:
+        checks = executed_checks_by_page.get(url, set())
+        missing_gaps = []
+        if "axe" not in checks:
+            missing_gaps.append(CODE_REVIEW_ONLY_GAPS[0])
+        if not {"keyboard", "viewport"}.issubset(checks):
+            missing_gaps.append(CODE_REVIEW_ONLY_GAPS[1])
+        for gap in missing_gaps:
+            not_checked.append({
+                **gap,
+                "reason": f'[{url}] {gap["reason"]}',
+            })
 
     report = {
         "scoring": {
             "model": "a11y-severity-scoring-v2",
             "profile": args.profile,
-            "sources": sorted({s for f in all_findings for s in f.get("sources", [])}),
+            "catalogVersion": catalog.get("version"),
+            "executedSourcesByPage": {
+                url: sorted(sources)
+                for url, sources in sorted(execution_by_page.items())
+            },
+            "executedChecksByPage": {
+                url: sorted(checks)
+                for url, checks in sorted(executed_checks_by_page.items())
+            },
+            "reviewedPhasesByPage": {
+                url: sorted(phases, key=lambda value: int(value))
+                for url, phases in sorted(reviewed_phases_by_page.items())
+            },
+            "scannerMetadata": sorted(
+                scanner_metadata,
+                key=lambda item: json.dumps(item, sort_keys=True),
+            ),
+            "sources": sorted(
+                {source for finding in all_findings
+                 for source in finding.get("sources", [])}
+                | {source for sources in execution_by_page.values() for source in sources}
+                | ({"agent-review"} if reviewed_phases_by_page else set())
+            ),
         },
         # The score reflects what was measured. Criteria listed here were not,
         # so a high score does not mean the page conforms.
-        "coverage": {"not_checked": not_checked},
-        "pages": sorted(pages, key=lambda p: p["score"]),
+        "coverage": {"not_checked": sorted(
+            {json.dumps(item, sort_keys=True): item for item in not_checked}.values(),
+            key=lambda item: (
+                item.get("criterion") or "",
+                item.get("reason") or "",
+                item.get("verifyBy") or "",
+            ),
+        )},
+        "pages": pages,
         "overall": {"score": average, "grade": grade_for(average), "counts": totals,
                     "finding_count": len(all_findings),
                     "dismissed_count": len(all_dismissed)},
-        "findings": sorted(all_findings,
-                           key=lambda f: ["critical", "serious", "moderate", "minor"].index(f["severity"])),
-        "dismissed": all_dismissed,
+        "findings": sorted(all_findings, key=lambda f: finding_sort_key(f, catalog)),
+        "dismissed": sorted(all_dismissed, key=lambda f: finding_sort_key(f, catalog)),
     }
 
     # The invariant every downstream artifact relies on. If this ever trips, the
@@ -576,15 +906,16 @@ def main():
         try:
             with open(args.baseline, encoding="utf-8") as handle:
                 previous = json.load(handle)
-            report["remediation_delta"] = remediation_delta(all_findings, previous.get("findings", []))
+            report["remediation_delta"] = remediation_delta(
+                all_findings, previous.get("findings", []), catalog)
         except (OSError, json.JSONDecodeError) as error:
             print(f"Warning: could not read baseline: {error}", file=sys.stderr)
 
-    output = to_markdown(report) if args.format == "markdown" else json.dumps(report, indent=2)
+    output = to_markdown(report) if args.format == "markdown" else json.dumps(report, indent=2, sort_keys=True)
 
     if args.out:
         with open(args.out, "w", encoding="utf-8") as handle:
-            handle.write(output if args.format == "markdown" else json.dumps(report, indent=2))
+            handle.write(output if args.format == "markdown" else json.dumps(report, indent=2, sort_keys=True))
         dismissed_note = f', {len(all_dismissed)} dismissed' if all_dismissed else ''
         print(f'Wrote {args.out}: {len(all_findings)} active findings{dismissed_note} '
               f'across {len(pages)} page(s), overall {average}/100 ({grade_for(average)})')

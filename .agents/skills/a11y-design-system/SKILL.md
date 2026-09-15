@@ -358,6 +358,10 @@ For each failing token, provide a WCAG-compliant replacement:
 
 ---
 
+## Scored findings
+
+Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `color-only-meaning`, `prefers-reduced-motion` (token/source files). Do not emit measured `color-contrast` or `target-size` — those are scanner-owned on the rendered page. Contrast.py may inform prose; it does not create scored findings unless a catalog agent-review rule matches.
+
 ## Related Skills
 
 - **Runtime contrast verification** — apply `a11y-contrast` (via a11y-audit) for rendered UI, not tokens

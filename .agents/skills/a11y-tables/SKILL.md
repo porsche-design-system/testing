@@ -92,8 +92,9 @@ You own everything related to tabular data accessibility:
 - Pagination without `aria-current="page"` - screen reader hears identical "1", "2", "3" buttons
 - Empty tables with no message - user doesn't know if data is loading or missing
 
-## How to Report Issues
+## Scored findings
 
+If inventory `hasTables` is false, skip this skill. Otherwise return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `table-caption-missing`, `table-layout`. When Phase 1 completed, do not emit missing `th`/headers associations that axe reports; in code-review-only mode use the exact scanner-owned catalog IDs when source evidence is definitive.
 
 ## Progressive disclosure
 
@@ -103,5 +104,5 @@ Read only the reference files needed for the current page/features. Do not load 
 - [Sortable tables, grids, selection](references/sortable-grids-selection.md) — aria-sort, interactive grids, select-all, row actions
 - [Responsive, pagination, empty states](references/responsive-pagination-empty.md) — responsive patterns, pagination, empty table states
 - [Layout tables and visual grids](references/layout-and-visual-grids.md) — layout tables detected or CSS grids mimicking tables
-- [Structured output templates](references/structured-output.md) — formatting findings for the audit report
+- [Scored findings](references/structured-output.md) — catalog `rule_id` values and JSON batch contract
 

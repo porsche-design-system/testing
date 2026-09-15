@@ -76,13 +76,15 @@ Skill paths are target-dependent after APM install — do **not** look under `.a
 
 ### Executable scripts (run, do not read)
 
-Three skills ship working scripts. Run them from the audited project root and parse the output. Do not read them into context, and do not write your own replacement.
+These skills ship working scripts. Run them from the audited project root and parse the output. Do not read them into context, and do not write your own replacement.
 
 | Script | Owner skill | Purpose |
 |--------|-------------|---------|
-| `scripts/a11y-scan.mjs` | `a11y-playwright` | Focus order, traps, viewport, tree, coverage, and axe scans in one run |
+| `scripts/a11y-scan.mjs` | `a11y-playwright` | Axe + tree/coverage (Phase 1) and keyboard/viewport (Phase 10) |
 | `scripts/contrast.py` | `a11y-contrast` | WCAG contrast ratios for declared colour pairs, with passing suggestions |
 | `scripts/normalize-findings.py` | `a11y-severity-scoring` | Scanner JSON → finding schema, merge, correlate, score |
+| `scripts/static-review.py` | `a11y-severity-scoring` | Closed-list agent-review findings from the Phase 1 tree dump |
+| `scripts/compare-findings.py` | `a11y-severity-scoring` | Diff two findings.json files by identity |
 | `scripts/export-findings.py` | `a11y-export` | findings.json → CSV, SARIF, self-contained HTML |
 
 ### Progressive disclosure (token budget)
@@ -90,37 +92,46 @@ Three skills ship working scripts. Run them from the audited project root and pa
 1. **Ambient:** skill descriptions (catalog) only — this package ships no always-on instructions.
 2. **Per phase:** Read the thin `SKILL.md` procedure for that phase.
 3. **On demand:** From that skill, Read only the linked `references/*.md` files the page features require (forms wizards, SR testing, complex tables). Do **not** preload every reference.
-4. **Reporting lookups:** finding schema, help URLs, WCAG encyclopedia, cross-page analysis, and VPAT live under `a11y-severity-scoring/references/` — not as separate skills.
+4. **Reporting lookups:** finding schema, rule catalog, finding-batch JSON, help URLs, WCAG encyclopedia, cross-page analysis, and VPAT live under `a11y-severity-scoring/references/` — not as separate skills.
 5. **Prefer running a script over reading a reference** when both would answer the same question. A measured ratio costs fewer tokens and is more accurate than a checklist walk.
 
 ### Delegation rules
 
 1. Before a domain or tooling step, **Read that skill's `SKILL.md`** and follow it; then Read only the references that apply.
 2. Keep **Web Scan Context** for every pass.
-3. Produce findings in the shape defined by `a11y-severity-scoring/references/finding-schema.md` — read it once at the start of the audit, before Phase 1.
-4. Deduplicate across skills and scanners, preserving every contributing `source`. Multi-source agreement is what raises confidence, so never discard the second sighting of an issue — record it.
+3. Produce findings in the shape defined by `a11y-severity-scoring/references/finding-schema.md`. Read it and `references/rule-catalog.md` once at the start of the audit, before Phase 1. Never invent a `rule_id`.
+4. Deduplicate across skills and scanners by catalog identity. When a scanner
+   completed for a page, code review must not emit rules owned by that scanner.
+   In code-review-only mode, those catalog IDs may be emitted with
+   `source: agent-review`; normalization uses explicit scanner execution status.
 5. Scoring: **only** via `a11y-severity-scoring`, preferring its `normalize-findings.py` script (never invent a second formula).
 6. Fixes: **only** via `a11y-issue-fixer` (never invent a second auto-fix table).
 7. Apply checklists; do **not** paste entire skills or references into the user reply.
 8. Never report a measurement you did not take. Contrast ratios, tab order, and reflow behaviour come from the scripts, not from estimation. If a tool is unavailable, say the check did not run.
 9. Help URLs: after Reading `a11y-severity-scoring`, Read `references/help-urls.md`. On deep dive or user “why?” questions, Read `references/wcag-guide.md`.
-10. After each selected Phase 1–10 pass, retain its findings in memory using the shared schema. Before Phase 11, write one intermediate `a11y-finding-batch` per reviewed page under `$SCRATCH`, including an empty `findings` array when the page passed code review. Include Lighthouse findings in equivalent batches so the scoring script receives every source and every audited page appears in the scorecard.
+10. In Phase 11, run `static-review.py` exactly once per Phase 1 scan to seed
+    closed-list findings. At the end of each selected code-review phase, the orchestrator
+    writes exactly one immutable
+    `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batch, including an empty
+    `findings` array. Domain skills return finding objects and never write this
+    file. Include Lighthouse findings in equivalent immutable batches.
+11. Do not write `dismissals.json` unless the user supplied one or you are reusing `$PREVIOUS/dismissals.json` from a prior run.
 
 ## Single phase map (source of truth)
 
 | Phase | Skills to Read | Notes |
 |-------|----------------|-------|
-| **0** Discovery and setup | `a11y-framework`, `a11y-web-scanning` | Resolve scope, create `$RUN`/`$SCRATCH`, load the finding schema |
-| **1** Automated baseline | `a11y-web-scanning`; `a11y-lighthouse` only if selected | **First test: run axe-core before any other scanner or review pass** |
-| **2** Structure | `a11y-alt-text-headings`, `a11y-text-quality`; `a11y-media` if video/audio/media iframes | No full ARIA pass |
-| **3** Keyboard | `a11y-keyboard`; `a11y-modal` if overlays | |
-| **4** Forms | `a11y-forms` | |
+| **0** Discovery and setup | `a11y-framework`, `a11y-web-scanning` | Resolve scope, create `$RUN`/`$SCRATCH`, load the finding schema **and rule catalog** |
+| **1** Automated baseline | `a11y-web-scanning`, `a11y-playwright`; `a11y-lighthouse` only if selected | **First test:** `a11y-scan.mjs --mode axe,tree,coverage`. Skip later phases from `inventory`. |
+| **2** Structure | `a11y-alt-text-headings`, `a11y-text-quality`; `a11y-media` if `inventory.hasMedia` | No full ARIA pass |
+| **3** Keyboard | `a11y-keyboard`; `a11y-modal` if `inventory.hasDialogs` | |
+| **4** Forms | `a11y-forms` | Skip if not `inventory.hasForms` |
 | **5** Visual | `a11y-contrast`; **also** `a11y-design-system` when tokens/themes confirmed or detected | |
-| **6** Live regions | `a11y-live-regions` | |
-| **7** ARIA widgets | `a11y-aria` | APG/widget correctness **once** |
-| **8** Tables | `a11y-tables` | Skip if no tables |
+| **6** Live regions | `a11y-live-regions` | Skip if not (`inventory.hasLiveRegions` or obvious async UI) |
+| **7** ARIA widgets | `a11y-aria` | Skip if not `inventory.hasCustomWidgets` |
+| **8** Tables | `a11y-tables` | Skip if not `inventory.hasTables` |
 | **9** Links | `a11y-links` | |
-| **10** Behavioral | `a11y-playwright` | Run `scripts/a11y-scan.mjs`; skip gracefully if unavailable |
+| **10** Behavioral | `a11y-playwright` | `--mode keyboard,viewport` only (axe already ran in Phase 1) |
 | **11** Report | `a11y-severity-scoring` (+ `references/help-urls.md`; `references/wcag-guide.md` on deep dive / “why?”; `references/cross-page-analysis.md` when multi-page), `a11y-testing-coach`, `a11y-testing-strategy` | Score via `scripts/normalize-findings.py`; write `$RUN/ACCESSIBILITY-AUDIT.md` |
 | **12** Fix / verify | `a11y-issue-fixer` (+ Playwright verify) | Optional; CI guidance offered here |
 
@@ -128,7 +139,7 @@ Three skills ship working scripts. Run them from the audited project root and pa
 
 | Profile | Phases | Extras |
 |---------|--------|--------|
-| **Quick** | 0 → 1 → 11 | axe-core only; mark Phases 2–10 `SKIPPED` in order |
+| **Quick** | 0 → 1 → 11 | axe + tree + coverage only; mark Phases 2–10 `SKIPPED` in order |
 | **Standard** | 0–11 | Skip 8 if no tables; design-system only if tokens/themes |
 | **Deep dive** | Standard + always `a11y-cognitive` + design-system when any token/theme files exist | **Quiet mode**: one Phase 0 questionnaire, then proceed phase by phase without re-asking |
 | **Runtime scan only** | 0 → 1 → 10 → 11 | Mark Phases 2–9 `SKIPPED`; mark Phase 10 `SKIPPED` when Playwright is unavailable; do not read source |
@@ -166,7 +177,7 @@ For multi-page audits, phase numbering is global: finish Phase 1 for every page 
 - **Framework:** [React / Vue / Angular / Next.js / Svelte / Vanilla / unknown]
 - **Audit Method:** [runtime scan / code review / both]
 - **Thoroughness:** [quick / standard / deep dive]
-- **Target Standard:** [WCAG 2.2 AA / WCAG 2.1 AA / WCAG 2.2 AAA]
+- **Target Standard:** [WCAG 2.2 AA / WCAG 2.1 AA]
 - **Disabled Rules:** [list or "none"]
 - **User Notes:** [Phase 0 specifics]
 - **Part of Multi-Page Audit:** [yes/no - if yes, page X of Y]
@@ -181,6 +192,21 @@ When the user asks to review specific UI files (not a full site audit), skip the
 3. Synthesize Critical / Important / Recommendations / Positive Notes.
 4. If used as an edit-gate review and criticals are resolved, create `.github/.a11y-reviewed` when that workflow is in use.
 
+Review mode is prose-only unless the initiating prompt requests a component
+scorecard. For a component-library audit, use code-review batch mode instead:
+
+1. Create `$RUN` and `$SCRATCH`; load the finding schema, catalog, and batch contract.
+2. Assign each component a stable page URL:
+   `component://<workspace-relative-posix-path>`.
+3. Domain skills return finding objects. The orchestrator writes immutable
+   `findings-agent-phase-<N>-page-<M>.json` batches. Write at least one empty
+   batch per component so clean components remain in the scorecard.
+4. Because runtime scanners did not execute, definitive source findings may use
+   scanner-owned catalog IDs with `source: agent-review`. Runtime-only behavior
+   remains Not Verified.
+5. Normalize all batches, generate the summary, and write the standard
+   `findings.json` and `ACCESSIBILITY-AUDIT.md` artifacts.
+
 ## Output contract
 
 **This is an allowlist, not an example.** Write these files and no others. Everything the user did not ask for is clutter they have to read, judge, and delete.
@@ -192,10 +218,9 @@ When the user asks to review specific UI files (not a full site audit), skip the
     findings.json                       scored findings, incl. dismissals
     dismissals.json                     only if findings were dismissed
     raw/                                scanner output, kept for reproducibility
-      scan-axe.json                     single-page run, trimmed
-      scan-playwright.json
-      scan-axe-page-<N>.json            multi-page run, one per page
-      scan-playwright-page-<N>.json
+      scan-axe-page-<N>.json            one trimmed Phase 1 scan per page; N=1 for single page
+      scan-axe-cli-page-<N>.json        only when the pinned CLI fallback was needed
+      scan-playwright-page-<N>.json      one Phase 10 scan per page
     ACCESSIBILITY-AUDIT.html            only if that format was requested
     ACCESSIBILITY-AUDIT.sarif           only if that format was requested
     ACCESSIBILITY-AUDIT-*.csv           only if that format was requested
@@ -238,7 +263,7 @@ These exist because every one of them has already been violated in a real run, p
    ```
 
    Omit `selector` to dismiss a rule everywhere on the page. Every dismissal needs a `reason` — the script rejects the file otherwise, because an unexplained dismissal is indistinguishable from a missed issue. Dismissals are applied before counting and scoring, so counts, score, and findings can never disagree.
-4. **A dismissal requires evidence, not a hunch.** Confirm by keyboard, by reading the component's source, or by re-scanning with a longer `--load-delay`. State what you checked in the reason.
+4. **A dismissal requires evidence, not a hunch.** Confirm by keyboard, by reading the component's source, or by re-scanning with a longer `--load-delay`. State what you checked in the reason. Do not create `dismissals.json` unless the user asked or a previous run already has one to reuse.
 5. **If the exporter rejects the findings file, stop and fix it.** An error like *declared counts do not match the findings* means the file was hand-edited. Re-run the scoring script; never work around the check by editing the export.
 6. **Quote the report's numbers from one place only.** The markdown report, the HTML export, and `findings.json` must agree because they all derive from the same generated summary — not because you copied carefully.
 7. **Never reimplement a check axe-core already performs, above all colour contrast.** A hand-rolled contrast routine once reported eleven failures — including black text on a near-black background — on a page where axe-core, in the same browser, reported none. It was reading the custom element's host colour while the text rendered in the colour its shadow root applied. axe-core owns contrast, ARIA validity and name computation; the scanner owns what it can measure directly: focus order, tab stops, keyboard traps, document overflow, target geometry and structure.
@@ -271,7 +296,8 @@ Instead, **print the full path when the audit finishes** so it is one click away
 Before questions:
 
 1. **Lighthouse CI:** Search workflows/config for lhci / treosh. If found, note it for Phase 1 correlation; do not run it before the Phase 1 axe baseline.
-2. **Playwright:** Note whether Playwright MCP tools exist **or** whether `npx playwright` / `@axe-core/playwright` can run (Phase 10 uses CLI as primary path; MCP is optional acceleration).
+2. **Playwright:** Note whether the pinned CLI scanner dependencies can run.
+   Both Phase 1 and Phase 10 use the CLI; MCP is optional acceleration.
 3. **Dev server probe:** If no URL yet, probe common ports (3000, 5173, 8080, 4200, 8000).
 
 Announce notable detections briefly, then continue.
@@ -287,7 +313,9 @@ Ask (adapt for dev vs production):
 1. Project type (web app, marketing, dashboard, e-commerce, SaaS, docs)
 2. Framework (React, Vue, Angular, Next.js, Svelte, Vanilla)
 3. URL / dev server URL (skip runtime phases if none)
-4. Target WCAG level (default WCAG 2.2 AA)
+4. Target standard: WCAG 2.2 AA (default) / WCAG 2.1 AA. AAA guidance
+   may be added as unscored recommendations; the deterministic scanner catalog
+   is A/AA.
 
 ### Step 3: Scope and thoroughness
 
@@ -334,7 +362,7 @@ If any target route is behind a login, follow the authenticated-pages procedure 
    Create `$RUN/raw/` later, at the moment of first write. Do not create a `screenshots/` directory.
 
    If `.a11y/runs/` already contains runs, the newest one is the baseline; tell the user you will report fixed, persistent, and new issues against it.
-2. Read `a11y-severity-scoring/references/finding-schema.md` once, so every later phase emits findings in the same shape.
+2. Read `a11y-severity-scoring/references/finding-schema.md` and `references/rule-catalog.md` once, so every later phase emits catalog `rule_id` values only.
 3. Read `a11y-framework` for the detected stack.
 4. For crawl/inventory, Read `a11y-web-scanning`.
 5. Only if the user explicitly asked for screenshots, capture them into `$SCRATCH` (prefer `npx capture-website-cli`, fallback `npx playwright screenshot`) and keep them out of `$RUN`. Unannotated screenshots are not audit evidence.
@@ -347,34 +375,45 @@ If any target route is behind a login, follow the authenticated-pages procedure 
 
 This is the first testing phase. When the audit method includes runtime testing:
 
-1. Read `a11y-web-scanning`.
-2. Run the axe-core engine before any code review, Lighthouse run, or behavioral scanner.
-3. For a public page, use the CLI:
-
-   ```bash
-   npx @axe-core/cli <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe.json
-   ```
-
-4. For an authenticated page, establish and verify storage state, then use the shipped scanner's axe-only mode. Do not run the public CLI against an authenticated route:
+1. Read `a11y-web-scanning` and `a11y-playwright`.
+2. Run the shipped scanner for axe + tree + coverage **before** any code review, Lighthouse run, or keyboard/viewport pass. Use the same command for public and authenticated pages (add `--storage-state` when auth is required):
 
    ```bash
    node <a11y-playwright>/scripts/a11y-scan.mjs \
-     --url <URL> --mode axe --storage-state <file> --out $SCRATCH/scan-axe.json
+     --url <URL> --mode axe,tree,coverage --out $SCRATCH/scan-axe-page-1.json
    ```
 
-5. In a multi-page audit, replace `scan-axe.json` with `scan-axe-page-<N>.json` for each page, regardless of which axe runner is used. Never reuse an output path across pages.
-6. Parse and merge the axe findings into the audit finding set.
-7. Only after axe-core completes, run Lighthouse if the user selected it and correlate any Lighthouse CI findings detected during Phase 0.
+   In a multi-page audit, write `scan-axe-page-<N>.json` for each page. Never reuse an output path across pages.
+3. Keep `inventory` from that JSON. Skip Phases 2–9 from those flags, not from guesses: `hasMedia` → Phase 2 media; `hasDialogs` → Phase 3 modal; `hasForms` → Phase 4; `hasLiveRegions` → Phase 6; `hasCustomWidgets` → Phase 7; `hasTables` → Phase 8. If `inventory` is missing, run the phase rather than skipping it.
+4. Inspect `scans.axe.status`. If it is not `ok` on a public page (missing or
+   mismatched axe package included), run the pinned CLI fallback to
+   `$SCRATCH/scan-axe-cli-page-<N>.json`. Keep the primary scan because it
+   contains tree, coverage, and inventory. For authenticated pages, do not run
+   an unauthenticated CLI fallback; mark axe coverage failed.
+5. Only after axe-core completes, run Lighthouse if the user selected it and correlate any Lighthouse CI findings detected during Phase 0.
 
-Convert Lighthouse violations into a shared finding batch with `source: lighthouse`, retain the original phase as `phase: "1"`, and save it under `$SCRATCH` for Phase 11 normalization. Lighthouse's own aggregate score is not the audit score.
+Convert Lighthouse violations into a shared finding batch with `source: lighthouse`, retain the original phase as `phase: "1"`, and save it under `$SCRATCH` for Phase 11 normalization. Lighthouse's own aggregate score is not the audit score. Lighthouse `rule_id` values must exist in the rule catalog.
 
 If runtime testing was not selected or no URL is available, mark the phase `SKIPPED` with the reason. Do not substitute source review for the missing automated baseline.
 
 Do not capture screenshots unless the user asked; if they did, keep them in `$SCRATCH`.
 
+Do not run unpinned `npx @axe-core/cli` as the Phase 1 path. When the requested
+axe mode is non-OK on a public page, run the pinned CLI **and** engine:
+
+```bash
+npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+  <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
+  --save $SCRATCH/scan-axe-cli-page-<N>.json
+```
+
+Never write that fallback over `scan-axe-page-<N>.json`.
+
 ## Phase 2: Structure and semantics
 
 Ask only what you still need (templates, heading consistency). On **deep dive** or quiet mode, announce and proceed without re-asking.
+
+Skip `a11y-media` unless `inventory.hasMedia` is true (or inventory is missing).
 
 Read and apply:
 
@@ -388,13 +427,18 @@ Report findings, then continue.
 
 Ask about modals/overlays, SPA routing, drag-and-drop, custom menus only if unknown.
 
-Read `a11y-keyboard`. If overlays exist, Read `a11y-modal`. Report, then continue.
+Read `a11y-keyboard`. If `inventory.hasDialogs` (or inventory is missing and overlays exist), Read `a11y-modal`. Report, then continue.
 
 ## Phase 4: Forms and input
 
 Ask about forms/wizards/validation/custom controls only if unknown.
 
-Read `a11y-forms`. On **deep dive**, also Read `a11y-cognitive` after forms (or before Phase 11 if deferred). Report, then continue.
+If inventory exists and `inventory.hasForms` is false, mark Phase 4 `SKIPPED`
+and continue. If inventory is unavailable (including code-review-only), inspect
+the selected source deterministically and run the phase when form controls are
+present. Otherwise Read `a11y-forms`. On **deep dive**, also Read
+`a11y-cognitive` after forms (or before Phase 11 if deferred). Report, then
+continue.
 
 ## Phase 5: Color and visual design
 
@@ -406,15 +450,22 @@ If the user confirms a design system/tokens **or** token/theme files are detecte
 
 Ask about toasts, live search, filters, realtime UI, loading states only if unknown.
 
-Read `a11y-live-regions`. Report, then continue.
+If inventory exists, `inventory.hasLiveRegions` is false, and source review
+shows no async status/filter/toast UI, mark Phase 6 `SKIPPED`. Otherwise Read
+`a11y-live-regions`. Report, then continue.
 
 ## Phase 7: ARIA widget correctness
 
-Read `a11y-aria` for custom widgets and APG patterns (not a repeat of Phase 2 structure). Report, then continue.
+If inventory exists and `inventory.hasCustomWidgets` is false, mark Phase 7
+`SKIPPED`. If inventory is unavailable, inspect source for custom widget roles
+and ARIA state before deciding. Otherwise Read `a11y-aria` for custom widgets
+and APG patterns (not a repeat of Phase 2 structure). Report, then continue.
 
 ## Phase 8: Data tables
 
-If no tables, skip and say so. Otherwise Read `a11y-tables`. Report, then continue.
+If inventory exists and `inventory.hasTables` is false, skip and say so. If
+inventory is unavailable, inspect source for table/grid markup. Otherwise Read
+`a11y-tables`. Report, then continue.
 
 ## Phase 9: Links and navigation
 
@@ -424,41 +475,55 @@ Read `a11y-links`. Report, then continue.
 
 Runs when a URL is available and Playwright can run.
 
-1. Read `a11y-playwright` and run its shipped scanner — do not write a new scan script:
+1. Read `a11y-playwright` and run keyboard + viewport only — axe already ran in Phase 1:
 
    ```bash
-   node <a11y-playwright>/scripts/a11y-scan.mjs --url <URL> --out $SCRATCH/scan-playwright.json
+   node <a11y-playwright>/scripts/a11y-scan.mjs \
+     --url <URL> --mode keyboard,viewport --out $SCRATCH/scan-playwright-page-1.json
    ```
 
    In a multi-page audit, write `scan-playwright-page-<N>.json` so each page retains its own result.
 2. Merge findings with the Phase 1 axe baseline and Phases 2–9 code review for multi-source confidence.
 3. If Playwright or the URL is unavailable: skip, and say plainly in the report that behavioural checks did not run. Do not infer tab order or rendered contrast from source.
 
-What this scan does and does not settle matters for how you write the report. It measures focus order, tab stops, keyboard traps, reflow, target geometry and document structure, and it runs axe-core in the live page — which is where every contrast and ARIA verdict comes from. It deliberately reaches no verdict on focus-indicator visibility or on `tabindex="-1"`, and it reports those under `coverage.notChecked` instead. Carry that section into the report unchanged; do not fill the gap with a guess in either direction.
+What this scan does and does not settle matters for how you write the report.
+Phase 10 measures focus order, tab stops, keyboard traps, reflow, and target
+geometry. Axe-core and document structure ran once in Phase 1, which is where
+contrast, ARIA, and tree verdicts come from. The scanner deliberately reaches no
+verdict on focus-indicator visibility or on `tabindex="-1"`, and reports those
+under `coverage.notChecked` instead. Carry that section into the report
+unchanged; do not fill the gap with a guess in either direction.
 
 Contrast on web components deserves one specific caution. When a component colours slotted text through its `<slot>` element, the host's computed colour differs from what the user sees, and **every** computed-style engine misreads it — axe-core included. The scanner detects that pattern and names the affected components in `coverage.notChecked`. When it does, verify those contrast results with a colour picker before reporting or dismissing them.
 
 ## Phase 11: Final report
 
-1. Read `a11y-severity-scoring`. For every code-reviewed page, write `$SCRATCH/findings-agent[-page-<N>].json`, including `findings: []` when no issues were found; write equivalent `findings-lighthouse[-page-<N>].json` batches when Lighthouse ran. These are intermediate script inputs, not deliverables:
+1. Read `a11y-severity-scoring` (schema, catalog, finding-batch). Run static
+   review on every Phase 1 scan using page-specific immutable names:
+
+   ```bash
+   python3 <a11y-severity-scoring>/scripts/static-review.py \
+     $SCRATCH/scan-axe-page-<M>.json \
+     --out $SCRATCH/findings-static-page-<M>.json
+   ```
+
+   Each selected Phase 2–9 result is already stored as
+   `$SCRATCH/findings-agent-phase-<N>-page-<M>.json`; Lighthouse uses
+   `$SCRATCH/findings-lighthouse-page-<M>.json`.
 
    ```json
    {
      "type": "a11y-finding-batch",
      "url": "<page URL>",
      "source": "agent-review",
+     "phase": "<2-9>",
      "findings": [
        {
-         "rule_id": "<stable rule id>",
-         "severity": "<critical|serious|moderate|minor>",
-         "confidence": "<high|medium|low>",
-         "location": {"selector": "<selector or file location>"},
+         "rule_id": "<catalog rule id>",
+         "location": {"selector": "<selector or file path>"},
          "description": "<problem>",
          "impact": "<user impact>",
-         "remediation": "<fix>",
-         "wcag": "<criterion>",
-         "wcag_level": "<A|AA|AAA>",
-         "phase": "<2-9>"
+         "remediation": "<fix>"
        }
      ]
    }
@@ -469,7 +534,8 @@ Contrast on web components deserves one specific caution. When a component colou
    ```bash
    INPUT_FILES=()
    for input in "$SCRATCH"/scan-axe*.json "$SCRATCH"/scan-playwright*.json \
-                "$SCRATCH"/findings-agent*.json "$SCRATCH"/findings-lighthouse*.json; do
+                "$SCRATCH"/findings-static*.json "$SCRATCH"/findings-agent-phase-*.json \
+                "$SCRATCH"/findings-lighthouse*.json; do
      [ -f "$input" ] && INPUT_FILES+=("$input")
    done
    python3 <a11y-severity-scoring>/scripts/normalize-findings.py \

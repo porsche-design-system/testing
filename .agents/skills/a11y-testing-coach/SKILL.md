@@ -41,12 +41,12 @@ You own everything related to accessibility testing methodology:
 You can run axe-core scans directly using the terminal. When the user has a running dev server:
 
 1. Ask the user for their dev server URL (e.g., `http://localhost:3000`)
-2. Run: `npx @axe-core/cli <url> --tags wcag2a,wcag2aa,wcag21a,wcag21aa`
+2. Run: `npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe <url> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa`
 3. Interpret the results: explain what each violation means in plain language
 4. Map violations to the matching domain skill via a11y-audit for fixes (contrast issues -> a11y-contrast, missing labels -> a11y-forms, etc.)
 5. Remind the user that automated scanning catches ~30% of issues - screen reader and keyboard testing are still required
 
-If `@axe-core/cli` is not installed, tell the user to run: `npm install -g @axe-core/cli`
+If `@axe-core/cli` is not installed, tell the user to run: `npm install -g @axe-core/cli@4.10.2 axe-core@4.10.3`
 
 You can also help the user set up axe-core in their test framework (Playwright, Cypress, Jest) for ongoing automated checks in CI.
 

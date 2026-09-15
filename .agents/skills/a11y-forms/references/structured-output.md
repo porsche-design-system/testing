@@ -1,42 +1,9 @@
-# Structured Output
+# Scored findings
 
-## Structured Output for Sub-Agent Use
+Chat may summarize counts. Return finding objects to the orchestrator; the only scored artifacts are its immutable phase/page `a11y-finding-batch` JSON files. Follow `a11y-severity-scoring/references/finding-batch.md` and `a11y-severity-scoring/references/rule-catalog.md`.
 
-When used during a a11y-audit agent audit phase:
+**May emit:** `placeholder-only-label`, `error-not-associated`, `autocomplete-missing`, `wizard-step-focus`
 
-Provide framework-specific code fixes. For React, use `htmlFor` (not `for`). For Angular, use `[attr.aria-describedby]`. For Vue, use standard HTML attributes. For controlled inputs, show the state management pattern.
+**When the scanner completed, do not emit:** `label`, `label-title-only`, `form-field-multiple-labels`, `select-name`, `input-button-name`, `autocomplete-valid`, `button-name`
 
-Return each issue in this exact structure so the wizard can aggregate, deduplicate, and score results:
-
-```text
-### [N]. [Brief one-line description]
-
-- **Severity:** [critical | serious | moderate | minor]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or component name]
-
-**Current code:**
-[code block showing the problem]
-
-**Recommended fix:**
-[code block showing the corrected code in the detected framework syntax]
-```
-
-**Confidence rules:**
-- **high** - definitively wrong: input with no label association, error message with no `aria-describedby`, required field with no `required` attribute
-- **medium** - likely wrong: label and input appear visually associated but lack programmatic link, placeholder-only label suspected
-- **low** - possibly wrong: custom form control pattern may have accessible equivalent not visible in static analysis
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
-
-```text
-## Forms Findings Summary
-- **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
-```
-
+Severity and WCAG come from the catalog. Location identity is `file` for these rules. The orchestrator writes `"findings": []` when nothing matches `emit_if`. In code-review-only mode, definitive source defects may use exact scanner-owned catalog IDs.

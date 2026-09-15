@@ -365,39 +365,9 @@ The conditional render creates and fills the element simultaneously. The screen 
 - Missing loading state announcements (user does not know anything is happening)
 - Using `display: none` to hide a live region (screen reader ignores it completely)
 
-## Structured Output for Sub-Agent Use
+## Scored findings
 
-When used during a a11y-audit agent audit phase:
-
-```text
-### [severity]: [Brief description]
-- **WCAG:** [criterion number] [criterion name] (Level [A/AA/AAA])
-- **Confidence:** [high | medium | low]
-- **Impact:** [What a real user with a disability would experience - one sentence]
-- **Location:** [file path:line or CSS selector or component name]
-
-**Current code:**
-[code block showing the problem]
-
-**Recommended fix:**
-[code block showing the corrected code in the detected framework syntax]
-```
-
-**Confidence rules:**
-- **high** - definitively wrong: no live region for dynamic content, `aria-live="assertive"` on a non-critical update, live region conditionally rendered, confirmed missing announcement
-- **medium** - likely wrong: live region placement may not announce, debouncing absent for high-frequency updates, loading state may be insufficient
-- **low** - possibly wrong: announcement timing may be intentional, toast duration may meet user needs, manual verification with screen reader needed
-
-### Output Summary
-
-End your invocation with this summary block (used by the wizard for / progress announcements):
-
-```text
-## Live Region Controller Findings Summary
-- **Issues found:** [count]
-- **Critical:** [count] | **Serious:** [count] | **Moderate:** [count] | **Minor:** [count]
-- **High confidence:** [count] | **Medium:** [count] | **Low:** [count]
-```
+If inventory `hasLiveRegions` is false and the page has no filters/toasts/async status, return an empty `findings` array. Otherwise return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `live-region-missing` when status/filter/search updates the UI with no `aria-live` / `role="status"` / `role="alert"`.
 
 Always explain your reasoning. Developers need to understand why, not just what.
 

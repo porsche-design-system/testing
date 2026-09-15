@@ -148,7 +148,9 @@ Since Lighthouse uses axe-core under the hood, correlation is straightforward:
 
 1. **Match by audit/rule ID:** Lighthouse audit IDs correspond directly to axe-core rule IDs
 2. **Match by URL:** Compare scanned URLs from Lighthouse config with local scan targets
-3. **Boost confidence:** Findings confirmed by both Lighthouse CI and local axe-core scan receive `high` confidence
+3. **Correlate without double-counting:** Lighthouse accessibility findings use
+   axe-core, so a local axe match shares identity but does not add an
+   independent confidence source
 
 ### Source Comparison
 
@@ -188,28 +190,30 @@ Track Lighthouse accessibility scores across runs to detect regressions:
 
 ## Structured Output Format
 
-When `lighthouse-bridge` normalizes Lighthouse data, it produces findings in this format:
+Scored Lighthouse findings use the finding-batch contract. The orchestrator
+writes `$SCRATCH/findings-lighthouse-page-<N>.json`:
 
 ```json
 {
-  "source": "lighthouse-ci",
-  "ruleId": "color-contrast",
-  "wcagCriterion": "1.4.3",
-  "wcagLevel": "AA",
-  "severity": "serious",
-  "confidence": "high",
+  "type": "a11y-finding-batch",
   "url": "https://example.com/login",
-  "element": "button.submit-btn",
-  "description": "Element has insufficient color contrast ratio",
-  "lighthouseWeight": 7,
-  "lighthouseScore": {
-    "overall": 87,
-    "previousOverall": 95,
-    "delta": -8,
-    "status": "regressed"
-  }
+  "source": "lighthouse",
+  "phase": "1",
+  "findings": [
+    {
+      "rule_id": "color-contrast",
+      "location": {"selector": "button.submit-btn"},
+      "description": "Element has insufficient color contrast ratio",
+      "impact": "Low-vision users may not read the control text.",
+      "remediation": "Increase contrast to at least 4.5:1 for text.",
+      "phase": "1"
+    }
+  ]
 }
 ```
+
+Keep Lighthouse score deltas in the chat/regression summary. They are not
+scored findings.
 
 ## GitHub Actions Integration
 
@@ -305,42 +309,38 @@ When Lighthouse CI reports are available (as workflow artifacts or in temporary 
    - Description and help text
    - Affected elements (CSS selectors and HTML snippets)
    - WCAG criterion
-   - Lighthouse weight (determines severity mapping)
+   - Lighthouse weight (context only; catalog owns severity)
 
 ### 3. Normalize Findings
 
-Convert Lighthouse audit data into the standard agent finding format:
+Convert each failing Lighthouse accessibility audit into a shared finding
+batch. Omit severity, confidence, and WCAG — `normalize-findings.py` overwrites
+those from the catalog. Extra Lighthouse fields may stay on the finding but are
+not scored.
 
 ```json
 {
-  "source": "lighthouse-ci",
-  "ruleId": "{audit-id}",
-  "wcagCriterion": "{criterion}",
-  "wcagLevel": "{A|AA|AAA}",
-  "severity": "{critical|serious|moderate|minor}",
-  "confidence": "medium",
+  "type": "a11y-finding-batch",
   "url": "{audited-url}",
-  "element": "{css-selector}",
-  "description": "{audit-description}",
-  "remediation": "{fix-guidance}",
-  "lighthouseWeight": 7,
-  "lighthouseScore": {
-    "overall": 87,
-    "previousOverall": null,
-    "delta": null,
-    "status": "baseline"
-  }
+  "source": "lighthouse",
+  "phase": "1",
+  "findings": [
+    {
+      "rule_id": "{catalog-rule-id}",
+      "location": {"selector": "{css-selector}"},
+      "description": "{audit-description}",
+      "impact": "{user-impact}",
+      "remediation": "{fix-guidance}",
+      "phase": "1"
+    }
+  ]
 }
 ```
 
-**Severity mapping by Lighthouse weight:**
-
-| Weight | Severity |
-|--------|----------|
-| 10 | Critical |
-| 7 | Serious |
-| 3 | Moderate |
-| 1 | Minor |
+Write that batch to `$SCRATCH/findings-lighthouse-page-<N>.json`. Skip any
+Lighthouse audit id that is not in the rule catalog. Lighthouse's own 0–100
+score is context only; it is not the audit score. Lighthouse weight does not
+set severity.
 
 ### 4. Track Score Regressions
 
@@ -382,10 +382,9 @@ When local axe-core scan results are provided, correlate with Lighthouse finding
 
 1. **Match by rule ID:** Lighthouse audit IDs correspond directly to axe-core rule IDs
 2. **Match by URL:** Compare audited URLs
-3. **Classify findings:**
-   - **Both sources:** High confidence, full severity weight
-   - **Lighthouse only:** Medium confidence, may be environment-specific
-   - **Local only:** Medium confidence, may not be in Lighthouse audit subset
+3. **Classify findings:** Pass the Lighthouse batch into the same
+   `normalize-findings.py` call as the axe scan. Axe and Lighthouse count as
+   one confidence family; do not invent a second score.
 
 ### 6. Generate Summary
 

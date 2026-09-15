@@ -13,40 +13,55 @@ The `a11y-audit` agent owns phase numbering. This skill supports:
 - **Phase 0:** Discover URLs, scope, framework, authentication needs, and scanner availability. Do not run audit tests during discovery.
 - **Phase 1:** Establish the automated baseline. Run the axe-core engine before Lighthouse, code review, or behavioral testing.
 
-For a public page, use `@axe-core/cli`. For an authenticated page, use the `a11y-playwright` scanner in `--mode axe` with storage state, because `@axe-core/cli` cannot load the authenticated session. In both cases, axe-core remains the first test.
+For a public **or** authenticated page, use the shipped `a11y-playwright` scanner. Authenticated pages add `--storage-state`. Do not use unpinned `npx @axe-core/cli` as the primary Phase 1 path.
 
 Complete Phase 1 as one step before returning control:
 
 1. Confirm the target URL is reachable and is the intended page.
-2. Run axe-core and save its JSON under `$SCRATCH`. Use `scan-axe.json` for one page or `scan-axe-page-<N>.json` for each page in a multi-page audit; never reuse a page's output path.
-3. Parse the result into the shared finding schema.
-4. Return the scanner status, artifact path, violation count, severity breakdown, and any coverage gap.
-5. Only then may the agent mark Phase 1 `DONE`, `SKIPPED`, or `FAILED` and advance.
+2. Run:
+
+   ```bash
+   node <a11y-playwright>/scripts/a11y-scan.mjs \
+     --url <URL> --mode axe,tree,coverage --out $SCRATCH/scan-axe-page-1.json
+   ```
+
+   Use `scan-axe-page-<N>.json` for each page in a multi-page audit; never reuse a page's output path.
+3. Return the scanner status, artifact path, `inventory` flags, violation count, and any coverage gap.
+4. Only then may the agent mark Phase 1 `DONE`, `SKIPPED`, or `FAILED` and advance.
 
 ## Supported Audit Methods
 
 | Method | Tool | When to Use |
 |--------|------|-------------|
-| Runtime scan | axe-core CLI | Live URL available (dev server or production) |
+| Runtime scan | `a11y-scan.mjs --mode axe,tree,coverage` | Live URL available (dev server or production) |
 | Code review | Domain skill checklists (via a11y-audit) | Source code available in workspace |
 | Both | axe-core + domain skills | Most comprehensive - catches issues from both angles |
 
 ## Runtime Scanning Commands
 
-### axe-core CLI
+### Phase 1 (required)
 
 ```bash
-# Single page scan (WCAG 2.2 AA)
-npx @axe-core/cli <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa
+node <a11y-playwright>/scripts/a11y-scan.mjs \
+  --url <URL> --mode axe,tree,coverage --out $SCRATCH/scan-axe-page-1.json
+```
 
-# Save results to JSON
-npx @axe-core/cli <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe.json
+The JSON includes `inventory` (`hasTables`, `hasForms`, `hasMedia`, `hasDialogs`, `hasLiveRegions`, `hasCustomWidgets`) used to skip later phases.
 
-# Multiple pages: repeat once per page with a unique index
-npx @axe-core/cli <URL-N> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --save $SCRATCH/scan-axe-page-<N>.json
+After every primary scan, inspect `scans.axe.status`. If it is not `ok` on a
+public page, run the pinned CLI fallback below to
+`$SCRATCH/scan-axe-cli-page-<N>.json` and preserve the primary file for its
+tree/inventory data. Never use the public CLI fallback for an authenticated
+route.
 
-# With Chrome flags (headless)
-npx @axe-core/cli <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa --chrome-flags="--headless --no-sandbox"
+### Fallback: pinned axe-core CLI
+
+Use only when Playwright cannot run. Inventory flags will be missing, so do not skip Phases 2–9 from guesses.
+
+```bash
+npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+  <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
+  --save $SCRATCH/scan-axe-cli-page-1.json
 ```
 > `$RUN` is the timestamped run directory the `a11y-audit` agent creates in Phase 0 (`.a11y/runs/<YYYY-MM-DD-HHMMSS>`); `$SCRATCH` is a `mktemp -d` directory for intermediates, which are never written into the project. Running standalone, substitute any directories.
 
@@ -193,17 +208,14 @@ Add `.auth/` to `.gitignore` before creating it. Session files contain live cook
 ### Step 3: Reuse it across tools
 
 ```bash
-# Behavioural scan of an authenticated route
+# Phase 1 of an authenticated route
 node <a11y-playwright>/scripts/a11y-scan.mjs \
   --url http://localhost:3000/dashboard \
+  --mode axe,tree,coverage \
   --storage-state .auth/state.json
-
-# Screenshots of an authenticated route
-npx playwright screenshot --load-storage=.auth/state.json \
-  --full-page "http://localhost:3000/dashboard" "$SCRATCH/screenshots/dashboard.png"
 ```
 
-The `@axe-core/cli` tool cannot load a storage state. For authenticated routes, use the Playwright scanner's `axe` mode instead of the axe CLI.
+Prefer this scanner over `@axe-core/cli` for every Phase 1 run. The CLI cannot load storage state; the supported fallback wrapper is `@4.10.2` (axe-core `~4.10.3`).
 
 ### Step 4: Verify and record
 

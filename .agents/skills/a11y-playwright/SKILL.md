@@ -8,7 +8,10 @@ user-invocable: false
 
 ## Audit phase role
 
-The `a11y-audit` agent owns phase numbering. Behavioral modes from this skill run only in **Phase 10**, after the Phase 1 axe baseline and Phases 2–9 each have a terminal status. The one exception is an authenticated page: Phase 1 may invoke this scanner with `--mode axe --storage-state <file>` solely to establish the axe-core baseline. Do not run keyboard, tree, viewport, or coverage modes during that exception. Complete the requested scan, return findings, and stop.
+The `a11y-audit` agent owns phase numbering. In **Phase 1**, every public or
+authenticated page runs `--mode axe,tree,coverage`. In **Phase 10**, run
+`--mode keyboard,viewport`; never re-run axe. Complete only the requested
+modes, return findings, and stop.
 
 Procedure module for `a11y-audit`. Behavioural testing catches what static review cannot: real tab order, keyboard traps, reflow at narrow widths, and target geometry as rendered.
 
@@ -27,37 +30,46 @@ It is scoped by one rule: **the scanner never reimplements an axe-core check, an
 
 ## Execution order
 
-1. **Detect.** `npx playwright --version`. If that fails, skip to Graceful degradation.
+1. **Detect.** Verify the exact supported scanner dependencies below. If that fails, skip to Graceful degradation.
 2. **Run the scanner** from the project root, so it resolves the project's own `playwright` install.
-3. **Parse the JSON** and convert each finding to the schema in `a11y-severity-scoring/references/finding-schema.md`, with `source: playwright`.
-4. **Merge** with the Phase 1 axe baseline and Phases 2–9 code-review findings. Issues confirmed here *and* by axe *and* by code review reach `confirmed` confidence.
+3. **Parse the JSON** through `normalize-findings.py`; do not hand-convert it.
+4. **Merge** Phase 1, immutable Phase 2–9 batches, and Phase 10 in one
+   normalization call. Only exact catalog identities correlate.
 
 Optional MCP `run_playwright_*` tools may substitute for the equivalent scan mode when they exist in the tool list. Their absence is never a failure — the CLI is the primary path.
 
 ## Setup
 
 ```bash
-npx playwright --version
-npm install -D playwright @axe-core/playwright
+npm install -D playwright@1.63.0 @axe-core/playwright@4.10.2 axe-core@4.10.3
 npx playwright install chromium
 ```
 
-`playwright` alone enables the keyboard, tree and coverage scans. `@axe-core/playwright` adds the axe scan and the per-viewport axe enrichment — install it, because without it the audit has no contrast or ARIA coverage at all.
+The scanner records Playwright and browser versions in its JSON. Axe execution
+requires exactly `@axe-core/playwright@4.10.2` with `axe-core@4.10.3`; it fails
+fast on another version because the rule catalog is versioned against that
+engine. The viewport pass does not run axe a second time.
 
 ## Running the scanner
 
 ```bash
-# Full behavioural scan
-node scripts/a11y-scan.mjs --url http://localhost:3000 --out $SCRATCH/scan-playwright.json
+# Phase 1 baseline (axe + structure + coverage)
+node scripts/a11y-scan.mjs --url http://localhost:3000 --mode axe,tree,coverage --out $SCRATCH/scan-axe-page-1.json
+
+# Phase 10 behavioural (do not re-run axe)
+node scripts/a11y-scan.mjs --url http://localhost:3000 --mode keyboard,viewport --out $SCRATCH/scan-playwright-page-1.json
 
 # One scan type
 node scripts/a11y-scan.mjs --url http://localhost:3000 --mode keyboard
+
+# Late-hydrating apps
+node scripts/a11y-scan.mjs --url http://localhost:3000 --load-delay 3000 --out $SCRATCH/scan-axe-page-1.json
 
 # Scoped to a component
 node scripts/a11y-scan.mjs --url http://localhost:3000 --mode axe --selector ".modal"
 
 # Auth-gated page (see a11y-web-scanning for capturing the state file)
-node scripts/a11y-scan.mjs --url http://localhost:3000/dashboard --storage-state .auth/state.json
+node scripts/a11y-scan.mjs --url http://localhost:3000/dashboard --mode axe,tree,coverage --storage-state .auth/state.json
 ```
 ## Web components and shadow DOM
 
@@ -84,8 +96,17 @@ If a result still looks implausible, re-scan with `--load-delay 3000` first — 
 | `--storage-state` | none | Playwright storageState file for authenticated pages |
 | `--viewports` | `320,768,1024,1440` | Widths for the reflow and target-size scan |
 | `--max-tabs` | `100` | Tab presses during keyboard traversal |
+| `--timeout` | `30000` | Navigation/readiness timeout |
+| `--load-delay` | `2000` | Milliseconds to wait after `load` before measuring |
+| `--ready-selector` | none | Element that must exist before measurement |
+| `--stability-window` | `500` | Mutation-free DOM window before measurement |
+| `--best-effort-readiness` | false | Continue after the 5s stability ceiling; recorded as `maximum-time-reached` |
 
 Exit code `0` means the scan ran (violations may still exist); `1` means it could not run.
+
+Every mode navigates independently and records whether the DOM became stable.
+Without `--best-effort-readiness`, reaching the stability ceiling fails that
+mode instead of silently measuring an arbitrary state.
 
 ## What each mode reports
 
@@ -128,7 +149,7 @@ Playwright is not installed, so behavioural testing (keyboard traversal, viewpor
 reflow, accessibility tree) did not run. Findings in this report come from code
 review and axe-core CLI only.
 
-Install: npm install -D playwright @axe-core/playwright && npx playwright install chromium
+Install: npm install -D playwright@1.63.0 @axe-core/playwright@4.10.2 axe-core@4.10.3 && npx playwright install chromium
 ```
 
 ## Reliability
