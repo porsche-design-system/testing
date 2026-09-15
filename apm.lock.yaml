@@ -51,160 +51,193 @@ dependencies:
     .github/instructions/frontend-a11y.instructions.md: sha256:e851b03f1b6ff4dc81d297ff8f67038730c6ebfc8d5fdf4b43275f2eed503ed1
   content_hash: sha256:b0cab78a8df5fbcea81b6b1ff1af1af8a8c43362402c57f7fc7559904454433b
   declared_license: MIT
+- repo_url: porsche-design-system/skills
+  name: web-accessibility-audit
+  host: github.com
+  resolved_commit: 5ff0382bd754299fd8ee04f458e10644c2f46c96
+  resolved_ref: web-accessibility-audit--v0.1.1
+  version: 0.1.1
+  virtual_path: packages/web-accessibility-audit
+  is_virtual: true
+  package_type: apm_package
+  deployed_files:
+  - .agents/skills/a11y-alt-text-headings
+  - .agents/skills/a11y-alt-text-headings/SKILL.md
+  - .agents/skills/a11y-alt-text-headings/references/alt-text-patterns.md
+  - .agents/skills/a11y-alt-text-headings/references/headings-landmarks.md
+  - .agents/skills/a11y-alt-text-headings/references/image-analysis-workflow.md
+  - .agents/skills/a11y-alt-text-headings/references/structured-output.md
+  - .agents/skills/a11y-alt-text-headings/references/svg-icons-media.md
+  - .agents/skills/a11y-aria
+  - .agents/skills/a11y-aria/SKILL.md
+  - .agents/skills/a11y-cognitive
+  - .agents/skills/a11y-cognitive/SKILL.md
+  - .agents/skills/a11y-contrast
+  - .agents/skills/a11y-contrast/SKILL.md
+  - .agents/skills/a11y-contrast/references/checking-and-color-independence.md
+  - .agents/skills/a11y-contrast/references/focus-themes-motion.md
+  - .agents/skills/a11y-contrast/references/structured-output.md
+  - .agents/skills/a11y-contrast/references/wcag22-and-tailwind.md
+  - .agents/skills/a11y-contrast/scripts/contrast.py
+  - .agents/skills/a11y-design-system
+  - .agents/skills/a11y-design-system/SKILL.md
+  - .agents/skills/a11y-export
+  - .agents/skills/a11y-export/SKILL.md
+  - .agents/skills/a11y-export/scripts/export-findings.py
+  - .agents/skills/a11y-forms
+  - .agents/skills/a11y-forms/SKILL.md
+  - .agents/skills/a11y-forms/references/control-types.md
+  - .agents/skills/a11y-forms/references/errors-and-autocomplete.md
+  - .agents/skills/a11y-forms/references/labels-and-grouping.md
+  - .agents/skills/a11y-forms/references/structured-output.md
+  - .agents/skills/a11y-forms/references/wizards-and-patterns.md
+  - .agents/skills/a11y-framework
+  - .agents/skills/a11y-framework/SKILL.md
+  - .agents/skills/a11y-issue-fixer
+  - .agents/skills/a11y-issue-fixer/SKILL.md
+  - .agents/skills/a11y-keyboard
+  - .agents/skills/a11y-keyboard/SKILL.md
+  - .agents/skills/a11y-lighthouse
+  - .agents/skills/a11y-lighthouse/SKILL.md
+  - .agents/skills/a11y-links
+  - .agents/skills/a11y-links/SKILL.md
+  - .agents/skills/a11y-live-regions
+  - .agents/skills/a11y-live-regions/SKILL.md
+  - .agents/skills/a11y-media
+  - .agents/skills/a11y-media/SKILL.md
+  - .agents/skills/a11y-modal
+  - .agents/skills/a11y-modal/SKILL.md
+  - .agents/skills/a11y-playwright
+  - .agents/skills/a11y-playwright/SKILL.md
+  - .agents/skills/a11y-playwright/references/ci-integration.md
+  - .agents/skills/a11y-playwright/references/fix-verification.md
+  - .agents/skills/a11y-playwright/references/scan-patterns.md
+  - .agents/skills/a11y-playwright/scripts/a11y-scan.mjs
+  - .agents/skills/a11y-severity-scoring
+  - .agents/skills/a11y-severity-scoring/SKILL.md
+  - .agents/skills/a11y-severity-scoring/references/cross-page-analysis.md
+  - .agents/skills/a11y-severity-scoring/references/finding-schema.md
+  - .agents/skills/a11y-severity-scoring/references/help-urls.md
+  - .agents/skills/a11y-severity-scoring/references/vpat-acr.md
+  - .agents/skills/a11y-severity-scoring/references/wcag-guide.md
+  - .agents/skills/a11y-severity-scoring/scripts/normalize-findings.py
+  - .agents/skills/a11y-tables
+  - .agents/skills/a11y-tables/SKILL.md
+  - .agents/skills/a11y-tables/references/layout-and-visual-grids.md
+  - .agents/skills/a11y-tables/references/responsive-pagination-empty.md
+  - .agents/skills/a11y-tables/references/simple-and-complex-tables.md
+  - .agents/skills/a11y-tables/references/sortable-grids-selection.md
+  - .agents/skills/a11y-tables/references/structured-output.md
+  - .agents/skills/a11y-testing-coach
+  - .agents/skills/a11y-testing-coach/SKILL.md
+  - .agents/skills/a11y-testing-coach/references/automated-testing.md
+  - .agents/skills/a11y-testing-coach/references/devtools-and-test-plans.md
+  - .agents/skills/a11y-testing-coach/references/keyboard-testing.md
+  - .agents/skills/a11y-testing-coach/references/screen-reader-testing.md
+  - .agents/skills/a11y-testing-strategy
+  - .agents/skills/a11y-testing-strategy/SKILL.md
+  - .agents/skills/a11y-text-quality
+  - .agents/skills/a11y-text-quality/SKILL.md
+  - .agents/skills/a11y-web-scanning
+  - .agents/skills/a11y-web-scanning/SKILL.md
+  - .cursor/agents/a11y-audit.md
+  - .cursor/commands/a11y-audit-multi-page.md
+  - .cursor/commands/a11y-audit.md
+  - .cursor/commands/a11y-component-library-audit.md
+  - .cursor/commands/a11y-fix.md
+  - .cursor/commands/a11y-lead.md
+  - .cursor/commands/a11y-quick-check.md
+  - .github/agents/a11y-audit.agent.md
+  - .github/prompts/a11y-audit-multi-page.prompt.md
+  - .github/prompts/a11y-audit.prompt.md
+  - .github/prompts/a11y-component-library-audit.prompt.md
+  - .github/prompts/a11y-fix.prompt.md
+  - .github/prompts/a11y-lead.prompt.md
+  - .github/prompts/a11y-quick-check.prompt.md
+  deployed_file_hashes:
+    .agents/skills/a11y-alt-text-headings/SKILL.md: sha256:1bd09b301035f88925bcfd53e56845a09f3488517949ce1d9c88addd432483d3
+    .agents/skills/a11y-alt-text-headings/references/alt-text-patterns.md: sha256:c7cdf1d8dfc64b698650cdcdecc5c7dfabc732ebe31e9d45c617b2be164b63ad
+    .agents/skills/a11y-alt-text-headings/references/headings-landmarks.md: sha256:3fe78d44d21e05d090e97337d3ffe9d39db88440680f40e861d178c3e257b116
+    .agents/skills/a11y-alt-text-headings/references/image-analysis-workflow.md: sha256:dc710c5db1e8751b8db80e22ff85f5d2222680f4be8416a0149b4ce958a9991a
+    .agents/skills/a11y-alt-text-headings/references/structured-output.md: sha256:1dd433ce9675215fa6f73c0f5e6709423eab8972e7d9c485ab555025d377194f
+    .agents/skills/a11y-alt-text-headings/references/svg-icons-media.md: sha256:593818453f5aa5d0d6b8f95c66c04fbc57855c6ee33f28f45382fc12ccdf2a47
+    .agents/skills/a11y-aria/SKILL.md: sha256:e4f7b39e0b5e67823c47faf7dd62d37e511b6bf6d560be192da463f6d0d31446
+    .agents/skills/a11y-cognitive/SKILL.md: sha256:aee827231e044c674f91bbba705add42af49f32f42ff7ae100b37d1c53130806
+    .agents/skills/a11y-contrast/SKILL.md: sha256:4ec720a1e2f7160b3eedf8b1dc3a5989432cb88bcad260890925d4f50391c540
+    .agents/skills/a11y-contrast/references/checking-and-color-independence.md: sha256:219aeb885b42d90c3a154b5a934078cc7072968338ee2ca4089ac2190b0c5759
+    .agents/skills/a11y-contrast/references/focus-themes-motion.md: sha256:c8110931076c12a50309aabc71f596ab5a9abba6a0d8536cf886eae03547af35
+    .agents/skills/a11y-contrast/references/structured-output.md: sha256:85d6d89f5191ad181a7844293a8cb65a81ec565c185cf52de64a7df88f16fbb8
+    .agents/skills/a11y-contrast/references/wcag22-and-tailwind.md: sha256:704668208a969b251faa7594007ff7da222ff9d23160622ee14d21e829a25e7d
+    .agents/skills/a11y-contrast/scripts/contrast.py: sha256:9320b7fad2f0c9969f49401032e642c95af85c2d9593523fa11ee74b41eee275
+    .agents/skills/a11y-design-system/SKILL.md: sha256:3444ea55eac2009d432387b69be42ee4bb5413a257f373cceb0194094c9ccb51
+    .agents/skills/a11y-export/SKILL.md: sha256:486a44ba39b8404e5d33ce487374fd219ba366a77958ce23ef39bfc9c5b9e9e4
+    .agents/skills/a11y-export/scripts/export-findings.py: sha256:5e0c987e86b04c98d2348d04c792c7913041fe13e122df604cda0f7cad9a738c
+    .agents/skills/a11y-forms/SKILL.md: sha256:f10108d3500a0e3ea9566956b9a939d8447b1267b66d182d411e1c10c6c52dcb
+    .agents/skills/a11y-forms/references/control-types.md: sha256:666dfd131918030cc8561ea2bd99bbf3605cdf68134aee4f1fcc78bdb5696c89
+    .agents/skills/a11y-forms/references/errors-and-autocomplete.md: sha256:92c97b24acafd07cccd97afcdaf5729fa6bf581ef5fd889bbd057fc5169ac84e
+    .agents/skills/a11y-forms/references/labels-and-grouping.md: sha256:07341c8e181ac384428ba576689722c52bb3fc747d9f508f61affad51e092910
+    .agents/skills/a11y-forms/references/structured-output.md: sha256:ae12d795bedc8b22de8afd447fe02506d4c72aecb5de39d3676feda6d70ceebd
+    .agents/skills/a11y-forms/references/wizards-and-patterns.md: sha256:db3739a9cdb01495bd0ba0070fa5d6830b407e73b4b8eb7222cabb554940a710
+    .agents/skills/a11y-framework/SKILL.md: sha256:1580df86d3caaf0bfd4562331e76aff26d82543d60da6690524b5ae4322427a7
+    .agents/skills/a11y-issue-fixer/SKILL.md: sha256:48c20543abe9f22b9af3bcb4144c6290f2ed33a5f63e18c3d8aabeb116af7e68
+    .agents/skills/a11y-keyboard/SKILL.md: sha256:f942b5be6638362c945a5effc6363a222be10c038010c8b1ecf948bca0094380
+    .agents/skills/a11y-lighthouse/SKILL.md: sha256:1ee7e0d2895275467a28b4288960e7b9cc4e89d0eb9677c05b2bf8085f2e4477
+    .agents/skills/a11y-links/SKILL.md: sha256:04eb87ea2960a7761cdc86dd030d5fd9603dcf70bd76db462e7f1855e1d6917e
+    .agents/skills/a11y-live-regions/SKILL.md: sha256:1a8270eec54c08fda227010a9f8b6f2926fe2f77b10aaec8fa5348ce7ab82c5d
+    .agents/skills/a11y-media/SKILL.md: sha256:427ea45eeedd54849bec659a6fdf5088a8f9aa084c7b3a235b7777141df98d49
+    .agents/skills/a11y-modal/SKILL.md: sha256:6a31e71f85604b03b1d0793cdf28f8d88ae40921522b622dc49e651b6a741240
+    .agents/skills/a11y-playwright/SKILL.md: sha256:3df8bdb0bd01281c41b9b7d6914d9c6eec2b0b58e39d4c687acd6beb808aeb91
+    .agents/skills/a11y-playwright/references/ci-integration.md: sha256:201338a72b47c070bcfef1d2fec4ca9273d5e1ef19b2f063a44e300b5a9e63d9
+    .agents/skills/a11y-playwright/references/fix-verification.md: sha256:3ffe2e5fa4aa614a445c3add050fe2da4c6bf814269d030ebea74491eb702176
+    .agents/skills/a11y-playwright/references/scan-patterns.md: sha256:32cf1aaf5903133731c8e6c14a27f90b2ce9a59ce2ea039bdf19288715146f53
+    .agents/skills/a11y-playwright/scripts/a11y-scan.mjs: sha256:bc4b04b5158e1042e7912702499a2617196325cf349848accfcaa5debdf99fb1
+    .agents/skills/a11y-severity-scoring/SKILL.md: sha256:1c7c3e517fd078f42f6ef33e2e5df46b2336268d93fffbce83d59189d88602ee
+    .agents/skills/a11y-severity-scoring/references/cross-page-analysis.md: sha256:7d8f90f6d468625f1d66db4efea6fbd2cf060671e9752e5486ee5abdf1febd03
+    .agents/skills/a11y-severity-scoring/references/finding-schema.md: sha256:a69d817172b391209de51a500ef4fec9eb6e3a6e97e524b52923bc13e0e5a8bd
+    .agents/skills/a11y-severity-scoring/references/help-urls.md: sha256:d25dc588f6901ac3a61c09ccb4dcb6c3cb813ebea6cc244dcf2ef30766aa9099
+    .agents/skills/a11y-severity-scoring/references/vpat-acr.md: sha256:4478050a782cade65eed214b88118de9c4c2ea504f6991afff1f7268eadda558
+    .agents/skills/a11y-severity-scoring/references/wcag-guide.md: sha256:fbd23ee2c6da92bc2eb5b8bb84ad72c74cc88a525ecbc65f79b387c48ba2e76b
+    .agents/skills/a11y-severity-scoring/scripts/normalize-findings.py: sha256:9989c0e98adb97bb24ce8ec250baa47030b3daaafb68fa02bfb9e02cc2fae49f
+    .agents/skills/a11y-tables/SKILL.md: sha256:8e3868d80f78ce0eb54ba86e4e402cd51bda8c635a46ee6d893dbc7e7a8f8bad
+    .agents/skills/a11y-tables/references/layout-and-visual-grids.md: sha256:8bf623a513e93c9c9a0a13abe3eaae965058a96b27cc8e5156a28b5ad67e4a9c
+    .agents/skills/a11y-tables/references/responsive-pagination-empty.md: sha256:5e74c79b9786640fb1f541f8ad71ac28d402dff1e147c5b7a97cc0739c6b1f97
+    .agents/skills/a11y-tables/references/simple-and-complex-tables.md: sha256:0909a04947c400d74994b1e68db037f973e69a380f9e4fbf9b1261e91f5c7501
+    .agents/skills/a11y-tables/references/sortable-grids-selection.md: sha256:c50b73bc062215ef03c49450f8c19c5c5ae1bf0d06823690eaff55e089bdec7a
+    .agents/skills/a11y-tables/references/structured-output.md: sha256:c6eb1192998fa2f8414b22a56c8f4a41e4d94ed32e91f3b84c46ab263a106952
+    .agents/skills/a11y-testing-coach/SKILL.md: sha256:b23b243c7a43dc3a9a98b48710c223d885fd48e83632d41d87474877fddea697
+    .agents/skills/a11y-testing-coach/references/automated-testing.md: sha256:b2a1fe9bdb72b35ed102d54be38e36484cf73775980c4490bc71f8ac870ec612
+    .agents/skills/a11y-testing-coach/references/devtools-and-test-plans.md: sha256:f7b817c7257d2d3b685521c9d9722789c4764638447b15e5a4957e310876831d
+    .agents/skills/a11y-testing-coach/references/keyboard-testing.md: sha256:1ef12d07f9e19692c939ac58ed5b3b809d2a3677a252508135125456ad75e0f5
+    .agents/skills/a11y-testing-coach/references/screen-reader-testing.md: sha256:db719e87ed244306dcc39506a6b92dc5397d3bf17f86bbccd09ce847e369715c
+    .agents/skills/a11y-testing-strategy/SKILL.md: sha256:88ec7b5acf718c8cf01be9dd7336392d50ea2d565191693a735f0a65564dd41e
+    .agents/skills/a11y-text-quality/SKILL.md: sha256:4420ad60bc24485e89c8cba6bc44977c01a32be96ee9d3e17d2e6b4f7d9f09cb
+    .agents/skills/a11y-web-scanning/SKILL.md: sha256:5589db9e727281a5608463e7d4c251eae0c6133b35f34af409760965fbf790a9
+    .cursor/agents/a11y-audit.md: sha256:036d23050e92dc2045a9b14bec70459ee08e218b1f31cbc3a45e9f99e67fe56c
+    .cursor/commands/a11y-audit-multi-page.md: sha256:c7fdc1731070d38616c0fe8c29f8f4593b394dad07072a63df2ce12cfa9230a9
+    .cursor/commands/a11y-audit.md: sha256:48bdb3ee7477dfb3fbeff8387d7bbaf2e092805631b472981374028d03129f9d
+    .cursor/commands/a11y-component-library-audit.md: sha256:30942aab6694cfaf52dc05d0f472e1b99c8248ccb57200babdacf776317f6f6b
+    .cursor/commands/a11y-fix.md: sha256:7dcac1514c04ca86a0b550a97f13201dd501b33c13c4762f593203c56e0ff984
+    .cursor/commands/a11y-lead.md: sha256:2538efa6e78966c217c2766f3c6ce50d6910bd712f0c19f4c37959aa9a6df502
+    .cursor/commands/a11y-quick-check.md: sha256:f2218676dcf505dae092bebcb6f42ffe1f91ebd2412b674bad975eed52562ab6
+    .github/agents/a11y-audit.agent.md: sha256:036d23050e92dc2045a9b14bec70459ee08e218b1f31cbc3a45e9f99e67fe56c
+    .github/prompts/a11y-audit-multi-page.prompt.md: sha256:40c08f856b0b81cf2cef215943a60f99e4ae6b051e7f3048e8128d6e8a059271
+    .github/prompts/a11y-audit.prompt.md: sha256:8742ce7019b782e29659b97ef9e27ff39fcee1fe7f31d5ab3c5a16b2d4f9cf13
+    .github/prompts/a11y-component-library-audit.prompt.md: sha256:0e72773858db4c3bf5289093ccad7f925ce9709d8d164525a14c900d65f13fa9
+    .github/prompts/a11y-fix.prompt.md: sha256:ece25af196301dfa15477e45532226d947309bc76bbe40d3084f4c52a3f410b2
+    .github/prompts/a11y-lead.prompt.md: sha256:ca8a9ef114672321ef37e7f48c3163c4543886fdb3e3fd3f2fb09315fa0a9c7f
+    .github/prompts/a11y-quick-check.prompt.md: sha256:b3a7d3a04c4f8d4b29d18ef0faeeb5bf537249ef6fa452d4a661ec5ff2714fa9
+  content_hash: sha256:6eefaa0e47446898a17406198ec69e4ee6d88f3930d58196439690eb08dcee32
+  declared_license: MIT
 deployments:
 - kind: project-relative
   target: copilot
-  value: .agents/skills/accessible-frontend
+  value: .github/agents/a11y-audit.agent.md
   runtime: null
   scope: project
   owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: null
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/INDEX.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:33dc5e61c1ff0703b0f8c69bf60afeadc206791a27d9a4879ca6990970de7b6f
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/SKILL.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:9ae34e27405f8db69e841b440ad65e0c3fbed6e68579b4e3e263b7ec344332d1
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/aria-widgets.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:35ad637b5e0c2b880e18168270d2613dc421e314db6a20f563422ccfa3ecd7ca
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/cognitive-timing-and-input.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:d4d263f8be31f38b450ef019dc77b1823ee673c9ee0742bdd0cff01b95db3291
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/dialogs-and-overlays.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:8cc0e16e686b765e0ee98dc3540132e882b928f7afcfd8999bb489bfe47b05d6
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/en-301-549.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:e009709d420702925e073e278036878bb06fae30cc515e09ea30195db5126bef
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/forms.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:eb8359bab7b70a61daafa0771d423137e1f99d2325475ee0c596b306c80d09eb
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/framework-integration.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:5fe92357ca8b4509c7d8ca543a3a63eb328c142d401de474330346dd8b730abc
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/images-and-media.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:11bf45512a0e7d79064736ffc3a77fd549807ed3f22b3ee0e620eb1c630f1747
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/keyboard-and-focus.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:2a6141f6a703a7ab5f7c83f6d083c9ac0e054204928cfcb32ff42c478b801186
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/links-and-navigation.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:855b34b7e9f09244bd91cf4f62567a5ac3d87bb7d2518530d596fb4c7a1aa7cf
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/live-regions.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:cee8be0cfbefe30afcfacf2cfcd8487b66abc191863dcd2223f923ac0be86da5
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/routing-and-dynamic-ui.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:82bbda95f0e60336b57e5ca2b786a18a40fa1a88323f8d2b827e164ddc8f44b1
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/structure-landmarks-headings.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:504a5100f3af15d270484dd6ced9cad9f9293e9183eab45c1b97dae14ddf9fc5
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/tables-and-grids.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:543969b8c71cf4001af93025ed66e027cabd78eb676e947dc9c61d513cb57136
-- kind: project-relative
-  target: copilot
-  value: .agents/skills/accessible-frontend/references/topics/visual-hcm-zoom-contrast.md
-  runtime: null
-  scope: project
-  owners:
-  - porsche-design-system/skills/packages/web-accessibility-codegen
-  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
-  content_hash: sha256:4a40a5b030ccdefa1d7ec01f5fcb3306af3153ddfec2dc530485ee68843d5730
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:036d23050e92dc2045a9b14bec70459ee08e218b1f31cbc3a45e9f99e67fe56c
 - kind: project-relative
   target: copilot
   value: .github/instructions/frontend-a11y.instructions.md
@@ -215,6 +248,123 @@ deployments:
   active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
   content_hash: sha256:e851b03f1b6ff4dc81d297ff8f67038730c6ebfc8d5fdf4b43275f2eed503ed1
 - kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-audit-multi-page.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:40c08f856b0b81cf2cef215943a60f99e4ae6b051e7f3048e8128d6e8a059271
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-audit.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:8742ce7019b782e29659b97ef9e27ff39fcee1fe7f31d5ab3c5a16b2d4f9cf13
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-component-library-audit.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:0e72773858db4c3bf5289093ccad7f925ce9709d8d164525a14c900d65f13fa9
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-fix.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:ece25af196301dfa15477e45532226d947309bc76bbe40d3084f4c52a3f410b2
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-lead.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:ca8a9ef114672321ef37e7f48c3163c4543886fdb3e3fd3f2fb09315fa0a9c7f
+- kind: project-relative
+  target: copilot
+  value: .github/prompts/a11y-quick-check.prompt.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:b3a7d3a04c4f8d4b29d18ef0faeeb5bf537249ef6fa452d4a661ec5ff2714fa9
+- kind: project-relative
+  target: cursor
+  value: .cursor/agents/a11y-audit.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:036d23050e92dc2045a9b14bec70459ee08e218b1f31cbc3a45e9f99e67fe56c
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-audit-multi-page.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:c7fdc1731070d38616c0fe8c29f8f4593b394dad07072a63df2ce12cfa9230a9
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-audit.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:48bdb3ee7477dfb3fbeff8387d7bbaf2e092805631b472981374028d03129f9d
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-component-library-audit.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:30942aab6694cfaf52dc05d0f472e1b99c8248ccb57200babdacf776317f6f6b
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-fix.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:7dcac1514c04ca86a0b550a97f13201dd501b33c13c4762f593203c56e0ff984
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-lead.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:2538efa6e78966c217c2766f3c6ce50d6910bd712f0c19f4c37959aa9a6df502
+- kind: project-relative
+  target: cursor
+  value: .cursor/commands/a11y-quick-check.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:f2218676dcf505dae092bebcb6f42ffe1f91ebd2412b674bad975eed52562ab6
+- kind: project-relative
   target: cursor
   value: .cursor/rules/frontend-a11y.mdc
   runtime: null
@@ -223,3 +373,867 @@ deployments:
   - porsche-design-system/skills/packages/web-accessibility-codegen
   active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
   content_hash: sha256:77bd29047602f8e8151a497c70ecb1ff40045df8d4228e2036a9f610b8771976
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1bd09b301035f88925bcfd53e56845a09f3488517949ce1d9c88addd432483d3
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/references/alt-text-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:c7cdf1d8dfc64b698650cdcdecc5c7dfabc732ebe31e9d45c617b2be164b63ad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/references/headings-landmarks.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:3fe78d44d21e05d090e97337d3ffe9d39db88440680f40e861d178c3e257b116
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/references/image-analysis-workflow.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:dc710c5db1e8751b8db80e22ff85f5d2222680f4be8416a0149b4ce958a9991a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/references/structured-output.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1dd433ce9675215fa6f73c0f5e6709423eab8972e7d9c485ab555025d377194f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-alt-text-headings/references/svg-icons-media.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:593818453f5aa5d0d6b8f95c66c04fbc57855c6ee33f28f45382fc12ccdf2a47
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-aria
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-aria/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:e4f7b39e0b5e67823c47faf7dd62d37e511b6bf6d560be192da463f6d0d31446
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-cognitive
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-cognitive/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:aee827231e044c674f91bbba705add42af49f32f42ff7ae100b37d1c53130806
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:4ec720a1e2f7160b3eedf8b1dc3a5989432cb88bcad260890925d4f50391c540
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/references/checking-and-color-independence.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:219aeb885b42d90c3a154b5a934078cc7072968338ee2ca4089ac2190b0c5759
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/references/focus-themes-motion.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:c8110931076c12a50309aabc71f596ab5a9abba6a0d8536cf886eae03547af35
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/references/structured-output.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:85d6d89f5191ad181a7844293a8cb65a81ec565c185cf52de64a7df88f16fbb8
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/references/wcag22-and-tailwind.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:704668208a969b251faa7594007ff7da222ff9d23160622ee14d21e829a25e7d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-contrast/scripts/contrast.py
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:9320b7fad2f0c9969f49401032e642c95af85c2d9593523fa11ee74b41eee275
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-design-system
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-design-system/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:3444ea55eac2009d432387b69be42ee4bb5413a257f373cceb0194094c9ccb51
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-export
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-export/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:486a44ba39b8404e5d33ce487374fd219ba366a77958ce23ef39bfc9c5b9e9e4
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-export/scripts/export-findings.py
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:5e0c987e86b04c98d2348d04c792c7913041fe13e122df604cda0f7cad9a738c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:f10108d3500a0e3ea9566956b9a939d8447b1267b66d182d411e1c10c6c52dcb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/references/control-types.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:666dfd131918030cc8561ea2bd99bbf3605cdf68134aee4f1fcc78bdb5696c89
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/references/errors-and-autocomplete.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:92c97b24acafd07cccd97afcdaf5729fa6bf581ef5fd889bbd057fc5169ac84e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/references/labels-and-grouping.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:07341c8e181ac384428ba576689722c52bb3fc747d9f508f61affad51e092910
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/references/structured-output.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:ae12d795bedc8b22de8afd447fe02506d4c72aecb5de39d3676feda6d70ceebd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-forms/references/wizards-and-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:db3739a9cdb01495bd0ba0070fa5d6830b407e73b4b8eb7222cabb554940a710
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-framework
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-framework/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1580df86d3caaf0bfd4562331e76aff26d82543d60da6690524b5ae4322427a7
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-issue-fixer
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-issue-fixer/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:48c20543abe9f22b9af3bcb4144c6290f2ed33a5f63e18c3d8aabeb116af7e68
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-keyboard
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-keyboard/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:f942b5be6638362c945a5effc6363a222be10c038010c8b1ecf948bca0094380
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-lighthouse
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-lighthouse/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1ee7e0d2895275467a28b4288960e7b9cc4e89d0eb9677c05b2bf8085f2e4477
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-links
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-links/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:04eb87ea2960a7761cdc86dd030d5fd9603dcf70bd76db462e7f1855e1d6917e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-live-regions
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-live-regions/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1a8270eec54c08fda227010a9f8b6f2926fe2f77b10aaec8fa5348ce7ab82c5d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-media
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-media/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:427ea45eeedd54849bec659a6fdf5088a8f9aa084c7b3a235b7777141df98d49
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-modal
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-modal/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:6a31e71f85604b03b1d0793cdf28f8d88ae40921522b622dc49e651b6a741240
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:3df8bdb0bd01281c41b9b7d6914d9c6eec2b0b58e39d4c687acd6beb808aeb91
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright/references/ci-integration.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:201338a72b47c070bcfef1d2fec4ca9273d5e1ef19b2f063a44e300b5a9e63d9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright/references/fix-verification.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:3ffe2e5fa4aa614a445c3add050fe2da4c6bf814269d030ebea74491eb702176
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright/references/scan-patterns.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:32cf1aaf5903133731c8e6c14a27f90b2ce9a59ce2ea039bdf19288715146f53
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-playwright/scripts/a11y-scan.mjs
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:bc4b04b5158e1042e7912702499a2617196325cf349848accfcaa5debdf99fb1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1c7c3e517fd078f42f6ef33e2e5df46b2336268d93fffbce83d59189d88602ee
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/references/cross-page-analysis.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:7d8f90f6d468625f1d66db4efea6fbd2cf060671e9752e5486ee5abdf1febd03
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/references/finding-schema.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:a69d817172b391209de51a500ef4fec9eb6e3a6e97e524b52923bc13e0e5a8bd
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/references/help-urls.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:d25dc588f6901ac3a61c09ccb4dcb6c3cb813ebea6cc244dcf2ef30766aa9099
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/references/vpat-acr.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:4478050a782cade65eed214b88118de9c4c2ea504f6991afff1f7268eadda558
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/references/wcag-guide.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:fbd23ee2c6da92bc2eb5b8bb84ad72c74cc88a525ecbc65f79b387c48ba2e76b
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-severity-scoring/scripts/normalize-findings.py
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:9989c0e98adb97bb24ce8ec250baa47030b3daaafb68fa02bfb9e02cc2fae49f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:8e3868d80f78ce0eb54ba86e4e402cd51bda8c635a46ee6d893dbc7e7a8f8bad
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/references/layout-and-visual-grids.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:8bf623a513e93c9c9a0a13abe3eaae965058a96b27cc8e5156a28b5ad67e4a9c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/references/responsive-pagination-empty.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:5e74c79b9786640fb1f541f8ad71ac28d402dff1e147c5b7a97cc0739c6b1f97
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/references/simple-and-complex-tables.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:0909a04947c400d74994b1e68db037f973e69a380f9e4fbf9b1261e91f5c7501
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/references/sortable-grids-selection.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:c50b73bc062215ef03c49450f8c19c5c5ae1bf0d06823690eaff55e089bdec7a
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-tables/references/structured-output.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:c6eb1192998fa2f8414b22a56c8f4a41e4d94ed32e91f3b84c46ab263a106952
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:b23b243c7a43dc3a9a98b48710c223d885fd48e83632d41d87474877fddea697
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach/references/automated-testing.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:b2a1fe9bdb72b35ed102d54be38e36484cf73775980c4490bc71f8ac870ec612
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach/references/devtools-and-test-plans.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:f7b817c7257d2d3b685521c9d9722789c4764638447b15e5a4957e310876831d
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach/references/keyboard-testing.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:1ef12d07f9e19692c939ac58ed5b3b809d2a3677a252508135125456ad75e0f5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-coach/references/screen-reader-testing.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:db719e87ed244306dcc39506a6b92dc5397d3bf17f86bbccd09ce847e369715c
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-strategy
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-testing-strategy/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:88ec7b5acf718c8cf01be9dd7336392d50ea2d565191693a735f0a65564dd41e
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-text-quality
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-text-quality/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:4420ad60bc24485e89c8cba6bc44977c01a32be96ee9d3e17d2e6b4f7d9f09cb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-web-scanning
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/a11y-web-scanning/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-audit
+  active_owner: porsche-design-system/skills/packages/web-accessibility-audit
+  content_hash: sha256:5589db9e727281a5608463e7d4c251eae0c6133b35f34af409760965fbf790a9
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: null
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/INDEX.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:33dc5e61c1ff0703b0f8c69bf60afeadc206791a27d9a4879ca6990970de7b6f
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/SKILL.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:9ae34e27405f8db69e841b440ad65e0c3fbed6e68579b4e3e263b7ec344332d1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/aria-widgets.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:35ad637b5e0c2b880e18168270d2613dc421e314db6a20f563422ccfa3ecd7ca
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/cognitive-timing-and-input.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:d4d263f8be31f38b450ef019dc77b1823ee673c9ee0742bdd0cff01b95db3291
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/dialogs-and-overlays.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:8cc0e16e686b765e0ee98dc3540132e882b928f7afcfd8999bb489bfe47b05d6
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/en-301-549.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:e009709d420702925e073e278036878bb06fae30cc515e09ea30195db5126bef
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/forms.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:eb8359bab7b70a61daafa0771d423137e1f99d2325475ee0c596b306c80d09eb
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/framework-integration.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:5fe92357ca8b4509c7d8ca543a3a63eb328c142d401de474330346dd8b730abc
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/images-and-media.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:11bf45512a0e7d79064736ffc3a77fd549807ed3f22b3ee0e620eb1c630f1747
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/keyboard-and-focus.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:2a6141f6a703a7ab5f7c83f6d083c9ac0e054204928cfcb32ff42c478b801186
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/links-and-navigation.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:855b34b7e9f09244bd91cf4f62567a5ac3d87bb7d2518530d596fb4c7a1aa7cf
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/live-regions.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:cee8be0cfbefe30afcfacf2cfcd8487b66abc191863dcd2223f923ac0be86da5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/routing-and-dynamic-ui.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:82bbda95f0e60336b57e5ca2b786a18a40fa1a88323f8d2b827e164ddc8f44b1
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/structure-landmarks-headings.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:504a5100f3af15d270484dd6ced9cad9f9293e9183eab45c1b97dae14ddf9fc5
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/tables-and-grids.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:543969b8c71cf4001af93025ed66e027cabd78eb676e947dc9c61d513cb57136
+- kind: project-relative
+  target: legacy
+  value: .agents/skills/accessible-frontend/references/topics/visual-hcm-zoom-contrast.md
+  runtime: null
+  scope: project
+  owners:
+  - porsche-design-system/skills/packages/web-accessibility-codegen
+  active_owner: porsche-design-system/skills/packages/web-accessibility-codegen
+  content_hash: sha256:4a40a5b030ccdefa1d7ec01f5fcb3306af3153ddfec2dc530485ee68843d5730
