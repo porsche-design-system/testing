@@ -54,7 +54,7 @@ Decision frameworks for accessibility testing — when to use automated tools vs
 ```text
 Is it a new component or page?
 ├── Yes → Full test coverage (automated + manual)
-│   ├── Run axe-core / Lighthouse scan
+│   ├── Run axe-core scan
 │   ├── Keyboard-only navigation test
 │   ├── Screen reader announcement test (NVDA + VoiceOver minimum)
 │   └── Visual check at 200% zoom
@@ -72,8 +72,7 @@ Is it a new component or page?
 
 1. **axe-core scan**: Run on every PR. Fail on new critical/serious violations.
 2. **Baseline management**: Store known issues in `.a11y/ci-baseline.json` (separate from an audit run's `findings.json`). Only fail on **new** issues.
-3. **Lighthouse score threshold**: Set minimum accessibility score (e.g., 90). Fail on regression.
-4. **Visual regression**: Capture screenshots at 200% zoom. Compare for focus indicator and layout changes.
+3. **Visual regression**: Capture screenshots at 200% zoom. Compare for focus indicator and layout changes.
 
 ### Preventing Regressions
 
@@ -105,7 +104,6 @@ Then [accessible outcome]:
 | Tool | Type | Best For |
 |------|------|----------|
 | axe-core / @axe-core/cli | Automated | CI/CD integration, broad violation scan |
-| Lighthouse | Automated | Performance + accessibility combined score |
 | WAVE | Semi-automated | Visual overlay of accessibility features/issues |
 | Accessibility Insights | Semi-automated | FastPass (automated) + Assessment (guided manual) |
 | pa11y | Automated | CI/CD, HTML CodeSniffer rules |

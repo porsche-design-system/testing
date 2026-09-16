@@ -207,10 +207,16 @@ try {
   process.exit(1);
 }
 
+const colorScheme = values['color-scheme'];
+if (!['light', 'dark', 'no-preference'].includes(colorScheme)) {
+  console.error('Error: --color-scheme must be light, dark, or no-preference.');
+  process.exit(1);
+}
+
 const contextOptions = {
   locale: 'en-US',
   timezoneId: 'UTC',
-  colorScheme: 'light',
+  colorScheme,
   viewport: { width: 1440, height: 900 },
 };
 if (values['storage-state']) {

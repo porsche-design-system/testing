@@ -96,7 +96,6 @@ The `workbench.browser.pageZoom` setting controls the default zoom level. To tes
 
 ### Automated Checks
 - [ ] axe-core reports zero violations
-- [ ] Lighthouse accessibility score 100
 - [ ] Pa11y CI passes
 
 ### Keyboard Testing

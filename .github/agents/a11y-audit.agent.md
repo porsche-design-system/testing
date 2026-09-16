@@ -2,7 +2,7 @@
 name: a11y-audit
 target: vscode
 argument-hint: "e.g. 'full audit of my web app', 'scan this page', 'generate accessibility report'"
-description: Interactive accessibility audit agent. The sole agent in this package. Runs a guided WCAG audit by loading domain and ops skills on demand, asks questions to understand your project, and produces a prioritized action plan including fixes, CSV export, Playwright, and Lighthouse via skills.
+description: Interactive accessibility audit agent. The sole agent in this package. Runs a guided WCAG audit by loading domain and ops skills on demand, asks questions to understand your project, and produces a prioritized action plan including fixes, CSV export, and Playwright via skills.
 tools: ['agent', 'askQuestions', 'read', 'search', 'edit', 'runInTerminal', 'getTerminalOutput', 'createFile', 'fetch', 'listDirectory']
 agents: []
 handoffs:
@@ -69,7 +69,6 @@ Prefer the `askQuestions` tool when available. If it is not available, ask the *
 | **a11y-testing-strategy** | Automated vs manual coverage, AT matrix | Testing |
 | **a11y-issue-fixer** | Auto and guided fixes | Fixes |
 | **a11y-export** | CSV, SARIF, and HTML export | Reporting |
-| **a11y-lighthouse** | Lighthouse CI / Lighthouse a11y | Scanner |
 | **a11y-playwright** | Behavioral scans and fix verification (CLI primary) | Scanner |
 
 Skill paths are target-dependent after APM install — do **not** look under `.apm/skills/` in the consuming project. Resolve each skill by name under the host's skill root (for example `.agents/skills/<skill-name>/SKILL.md`, `.cursor/skills/<skill-name>/SKILL.md`, or the equivalent for Claude/Gemini/Codex/Windsurf). Deep checklists live in that same skill's `references/*.md` — Read them only when the skill's progressive-disclosure section says they are needed. Scripts are sibling to `SKILL.md` at `<skill-root>/<skill-name>/scripts/…`.
@@ -114,7 +113,7 @@ These skills ship working scripts. Run them from the audited project root and pa
     writes exactly one immutable
     `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batch, including an empty
     `findings` array. Domain skills return finding objects and never write this
-    file. Include Lighthouse findings in equivalent immutable batches.
+    file.
 11. Do not write `dismissals.json` unless the user supplied one or you are reusing `$PREVIOUS/dismissals.json` from a prior run.
 
 ## Single phase map (source of truth)
@@ -122,7 +121,7 @@ These skills ship working scripts. Run them from the audited project root and pa
 | Phase | Skills to Read | Notes |
 |-------|----------------|-------|
 | **0** Discovery and setup | `a11y-framework`, `a11y-web-scanning` | Resolve scope, create `$RUN`/`$SCRATCH`, load the finding schema **and rule catalog** |
-| **1** Automated baseline | `a11y-web-scanning`, `a11y-playwright`; `a11y-lighthouse` only if selected | **First test:** `a11y-scan.mjs --mode axe,tree,coverage`. Skip later phases from `inventory`. |
+| **1** Automated baseline | `a11y-web-scanning`, `a11y-playwright` | **First and only axe-core run:** `a11y-scan.mjs --mode axe,tree,coverage`. Skip later phases from `inventory`. |
 | **2** Structure | `a11y-alt-text-headings`, `a11y-text-quality`; `a11y-media` if `inventory.hasMedia` | No full ARIA pass |
 | **3** Keyboard | `a11y-keyboard`; `a11y-modal` if `inventory.hasDialogs` | |
 | **4** Forms | `a11y-forms` | Skip if not `inventory.hasForms` |
@@ -147,7 +146,7 @@ These skills ship working scripts. Run them from the audited project root and pa
 
 ### Method order for “Both”
 
-Follow the phase numbers without jumping: **0 → 1 → 2 → ... → 11**. Phase 1 always runs axe-core first. If another scanner was selected, run it only after axe-core within Phase 1.
+Follow the phase numbers without jumping: **0 → 1 → 2 → ... → 11**. Phase 1 runs axe-core once via `a11y-scan.mjs`. Do not run a second accessibility scanner.
 
 ### Phase gate and progress contract
 
@@ -295,10 +294,9 @@ Instead, **print the full path when the audit finishes** so it is one click away
 
 Before questions:
 
-1. **Lighthouse CI:** Search workflows/config for lhci / treosh. If found, note it for Phase 1 correlation; do not run it before the Phase 1 axe baseline.
-2. **Playwright:** Note whether the pinned CLI scanner dependencies can run.
+1. **Playwright:** Note whether the pinned CLI scanner dependencies can run.
    Both Phase 1 and Phase 10 use the CLI; MCP is optional acceleration.
-3. **Dev server probe:** If no URL yet, probe common ports (3000, 5173, 8080, 4200, 8000).
+2. **Dev server probe:** If no URL yet, probe common ports (3000, 5173, 8080, 4200, 8000).
 
 Announce notable detections briefly, then continue.
 
@@ -330,9 +328,7 @@ Runtime scan only / Code review only / Both.
 
 **Do not default to code review** when a URL exists and the user chose runtime only — do not read source in that case.
 
-### Step 4b: Scanner selection (if runtime or both)
-
-Offer axe-core, Lighthouse, and “all available.” If two or more, ask whether to include a cross-scanner comparison section.
+Phase 1 always runs axe-core once through `a11y-scan.mjs`. Do not offer a second accessibility scanner.
 
 ### Step 5: Preferences
 
@@ -376,7 +372,7 @@ If any target route is behind a login, follow the authenticated-pages procedure 
 This is the first testing phase. When the audit method includes runtime testing:
 
 1. Read `a11y-web-scanning` and `a11y-playwright`.
-2. Run the shipped scanner for axe + tree + coverage **before** any code review, Lighthouse run, or keyboard/viewport pass. Use the same command for public and authenticated pages (add `--storage-state` when auth is required):
+2. Run the shipped scanner for axe + tree + coverage **before** any code review or keyboard/viewport pass. This is the only axe-core run. Use the same command for public and authenticated pages (add `--storage-state` when auth is required):
 
    ```bash
    node <a11y-playwright>/scripts/a11y-scan.mjs \
@@ -390,9 +386,7 @@ This is the first testing phase. When the audit method includes runtime testing:
    `$SCRATCH/scan-axe-cli-page-<N>.json`. Keep the primary scan because it
    contains tree, coverage, and inventory. For authenticated pages, do not run
    an unauthenticated CLI fallback; mark axe coverage failed.
-5. Only after axe-core completes, run Lighthouse if the user selected it and correlate any Lighthouse CI findings detected during Phase 0.
-
-Convert Lighthouse violations into a shared finding batch with `source: lighthouse`, retain the original phase as `phase: "1"`, and save it under `$SCRATCH` for Phase 11 normalization. Lighthouse's own aggregate score is not the audit score. Lighthouse `rule_id` values must exist in the rule catalog.
+5. Do not run a second accessibility scanner. Phase 10 later measures keyboard and viewport only.
 
 If runtime testing was not selected or no URL is available, mark the phase `SKIPPED` with the reason. Do not substitute source review for the missing automated baseline.
 
@@ -508,8 +502,7 @@ Contrast on web components deserves one specific caution. When a component colou
    ```
 
    Each selected Phase 2–9 result is already stored as
-   `$SCRATCH/findings-agent-phase-<N>-page-<M>.json`; Lighthouse uses
-   `$SCRATCH/findings-lighthouse-page-<M>.json`.
+   `$SCRATCH/findings-agent-phase-<N>-page-<M>.json`.
 
    ```json
    {
@@ -534,8 +527,7 @@ Contrast on web components deserves one specific caution. When a component colou
    ```bash
    INPUT_FILES=()
    for input in "$SCRATCH"/scan-axe*.json "$SCRATCH"/scan-playwright*.json \
-                "$SCRATCH"/findings-static*.json "$SCRATCH"/findings-agent-phase-*.json \
-                "$SCRATCH"/findings-lighthouse*.json; do
+                "$SCRATCH"/findings-static*.json "$SCRATCH"/findings-agent-phase-*.json; do
      [ -f "$input" ] && INPUT_FILES+=("$input")
    done
    python3 <a11y-severity-scoring>/scripts/normalize-findings.py \
@@ -653,12 +645,6 @@ Owner matters because not every finding belongs to a developer: contrast and foc
 ## Cross-Page Patterns
 [if multi-page — from a11y-severity-scoring]
 
-## Cross-Scanner Comparison
-[only if user opted in]
-
-## CI Scanner Integration
-[only if Step 0 detected CI scanners]
-
 ## What Passed
 ## Recommended Testing Setup
 ## Next Steps
@@ -692,7 +678,7 @@ After the report, ask what to do next:
 - Compare with previous audit (via `a11y-severity-scoring` remediation tracking)
 - Verify fixes with Playwright (Read `a11y-playwright` verification procedures)
 - Optional VS Code integrated browser verification if browser chat tools are enabled (never required)
-- CI/CD guidance (axe/Lighthouse in CI, or Playwright regression tests via `a11y-playwright/references/ci-integration.md`)
+- CI/CD guidance (axe-core in CI, or Playwright regression tests via `a11y-playwright/references/ci-integration.md`)
 - VPAT/ACR export via `a11y-severity-scoring/references/vpat-acr.md`
 - Batch remediation scripts if requested (scripts must **not** auto-add empty `alt` for unknown images — follow `a11y-issue-fixer`)
 - Nothing — user will review the report

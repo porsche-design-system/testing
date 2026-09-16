@@ -78,10 +78,9 @@ For code review or a scanner without a native parser, write an intermediate batc
 }
 ```
 
-Use `source: lighthouse` for normalized Lighthouse violations (`lighthouse-ci`
-is accepted as an input alias only). Axe and Lighthouse count as one
-confidence source because Lighthouse accessibility audits use axe-core. Never
-calculate a code-review-only score by hand.
+Use `source: agent-review` for code-review batches. Scanner JSON from
+`a11y-scan.mjs` or the pinned axe CLI is parsed directly; do not wrap it in a
+finding batch. Never calculate a code-review-only score by hand.
 
 ## Severity Scoring Formula
 
@@ -180,11 +179,11 @@ Update coefficients quarterly from confirmed outcomes. Avoid changing coefficien
 Correlation applies only to the same `(rule_id, URL, canonical location)`.
 Different instances of one rule never upgrade each other.
 
-Axe and Lighthouse count as one source family because Lighthouse
-accessibility audits use axe-core. Agent duplicates of scanner-owned rules are
-dropped when that scanner ran, so optional LLM repetition cannot change a
-score. Otherwise two independent families upgrade to **high** and three upgrade
-to **confirmed**. Input order never affects this reduction.
+Axe, Playwright, and agent-review are independent source families. Agent
+duplicates of scanner-owned rules are dropped when that scanner ran, so
+optional LLM repetition cannot change a score. Otherwise two independent
+families upgrade to **high** and three upgrade to **confirmed**. Input order
+never affects this reduction.
 
 ### Confidence Drift Guard
 

@@ -30,7 +30,7 @@ Rules:
 
 1. Omit `severity`, `confidence`, `wcag`, and `wcag_level` — the catalog supplies them. If present, they are ignored.
 2. Emit a finding only when that rule's `emit_if` is true. Do not invent IDs.
-3. Set `source` once at the batch top level (`agent-review` or `lighthouse`). Do not put `source` or `sources` on individual findings; the normalizer rejects that so an agent batch cannot claim `axe` or `playwright`.
+3. Set `source` once at the batch top level (`agent-review`). Do not put `source` or `sources` on individual findings; the normalizer rejects that so an agent batch cannot claim `axe` or `playwright`.
 4. If axe or Playwright completed for this page, do not emit rules owned by that
    scanner. In code-review-only mode, scanner-owned catalog IDs may be emitted
    from an `agent-review` batch.

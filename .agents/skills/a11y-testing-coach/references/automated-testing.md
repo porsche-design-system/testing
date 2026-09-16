@@ -153,18 +153,6 @@ npx pa11y-ci --config .pa11yci.json
 }
 ```
 
-### Lighthouse (Chrome DevTools)
-
-Built into Chrome, not as thorough as axe but easy to access:
-
-1. Open DevTools (F12)
-2. Go to Lighthouse tab
-3. Check "Accessibility" category
-4. Click "Analyze page load"
-5. Review the accessibility score and specific findings
-
-Note: Lighthouse accessibility tests are a subset of axe-core. A 100 score does NOT mean the page is accessible - it means it passed the automated checks.
-
 ### CI/CD Pipeline
 
 ```yaml

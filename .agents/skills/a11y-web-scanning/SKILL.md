@@ -11,7 +11,7 @@ user-invocable: false
 The `a11y-audit` agent owns phase numbering. This skill supports:
 
 - **Phase 0:** Discover URLs, scope, framework, authentication needs, and scanner availability. Do not run audit tests during discovery.
-- **Phase 1:** Establish the automated baseline. Run the axe-core engine before Lighthouse, code review, or behavioral testing.
+- **Phase 1:** Establish the automated baseline. Run the axe-core engine once before code review or behavioral testing.
 
 For a public **or** authenticated page, use the shipped `a11y-playwright` scanner. Authenticated pages add `--storage-state`. Do not use unpinned `npx @axe-core/cli` as the primary Phase 1 path.
 

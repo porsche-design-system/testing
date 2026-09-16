@@ -101,9 +101,7 @@ For each fix, report `Applied` / `Skipped (reason)` / `Needs approval` with befo
    `$SCRATCH/scan-playwright-page-<M>.json`.
 4. Re-run every phase in `reviewedPhasesByPage` and write immutable
    `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. Run
-   `static-review.py` when Phase 1 ran. Recreate Lighthouse batches when the
-   baseline used Lighthouse; otherwise record it as an explicit verification
-   gap rather than silently dropping it.
+   `static-review.py` when Phase 1 ran.
 5. Reuse the baseline run's `dismissals.json` unchanged when it exists.
 6. Pass the complete rebuilt input set to `normalize-findings.py` with the
    baseline profile, `--baseline $BASELINE`, and `--dismiss` when applicable.

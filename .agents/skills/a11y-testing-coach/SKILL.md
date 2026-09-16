@@ -28,7 +28,7 @@ This skill is a checklist/procedure module for `a11y-audit`. It teaches develope
 You own everything related to accessibility testing methodology:
 - Screen reader testing (NVDA, VoiceOver, JAWS, Narrator, TalkBack)
 - Keyboard-only testing workflows
-- Automated testing tools (axe-core, Pa11y, Lighthouse, WAVE)
+- Automated testing tools (axe-core, Pa11y, WAVE)
 - Browser DevTools accessibility features
 - Testing frameworks integration (Playwright, Cypress, Jest)
 - Accessibility test plans and checklists
@@ -85,6 +85,6 @@ Read only the reference files needed for the current page/features. Do not load 
 
 - [Screen reader testing](references/screen-reader-testing.md) — manual SR procedures (NVDA, VoiceOver, etc.)
 - [Keyboard testing](references/keyboard-testing.md) — keyboard-only test procedures
-- [Automated testing](references/automated-testing.md) — axe/Pa11y/Lighthouse setup, CI pipelines, framework integration
+- [Automated testing](references/automated-testing.md) — axe/Pa11y setup, CI pipelines, framework integration
 - [DevTools and test plans](references/devtools-and-test-plans.md) — browser DevTools a11y features, writing test plans, AT combinations
 

@@ -20,13 +20,12 @@ fields below before anything reaches a report:
 | `impact` | one sentence: who is affected and how |
 | `remediation` | one sentence: how to fix it |
 | `wcag` | generated criterion id from the catalog |
-| `sources` | generated array containing `axe`, `agent-review`, `lighthouse`, and/or `playwright`; `lighthouse-ci` is normalized to `lighthouse` |
+| `sources` | generated array containing `axe`, `agent-review`, and/or `playwright` |
 | `help_url` | from [help-urls.md](help-urls.md), when available |
 | `phase` | generated from the catalog |
 
-`sources` drives confidence upgrades. Axe and Lighthouse are one confidence
-source because Lighthouse accessibility audits use axe-core; they must not
-inflate confidence by corroborating each other.
+`sources` drives confidence upgrades. Axe, Playwright, and agent-review are
+independent families. They must not be aliases of one another.
 
 Identity for merge, scoring, and run-to-run comparison is `(rule_id, url, canonical_location)` where `canonical_location` is the selector, the file path, or `document` — never `file:line`. See [finding-batch.md](finding-batch.md) for the JSON agents must write.
 

@@ -68,8 +68,7 @@ GRADE_BANDS = [(90, "A"), (75, "B"), (50, "C"), (25, "D"), (0, "F")]
 
 SEVERITY_RANK = ["critical", "serious", "moderate", "minor"]
 VALID_CONFIDENCE = {"confirmed", "high", "medium", "low"}
-VALID_SOURCES = {"axe", "agent-review", "lighthouse", "playwright"}
-SOURCE_ALIASES = {"lighthouse-ci": "lighthouse"}
+VALID_SOURCES = {"axe", "agent-review", "playwright"}
 CODE_REVIEW_ONLY_GAPS = (
     {
         "criterion": "Runtime semantics, names, and rendered contrast",
@@ -486,7 +485,7 @@ def parse_file(path, not_checked=None, execution=None, executed_checks=None,
     # Shared finding batch from agent review or a scanner without a native parser.
     if isinstance(data, dict) and data.get("type") == "a11y-finding-batch":
         url = canonical_url(data.get("url", path))
-        source = SOURCE_ALIASES.get(data.get("source"), data.get("source"))
+        source = data.get("source")
         if source not in VALID_SOURCES:
             raise ValueError(f"finding batch has unknown source: {source!r}")
         if source == "agent-review" and data.get("phase") is not None and reviewed_phases is not None:
@@ -593,10 +592,7 @@ def merge_findings(findings, catalog):
         ))
         sources = sorted({source for finding in group
                           for source in finding.get("sources", [])})
-        confidence_sources = {
-            "axe" if source in {"axe", "lighthouse"} else source
-            for source in sources
-        }
+        confidence_sources = set(sources)
         meta = catalog["rules"][primary["rule_id"]]
         confidence = meta["confidence"]
         if len(confidence_sources) >= 3:

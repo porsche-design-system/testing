@@ -366,13 +366,12 @@ class NormalizeTests(unittest.TestCase):
             self.assertTrue(all(item["sources"] == ["playwright"]
                                 for item in findings))
 
-    def test_lighthouse_alias_does_not_double_axe_confidence(self):
+    def test_unknown_batch_source_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
-            axe = self.write(tmp, "axe.json", AXE_PAGE)
-            lighthouse = self.write(tmp, "lighthouse.json", {
+            batch = self.write(tmp, "batch.json", {
                 "type": "a11y-finding-batch",
                 "url": "https://example.test/",
-                "source": "lighthouse-ci",
+                "source": "ci-scanner",
                 "findings": [{
                     "rule_id": "image-alt",
                     "location": {"selector": "img.hero"},
@@ -381,12 +380,10 @@ class NormalizeTests(unittest.TestCase):
                     "remediation": "add alt",
                 }],
             })
-            out = os.path.join(tmp, "out.json")
-            run_script(NORMALIZE, axe, lighthouse, "--out", out)
-            finding = next(item for item in read_json(out)["findings"]
-                           if item["rule_id"] == "image-alt")
-            self.assertEqual(finding["sources"], ["axe", "lighthouse"])
-            self.assertEqual(finding["source_count"], 1)
+            result = run_script(
+                NORMALIZE, batch, "--out", os.path.join(tmp, "out.json"), check=False)
+            self.assertEqual(result.returncode, 2)
+            self.assertIn("unknown source", result.stderr)
 
     def test_hash_routes_and_trailing_slashes_remain_distinct(self):
         with tempfile.TemporaryDirectory() as tmp:
