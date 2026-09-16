@@ -218,7 +218,7 @@ scorecard. For a component-library audit, use code-review batch mode instead:
     dismissals.json                     only if findings were dismissed
     raw/                                scanner output, kept for reproducibility
       scan-axe-page-<N>.json            one trimmed Phase 1 scan per page; N=1 for single page
-      scan-axe-cli-page-<N>.json        only when the pinned CLI fallback was needed
+      scan-axe-cli-page-<N>.json        only when the CLI fallback was needed
       scan-playwright-page-<N>.json      one Phase 10 scan per page
     ACCESSIBILITY-AUDIT.html            only if that format was requested
     ACCESSIBILITY-AUDIT.sarif           only if that format was requested
@@ -294,7 +294,7 @@ Instead, **print the full path when the audit finishes** so it is one click away
 
 Before questions:
 
-1. **Playwright:** Note whether the pinned CLI scanner dependencies can run.
+1. **Playwright:** Note whether Playwright and `@axe-core/playwright` can run.
    Both Phase 1 and Phase 10 use the CLI; MCP is optional acceleration.
 2. **Dev server probe:** If no URL yet, probe common ports (3000, 5173, 8080, 4200, 8000).
 
@@ -381,8 +381,8 @@ This is the first testing phase. When the audit method includes runtime testing:
 
    In a multi-page audit, write `scan-axe-page-<N>.json` for each page. Never reuse an output path across pages.
 3. Keep `inventory` from that JSON. Skip Phases 2–9 from those flags, not from guesses: `hasMedia` → Phase 2 media; `hasDialogs` → Phase 3 modal; `hasForms` → Phase 4; `hasLiveRegions` → Phase 6; `hasCustomWidgets` → Phase 7; `hasTables` → Phase 8. If `inventory` is missing, run the phase rather than skipping it.
-4. Inspect `scans.axe.status`. If it is not `ok` on a public page (missing or
-   mismatched axe package included), run the pinned CLI fallback to
+4. Inspect `scans.axe.status`. If it is not `ok` on a public page (missing
+   axe package included), run the CLI fallback to
    `$SCRATCH/scan-axe-cli-page-<N>.json`. Keep the primary scan because it
    contains tree, coverage, and inventory. For authenticated pages, do not run
    an unauthenticated CLI fallback; mark axe coverage failed.
@@ -392,11 +392,11 @@ If runtime testing was not selected or no URL is available, mark the phase `SKIP
 
 Do not capture screenshots unless the user asked; if they did, keep them in `$SCRATCH`.
 
-Do not run unpinned `npx @axe-core/cli` as the Phase 1 path. When the requested
-axe mode is non-OK on a public page, run the pinned CLI **and** engine:
+Do not use `@axe-core/cli` as the primary Phase 1 path. When the requested
+axe mode is non-OK on a public page, run the latest CLI fallback:
 
 ```bash
-npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+npx --yes @axe-core/cli axe \
   <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
   --save $SCRATCH/scan-axe-cli-page-<N>.json
 ```

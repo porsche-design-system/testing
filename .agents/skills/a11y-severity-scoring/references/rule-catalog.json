@@ -1518,9 +1518,6 @@
     }
   },
   "scanner": {
-    "axe_cli_version": "4.10.2",
-    "axe_core_version": "4.10.3",
-    "axe_playwright_version": "4.10.2",
     "axe_rule_ids": [
       "area-alt",
       "aria-allowed-attr",

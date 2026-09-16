@@ -57,7 +57,7 @@ Closed lists live under `lists` in the JSON (`ambiguous_link_names`, `generic_al
 
 ## Axe rules
 
-The `scanner` block is the parity contract: wrapper
-`@axe-core/playwright@4.10.2`, exact engine `axe-core@4.10.3`, supported tags,
-disabled rules, and all 69 rule IDs selected by those tags. Package tests fail
-when any configured rule is absent from the catalog.
+The `scanner` block names the axe tags, disabled rules, and the catalogued
+axe rule IDs. The engine is the project's installed `@axe-core/playwright` and
+`axe-core` (latest at install time), not a frozen version. New axe IDs are still
+scored from scanner evidence until they are added to this catalog.

@@ -41,14 +41,14 @@ Optional MCP `run_playwright_*` tools may substitute for the equivalent scan mod
 ## Setup
 
 ```bash
-npm install -D playwright@1.63.0 @axe-core/playwright@4.10.2 axe-core@4.10.3
+npm install -D playwright@1.63.0 @axe-core/playwright@latest axe-core@latest
 npx playwright install chromium
 ```
 
-The scanner records Playwright and browser versions in its JSON. Axe execution
-requires exactly `@axe-core/playwright@4.10.2` with `axe-core@4.10.3`; it fails
-fast on another version because the rule catalog is versioned against that
-engine. The viewport pass does not run axe a second time.
+The scanner records Playwright, browser, and resolved axe versions in its JSON.
+Axe uses the project's installed `@axe-core/playwright` and `axe-core` — install
+the latest if they are missing. The scanner does not refuse a newer engine. The
+viewport pass does not run axe a second time.
 
 ## Running the scanner
 
@@ -150,7 +150,7 @@ Playwright is not installed, so behavioural testing (keyboard traversal, viewpor
 reflow, accessibility tree) did not run. Findings in this report come from code
 review and axe-core CLI only.
 
-Install: npm install -D playwright@1.63.0 @axe-core/playwright@4.10.2 axe-core@4.10.3 && npx playwright install chromium
+Install: npm install -D playwright@1.63.0 @axe-core/playwright@latest axe-core@latest && npx playwright install chromium
 ```
 
 ## Reliability

@@ -12,7 +12,7 @@ fields below before anything reaches a report:
 
 | Field | Values / format |
 |-------|-----------------|
-| `rule_id` | Catalog id from [rule-catalog.json](rule-catalog.json) only. Never a free WCAG string (`WCAG-1.1.1`) or an invented kebab-case name. |
+| `rule_id` | Agent batches: catalog id from [rule-catalog.json](rule-catalog.json) only. Axe scanner/CLI findings may use the installed engine's rule id; catalog metadata is applied when that id is known. Never a free WCAG string (`WCAG-1.1.1`) or an invented kebab-case name in agent review. |
 | `severity` | generated: `critical` \| `serious` \| `moderate` \| `minor` — taken from the catalog, not chosen per run |
 | `confidence` | generated: `confirmed` \| `high` \| `medium` \| `low` — catalog default, then source correlation |
 | `location` | `url` plus either `selector` or `file` (catalog `location_key`). Line numbers may appear in prose, never as the identity key. |

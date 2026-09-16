@@ -13,7 +13,7 @@ The `a11y-audit` agent owns phase numbering. This skill supports:
 - **Phase 0:** Discover URLs, scope, framework, authentication needs, and scanner availability. Do not run audit tests during discovery.
 - **Phase 1:** Establish the automated baseline. Run the axe-core engine once before code review or behavioral testing.
 
-For a public **or** authenticated page, use the shipped `a11y-playwright` scanner. Authenticated pages add `--storage-state`. Do not use unpinned `npx @axe-core/cli` as the primary Phase 1 path.
+For a public **or** authenticated page, use the shipped `a11y-playwright` scanner. Authenticated pages add `--storage-state`. Do not use `@axe-core/cli` as the primary Phase 1 path.
 
 Complete Phase 1 as one step before returning control:
 
@@ -49,17 +49,17 @@ node <a11y-playwright>/scripts/a11y-scan.mjs \
 The JSON includes `inventory` (`hasTables`, `hasForms`, `hasMedia`, `hasDialogs`, `hasLiveRegions`, `hasCustomWidgets`) used to skip later phases.
 
 After every primary scan, inspect `scans.axe.status`. If it is not `ok` on a
-public page, run the pinned CLI fallback below to
+public page, run the CLI fallback below to
 `$SCRATCH/scan-axe-cli-page-<N>.json` and preserve the primary file for its
 tree/inventory data. Never use the public CLI fallback for an authenticated
 route.
 
-### Fallback: pinned axe-core CLI
+### Fallback: axe-core CLI
 
-Use only when Playwright cannot run. Inventory flags will be missing, so do not skip Phases 2–9 from guesses.
+Use only when Playwright cannot run axe. Inventory flags will be missing, so do not skip Phases 2–9 from guesses.
 
 ```bash
-npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+npx --yes @axe-core/cli axe \
   <URL> --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
   --save $SCRATCH/scan-axe-cli-page-1.json
 ```
@@ -215,7 +215,7 @@ node <a11y-playwright>/scripts/a11y-scan.mjs \
   --storage-state .auth/state.json
 ```
 
-Prefer this scanner over `@axe-core/cli` for every Phase 1 run. The CLI cannot load storage state; the supported fallback wrapper is `@4.10.2` (axe-core `~4.10.3`).
+Prefer this scanner over `@axe-core/cli` for every Phase 1 run. The CLI cannot load storage state.
 
 ### Step 4: Verify and record
 

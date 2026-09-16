@@ -46,12 +46,13 @@ Use the **quick** profile:
      --out $SCRATCH/scan-axe-page-1.json
    ```
 
-   For an authenticated page, add `--storage-state <file>`. Do not use unpinned `@axe-core/cli`.
-   If `scans.axe.status` is not `ok` on a public page, run the pinned CLI and
-   engine without overwriting the primary scan:
+   For an authenticated page, add `--storage-state <file>`. Do not use `@axe-core/cli`
+   as the primary Phase 1 path.
+   If `scans.axe.status` is not `ok` on a public page, run the CLI fallback
+   without overwriting the primary scan:
 
    ```bash
-   npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+   npx --yes @axe-core/cli axe \
      ${input:pageUrl} --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
      --save $SCRATCH/scan-axe-cli-page-1.json
    ```

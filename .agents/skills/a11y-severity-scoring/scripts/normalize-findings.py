@@ -4,7 +4,9 @@
 Turns raw scanner JSON into the shape defined in references/finding-schema.md,
 merges findings that several sources agree on, and applies the scoring formula
 from SKILL.md. Rule ids, severities, and WCAG criteria come from
-references/rule-catalog.json so identical inputs score identically.
+references/rule-catalog.json so identical inputs score identically. Agent
+review IDs must be in the catalog; axe engine IDs that are not yet catalogued
+are scored from scanner evidence.
 
 Usage:
     normalize-findings.py <file> [<file> ...] [options]
@@ -179,9 +181,41 @@ def identity_key(finding, catalog):
     return (finding.get("rule_id"), location.get("url"), canonical_location(finding, catalog))
 
 
-def apply_catalog(finding, catalog):
+def is_axe_sourced(finding):
+    return "axe" in (finding.get("sources") or [])
+
+
+def synthesized_axe_rule(finding):
+    """Score an engine rule that is not yet in the catalog from axe evidence."""
+    severity = finding.get("severity")
+    if severity not in SEVERITY_RANK:
+        severity = "moderate"
+    level = finding.get("wcag_level")
+    if level not in {"A", "AA", "AAA"}:
+        level = "AA"
+    return {
+        "severity": severity,
+        "wcag": finding.get("wcag") or "unmapped",
+        "wcag_level": level,
+        "confidence": "high",
+        "phase": "1",
+        "location_key": "selector",
+    }
+
+
+def catalog_rule(finding, catalog):
     rid = finding.get("rule_id")
     meta = (catalog.get("rules") or {}).get(rid)
+    if meta:
+        return meta
+    if is_axe_sourced(finding) and rid:
+        return synthesized_axe_rule(finding)
+    return {}
+
+
+def apply_catalog(finding, catalog):
+    rid = finding.get("rule_id")
+    meta = catalog_rule(finding, catalog)
     if not meta:
         raise ValueError(f"unknown rule_id: {rid!r}")
     finding["severity"] = meta["severity"]
@@ -597,8 +631,8 @@ def merge_findings(findings, catalog):
         sources = sorted({source for finding in group
                           for source in finding.get("sources", [])})
         confidence_sources = set(sources)
-        meta = catalog["rules"][primary["rule_id"]]
-        confidence = meta["confidence"]
+        meta = catalog_rule(primary, catalog)
+        confidence = meta.get("confidence") or primary.get("confidence") or "high"
         if len(confidence_sources) >= 3:
             confidence = "confirmed"
         elif len(confidence_sources) >= 2:
@@ -802,15 +836,6 @@ def main():
             print(
                 f"Error: scanner catalog {scanner_catalog} does not match "
                 f"normalizer catalog {catalog.get('version')}",
-                file=sys.stderr,
-            )
-            return 2
-        axe_version = metadata.get("axeCoreVersion")
-        if (metadata.get("axeStatus") == "ok" and axe_version
-                and axe_version != (catalog.get("scanner") or {}).get("axe_core_version")):
-            print(
-                f"Error: scanner axe-core {axe_version} does not match catalog "
-                f"{(catalog.get('scanner') or {}).get('axe_core_version')}",
                 file=sys.stderr,
             )
             return 2

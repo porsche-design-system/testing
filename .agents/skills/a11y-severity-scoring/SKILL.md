@@ -79,7 +79,7 @@ For code review or a scanner without a native parser, write an intermediate batc
 ```
 
 Use `source: agent-review` for code-review batches. Scanner JSON from
-`a11y-scan.mjs` or the pinned axe CLI is parsed directly; do not wrap it in a
+`a11y-scan.mjs` or the axe-core CLI fallback is parsed directly; do not wrap it in a
 finding batch. Never calculate a code-review-only score by hand.
 
 ## Severity Scoring Formula

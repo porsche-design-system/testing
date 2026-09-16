@@ -176,6 +176,56 @@ class NormalizeTests(unittest.TestCase):
             self.assertEqual(result.returncode, 2)
             self.assertIn("unknown rule_id", result.stderr)
 
+    def test_resolved_axe_version_is_not_gated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            scan = self.write(tmp, "scan.json", {
+                "url": "https://example.test/",
+                "catalogVersion": "2026-q3",
+                "axeCoreVersion": "4.13.0",
+                "axePlaywrightVersion": "4.13.0",
+                "modes": ["axe", "tree", "coverage"],
+                "scans": {
+                    "axe": {"status": "ok", "violations": []},
+                    "tree": {
+                        "status": "ok", "h1Count": 1,
+                        "skippedHeadingLevels": [], "missingLandmarks": [],
+                    },
+                    "coverage": {"status": "ok", "notChecked": []},
+                },
+            })
+            out = os.path.join(tmp, "out.json")
+            run_script(NORMALIZE, scan, "--out", out)
+            report = read_json(out)
+            self.assertEqual(
+                report["scoring"]["scannerMetadata"][0]["axeCoreVersion"], "4.13.0")
+            self.assertEqual(report["overall"]["score"], 100)
+
+    def test_unknown_axe_engine_rule_is_scored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            scan = self.write(tmp, "scan.json", {
+                "url": "https://example.test/",
+                "violations": [{
+                    "id": "future-axe-rule",
+                    "impact": "serious",
+                    "help": "Future engine rule",
+                    "description": "Ensures a newly added axe check fails here",
+                    "helpUrl": "https://dequeuniversity.com/rules/axe/4.13/future-axe-rule",
+                    "tags": ["wcag2a", "wcag412"],
+                    "nodes": [{
+                        "target": ["my-widget"],
+                        "html": "<my-widget></my-widget>",
+                        "failureSummary": "Fix any of the following: Element has no accessible name",
+                    }],
+                }],
+            })
+            out = os.path.join(tmp, "out.json")
+            run_script(NORMALIZE, scan, "--out", out)
+            finding = read_json(out)["findings"][0]
+            self.assertEqual(finding["rule_id"], "future-axe-rule")
+            self.assertEqual(finding["severity"], "serious")
+            self.assertEqual(finding["wcag"], "4.1.2")
+            self.assertEqual(finding["sources"], ["axe"])
+
     def test_agent_duplicate_of_axe_rule_is_dropped(self):
         with tempfile.TemporaryDirectory() as tmp:
             scan = self.write(tmp, "scan.json", AXE_PAGE)
@@ -205,8 +255,9 @@ class NormalizeTests(unittest.TestCase):
         configured = set(catalog["scanner"]["axe_rule_ids"])
         self.assertEqual(len(configured), 69)
         self.assertFalse(configured - set(catalog["rules"]))
-        self.assertEqual(catalog["scanner"]["axe_core_version"], "4.10.3")
-        self.assertEqual(catalog["scanner"]["axe_playwright_version"], "4.10.2")
+        self.assertNotIn("axe_core_version", catalog["scanner"])
+        self.assertNotIn("axe_playwright_version", catalog["scanner"])
+        self.assertNotIn("axe_cli_version", catalog["scanner"])
         self.assertTrue(all(rule.get("check") for rule in catalog["rules"].values()))
 
     def test_input_order_does_not_change_confidence_or_output(self):

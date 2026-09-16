@@ -82,7 +82,7 @@ For each fix, report `Applied` / `Skipped (reason)` / `Needs approval` with befo
    ```
 
    If the replayed `scans.axe.status` is not `ok` and the baseline metadata for
-   this page contains `runner: axe-cli`, also repeat the pinned CLI fallback to
+   this page contains `runner: axe-cli`, also repeat the CLI fallback to
    `$SCRATCH/scan-axe-cli-page-<M>.json` and include it in normalization.
 
 3. From the page's metadata entries, union `modes`. If that set contains

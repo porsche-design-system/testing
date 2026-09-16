@@ -46,13 +46,14 @@ Use the single phase map (phases 0–12). Execute phases in numerical order:
      --out $SCRATCH/scan-axe-page-1.json
    ```
 
-   Skip later phases from the scan's `inventory` flags. Do not run unpinned `@axe-core/cli`.
-   If `scans.axe.status` is not `ok` on a public page, run the pinned CLI and
-   engine to `$SCRATCH/scan-axe-cli-page-1.json` (never overwrite the primary
+   Skip later phases from the scan's `inventory` flags. Do not use `@axe-core/cli`
+   as the primary Phase 1 path.
+   If `scans.axe.status` is not `ok` on a public page, run the CLI fallback
+   to `$SCRATCH/scan-axe-cli-page-1.json` (never overwrite the primary
    scan):
 
    ```bash
-   npx --yes --package=@axe-core/cli@4.10.2 --package=axe-core@4.10.3 axe \
+   npx --yes @axe-core/cli axe \
      ${input:pageUrl} --tags wcag2a,wcag2aa,wcag21a,wcag21aa,wcag22aa \
      --save $SCRATCH/scan-axe-cli-page-1.json
    ```
