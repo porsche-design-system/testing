@@ -451,6 +451,10 @@ def parse_file(path, not_checked=None, execution=None, executed_checks=None,
             "tags": data.get("tags"),
             "selector": data.get("selector"),
             "storageState": data.get("storageState"),
+            "colorScheme": data.get("colorScheme"),
+            "canvasWorkaround": ((data.get("scans") or {}).get("axe") or {}).get(
+                "canvasWorkaround"
+            ),
             "viewports": data.get("viewports"),
             "maxTabs": data.get("maxTabs"),
             "timeout": data.get("timeout"),

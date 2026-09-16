@@ -11,7 +11,7 @@ targets:
 dependencies:
   apm:
     - porsche-design-system/skills/packages/web-accessibility-codegen#web-accessibility-codegen--v0.2.0
-    - porsche-design-system/skills/packages/web-accessibility-audit#web-accessibility-audit--v0.3.0
+    - porsche-design-system/skills/packages/web-accessibility-audit#web-accessibility-audit--v0.3.1
   mcp: []
 includes: auto
 scripts: {}

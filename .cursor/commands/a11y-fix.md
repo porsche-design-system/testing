@@ -62,7 +62,8 @@ For each fix, report `Applied` / `Skipped (reason)` / `Needs approval` with befo
    Select the entry whose `modes` contains `axe`. If multiple entries differ on
    any replay option, stop and ask which configuration is authoritative instead
    of choosing by list order. If `executedChecksByPage` contains `axe`, re-run
-   Phase 1 with that entry's `tags`, `selector`, `storageState`, `timeout`, `loadDelay`,
+   Phase 1 with that entry's `tags`, `selector`, `storageState`, `colorScheme`,
+   `timeout`, `loadDelay`,
    `readiness.readySelector`, `readiness.stabilityWindow`, and
    `readiness.bestEffort` policy:
 
@@ -71,6 +72,7 @@ For each fix, report `Applied` / `Skipped (reason)` / `Needs approval` with befo
      --url <URL> --mode axe,tree,coverage \
      --tags <baseline-tags> [--selector <baseline-selector>] \
      [--storage-state <baseline-storage-state>] \
+     --color-scheme <baseline-color-scheme> \
      --timeout <baseline-timeout> \
      --load-delay <baseline-load-delay> \
      --stability-window <baseline-stability-window> \

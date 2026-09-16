@@ -716,6 +716,8 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertIn("--stability-window", prompt)
         self.assertIn("runner: a11y-scan", prompt)
         self.assertIn("storageState", prompt)
+        self.assertIn("colorScheme", prompt)
+        self.assertIn("--color-scheme", prompt)
         self.assertIn("loadDelay", prompt)
         self.assertIn("--baseline $BASELINE", prompt)
         self.assertIn("reviewedPhasesByPage", prompt)

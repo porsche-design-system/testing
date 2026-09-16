@@ -54,9 +54,9 @@ dependencies:
 - repo_url: porsche-design-system/skills
   name: web-accessibility-audit
   host: github.com
-  resolved_commit: c19dccffc3769a32d299f393f66c3df0a6b6863a
-  resolved_ref: web-accessibility-audit--v0.3.0
-  version: 0.3.0
+  resolved_commit: 151c5f16b9c3f8d42b1851a2cb0935621630644f
+  resolved_ref: web-accessibility-audit--v0.3.1
+  version: 0.3.1
   virtual_path: packages/web-accessibility-audit
   is_virtual: true
   package_type: apm_package
@@ -192,11 +192,11 @@ dependencies:
     .agents/skills/a11y-live-regions/SKILL.md: sha256:bf2ccdc12ffec0774d7407b48a82bf312413ab858e6947b6bdb5c810f0f97b02
     .agents/skills/a11y-media/SKILL.md: sha256:116908a333eacb2655ff5f684337c9986530ea8c82e5b98c1f8cb30c85c842f0
     .agents/skills/a11y-modal/SKILL.md: sha256:a0210025e542fe0ace529bccd089379e3a780daeab48cdb51763635f947ea2da
-    .agents/skills/a11y-playwright/SKILL.md: sha256:65cc8b16977d4d3593b3296b79950fcb812b41c4d939fc1f1e52b1b502d7a618
+    .agents/skills/a11y-playwright/SKILL.md: sha256:1ed1b4997a313080f4bab886e2f599cb9ee4134cdf8f41258bd104acb78e14a0
     .agents/skills/a11y-playwright/references/ci-integration.md: sha256:201338a72b47c070bcfef1d2fec4ca9273d5e1ef19b2f063a44e300b5a9e63d9
     .agents/skills/a11y-playwright/references/fix-verification.md: sha256:3ffe2e5fa4aa614a445c3add050fe2da4c6bf814269d030ebea74491eb702176
     .agents/skills/a11y-playwright/references/scan-patterns.md: sha256:32cf1aaf5903133731c8e6c14a27f90b2ce9a59ce2ea039bdf19288715146f53
-    .agents/skills/a11y-playwright/scripts/a11y-scan.mjs: sha256:9831b92a629a13d602bc8fe04364f43a1c375159ad4ee8c3653d24b984ecfb34
+    .agents/skills/a11y-playwright/scripts/a11y-scan.mjs: sha256:c0ac4f248b238945fc27555ca4cc3aac9b0ed9928f6c7873ea1adddb42b831b5
     .agents/skills/a11y-severity-scoring/SKILL.md: sha256:9c9acef756bc1b4e98bac7a365ec15407412b030e35135632eaceda1e8e61d4f
     .agents/skills/a11y-severity-scoring/references/cross-page-analysis.md: sha256:7d8f90f6d468625f1d66db4efea6fbd2cf060671e9752e5486ee5abdf1febd03
     .agents/skills/a11y-severity-scoring/references/finding-batch.md: sha256:2a62b74e6fe45d6dc460f0905e903d54762844eaf9f72b4515026e95100fed15
@@ -207,9 +207,9 @@ dependencies:
     .agents/skills/a11y-severity-scoring/references/vpat-acr.md: sha256:4478050a782cade65eed214b88118de9c4c2ea504f6991afff1f7268eadda558
     .agents/skills/a11y-severity-scoring/references/wcag-guide.md: sha256:fbd23ee2c6da92bc2eb5b8bb84ad72c74cc88a525ecbc65f79b387c48ba2e76b
     .agents/skills/a11y-severity-scoring/scripts/compare-findings.py: sha256:844f134130c8e2d50eab8c68c0c9fc9496584ac427868bceabe2109658925355
-    .agents/skills/a11y-severity-scoring/scripts/normalize-findings.py: sha256:6046f409c479dc441b23437710ef17bd541c23584c93b9c4b57fbff639665f5f
+    .agents/skills/a11y-severity-scoring/scripts/normalize-findings.py: sha256:a6a217fdce84b421cbab068d21ef0b091cedc9b19d2ca57a634188f6297e9049
     .agents/skills/a11y-severity-scoring/scripts/static-review.py: sha256:ce8f6114dd465f88500277a5a2fc810c1dda657b3eec21034d7abd89802f315c
-    .agents/skills/a11y-severity-scoring/scripts/test_normalize_findings.py: sha256:1a454f9eea69e943f0c0698a615b1c6cbaf7c978f08e9a99657100bff8068023
+    .agents/skills/a11y-severity-scoring/scripts/test_normalize_findings.py: sha256:0f2fada9a45839f3aeb836692c86fb3e67da08f925096ed6e9482f33f5633d45
     .agents/skills/a11y-tables/SKILL.md: sha256:029395a61e92d1c83554f6d6b5aa5ab9a7b4eca75e6ca68ec98f35648fef5835
     .agents/skills/a11y-tables/references/layout-and-visual-grids.md: sha256:8bf623a513e93c9c9a0a13abe3eaae965058a96b27cc8e5156a28b5ad67e4a9c
     .agents/skills/a11y-tables/references/responsive-pagination-empty.md: sha256:5e74c79b9786640fb1f541f8ad71ac28d402dff1e147c5b7a97cc0739c6b1f97
@@ -228,17 +228,17 @@ dependencies:
     .cursor/commands/a11y-audit-multi-page.md: sha256:08f0f156a06fb6f9f49014f4394475f4a1aadfe14606b802b9f2513a25678a33
     .cursor/commands/a11y-audit.md: sha256:c1960b2543a9acee3fb0f7521e9a374df7b337715a43891af6f601f2dc21be31
     .cursor/commands/a11y-component-library-audit.md: sha256:0f02e8a1b908afdcaa8bd7a5cf8d2f7c4b4f6dd017eb1878776458e1d8a67d89
-    .cursor/commands/a11y-fix.md: sha256:eda1184c4770274dbfd601f164f59128fbf130548e38ad59728635ecc4ff6f10
+    .cursor/commands/a11y-fix.md: sha256:7601ba7a859173b4fcddde46e45fd01722d49761de16745863d889a3ed3d7e84
     .cursor/commands/a11y-lead.md: sha256:2538efa6e78966c217c2766f3c6ce50d6910bd712f0c19f4c37959aa9a6df502
     .cursor/commands/a11y-quick-check.md: sha256:25572c2800407f1e361fa53423cbf3926c748d441d78310455efc19eb699e6b5
     .github/agents/a11y-audit.agent.md: sha256:29e475c5078baabd3c23eab204d2fe96bab3cda3b721a4bc7f5efb2d0ad1f19b
     .github/prompts/a11y-audit-multi-page.prompt.md: sha256:f4e9954a5cd51a7a0815f72a548989365e75560f1df419fb0e09b959b58f6a37
     .github/prompts/a11y-audit.prompt.md: sha256:1147677d5d8707d6d8678c48068fc6d3b0debcc152855dafeeb5e4daa71ee80b
     .github/prompts/a11y-component-library-audit.prompt.md: sha256:ac2a988cdde981aaff9451682db95e580f73927b93ef53fb0fdd95b659d19314
-    .github/prompts/a11y-fix.prompt.md: sha256:ae4f54d78975cf30cad217f10541b0959bab93bba421ad821e7ef2214db0b7b3
+    .github/prompts/a11y-fix.prompt.md: sha256:4ccf98dec2c9b4f4c1cb85ced552978590d8d09b0b6e2b404582c6619fc2ec4b
     .github/prompts/a11y-lead.prompt.md: sha256:ca8a9ef114672321ef37e7f48c3163c4543886fdb3e3fd3f2fb09315fa0a9c7f
     .github/prompts/a11y-quick-check.prompt.md: sha256:f6fd101a1bc8ee84c87f1e9adb3cbff057bc168c7a05d6ae4a558260a4f19307
-  content_hash: sha256:54e8e7361e4d4101de7bd72a132510af1d1efa4efc50b700e540f9b69f0cf1a2
+  content_hash: sha256:159374ce637537728255927c4a58c924951c587b15a9e07e7f693764ede21cdc
   declared_license: MIT
 deployments:
 - kind: project-relative
@@ -294,7 +294,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:ae4f54d78975cf30cad217f10541b0959bab93bba421ad821e7ef2214db0b7b3
+  content_hash: sha256:4ccf98dec2c9b4f4c1cb85ced552978590d8d09b0b6e2b404582c6619fc2ec4b
 - kind: project-relative
   target: copilot
   value: .github/prompts/a11y-lead.prompt.md
@@ -357,7 +357,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:eda1184c4770274dbfd601f164f59128fbf130548e38ad59728635ecc4ff6f10
+  content_hash: sha256:7601ba7a859173b4fcddde46e45fd01722d49761de16745863d889a3ed3d7e84
 - kind: project-relative
   target: cursor
   value: .cursor/commands/a11y-lead.md
@@ -816,7 +816,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:65cc8b16977d4d3593b3296b79950fcb812b41c4d939fc1f1e52b1b502d7a618
+  content_hash: sha256:1ed1b4997a313080f4bab886e2f599cb9ee4134cdf8f41258bd104acb78e14a0
 - kind: project-relative
   target: legacy
   value: .agents/skills/a11y-playwright/references/ci-integration.md
@@ -852,7 +852,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:9831b92a629a13d602bc8fe04364f43a1c375159ad4ee8c3653d24b984ecfb34
+  content_hash: sha256:c0ac4f248b238945fc27555ca4cc3aac9b0ed9928f6c7873ea1adddb42b831b5
 - kind: project-relative
   target: legacy
   value: .agents/skills/a11y-severity-scoring
@@ -960,7 +960,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:6046f409c479dc441b23437710ef17bd541c23584c93b9c4b57fbff639665f5f
+  content_hash: sha256:a6a217fdce84b421cbab068d21ef0b091cedc9b19d2ca57a634188f6297e9049
 - kind: project-relative
   target: legacy
   value: .agents/skills/a11y-severity-scoring/scripts/static-review.py
@@ -978,7 +978,7 @@ deployments:
   owners:
   - porsche-design-system/skills/packages/web-accessibility-audit
   active_owner: porsche-design-system/skills/packages/web-accessibility-audit
-  content_hash: sha256:1a454f9eea69e943f0c0698a615b1c6cbaf7c978f08e9a99657100bff8068023
+  content_hash: sha256:0f2fada9a45839f3aeb836692c86fb3e67da08f925096ed6e9482f33f5633d45
 - kind: project-relative
   target: legacy
   value: .agents/skills/a11y-tables

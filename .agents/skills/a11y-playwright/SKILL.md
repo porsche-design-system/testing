@@ -94,6 +94,7 @@ If a result still looks implausible, re-scan with `--load-delay 3000` first — 
 | `--tags` | WCAG 2.0–2.2 A/AA | axe tag list |
 | `--selector` | whole page | Scope the axe scan to a subtree |
 | `--storage-state` | none | Playwright storageState file for authenticated pages |
+| `--color-scheme` | `light` | Playwright `colorScheme`: `light`, `dark`, or `no-preference` |
 | `--viewports` | `320,768,1024,1440` | Widths for the reflow and target-size scan |
 | `--max-tabs` | `100` | Tab presses during keyboard traversal |
 | `--timeout` | `30000` | Navigation/readiness timeout |
@@ -120,7 +121,7 @@ mode instead of silently measuring an arbitrary state.
 
 `behavioralConfidence` is `High` when every requested scan completed, `Medium` at 60% or more, `Low` below that. Report it alongside findings so the reader knows how much of the behavioural surface was actually exercised.
 
-Contrast appears only under `axe`. Target size is reported after applying SC 2.5.8's inline and spacing exceptions, so a small inline link in a sentence is correctly not a finding; the remaining exceptions ("essential" and "equivalent control") need human judgement, which is why those findings carry `medium` confidence.
+Contrast appears only under `axe`. Before `analyze()`, the scanner sets a transparent `html`/`body` background to the CSS `Canvas` system colour so axe-core does not treat it as `#ffffff` under `color-scheme: dark` ([axe-core#3605](https://github.com/dequelabs/axe-core/issues/3605), [#4608](https://github.com/dequelabs/axe-core/issues/4608)). The inline patch is restored afterwards. Nested colour-scheme islands without an opaque background remain an axe limitation. Target size is reported after applying SC 2.5.8's inline and spacing exceptions, so a small inline link in a sentence is correctly not a finding; the remaining exceptions ("essential" and "equivalent control") need human judgement, which is why those findings carry `medium` confidence.
 
 ## Coverage and its limits
 

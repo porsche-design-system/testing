@@ -21,6 +21,7 @@
  *   --selector <css>       Limit axe to a subtree
  *   --storage-state <file> Playwright storageState JSON for auth-gated pages
  *   --viewports <list>     Comma-separated widths (default: 320,768,1024,1440)
+ *   --color-scheme <name>  Playwright colorScheme: light, dark, or no-preference (default: light)
  *   --max-tabs <n>         Tab presses during keyboard traversal (default: 100)
  *   --timeout <ms>         Navigation timeout (default: 30000)
  *   --load-delay <ms>      Wait after load before measuring (default: 2000)
@@ -106,6 +107,7 @@ const { values } = parseArgs({
     selector: { type: 'string' },
     'storage-state': { type: 'string' },
     viewports: { type: 'string', default: '320,768,1024,1440' },
+    'color-scheme': { type: 'string', default: 'light' },
     'max-tabs': { type: 'string', default: '100' },
     timeout: { type: 'string', default: '30000' },
     'load-delay': { type: 'string', default: '2000' },
@@ -162,6 +164,12 @@ const playwrightVersion = packageVersion('playwright');
 const axePlaywrightVersion = packageVersion('@axe-core/playwright');
 const axeCoreVersion = packageVersion('axe-core');
 
+const colorScheme = values['color-scheme'];
+if (!['light', 'dark', 'no-preference'].includes(colorScheme)) {
+  console.error('Error: --color-scheme must be light, dark, or no-preference.');
+  process.exit(1);
+}
+
 const results = {
   url: values.url,
   scannedAt: new Date().toISOString(),
@@ -175,6 +183,7 @@ const results = {
   tags: requestedTags,
   selector: values.selector || null,
   storageState: values['storage-state'] || null,
+  colorScheme,
   viewports: values.viewports.split(',').map((value) => Number(value.trim())),
   maxTabs,
   timeout,
@@ -204,12 +213,6 @@ try {
       : `Chromium failed to launch: ${error.message}`,
     install: 'npx playwright install chromium',
   }, null, 2));
-  process.exit(1);
-}
-
-const colorScheme = values['color-scheme'];
-if (!['light', 'dark', 'no-preference'].includes(colorScheme)) {
-  console.error('Error: --color-scheme must be light, dark, or no-preference.');
   process.exit(1);
 }
 
@@ -428,6 +431,50 @@ async function gotoPage(mode) {
   }
 }
 
+/**
+ * axe-core treats a transparent root background as #ffffff
+ * (dequelabs/axe-core#3605, #4608). When `color-scheme: dark` is in effect the
+ * UA paints Canvas instead, so light text is reported at ~1:1. Make that
+ * canvas colour computable for the duration of analyze(), then restore.
+ */
+async function applyCanvasContrastWorkaround() {
+  return page.evaluate(() => {
+    const transparent = (color) => {
+      if (!color || color === 'transparent') return true;
+      const rgba = color.match(/^rgba?\((.+)\)$/i);
+      if (!rgba) return false;
+      const parts = rgba[1].split(',').map((part) => part.trim());
+      return parts.length === 4 && Number(parts[3]) === 0;
+    };
+    const patchIfNeeded = (el) => {
+      if (!el || !transparent(getComputedStyle(el).backgroundColor)) return null;
+      const previous = el.style.getPropertyValue('background-color');
+      const priority = el.style.getPropertyPriority('background-color');
+      el.style.setProperty('background-color', 'Canvas', 'important');
+      return { tag: el.tagName.toLowerCase(), previous, priority };
+    };
+    const patches = [patchIfNeeded(document.documentElement), patchIfNeeded(document.body)]
+      .filter(Boolean);
+    window.__a11yCanvasPatches = patches;
+    return patches.map((patch) => patch.tag);
+  });
+}
+
+async function restoreCanvasContrastWorkaround() {
+  await page.evaluate(() => {
+    for (const patch of window.__a11yCanvasPatches || []) {
+      const el = patch.tag === 'html' ? document.documentElement : document.body;
+      if (!el) continue;
+      if (patch.previous) {
+        el.style.setProperty('background-color', patch.previous, patch.priority || '');
+      } else {
+        el.style.removeProperty('background-color');
+      }
+    }
+    delete window.__a11yCanvasPatches;
+  });
+}
+
 /** axe-core scan of the page (or a subtree). */
 async function runAxe() {
   if (!AxeBuilder) {
@@ -457,24 +504,39 @@ async function runAxe() {
     };
   }
   await gotoPage('axe');
-  let builder = new AxeBuilder({ page }).withTags(requestedTags);
-  builder = builder.disableRules(DISABLED_AXE_RULES);
-  if (values.selector) builder = builder.include(values.selector);
-  const axe = await builder.analyze();
-  return {
-    status: 'ok',
-    violationCount: axe.violations.length,
-    passCount: axe.passes.length,
-    incompleteCount: axe.incomplete.length,
-    violations: axe.violations.map((v) => ({
-      id: v.id,
-      impact: v.impact,
-      help: v.help,
-      helpUrl: v.helpUrl,
-      tags: v.tags,
-      nodes: v.nodes.map((n) => ({ target: n.target, html: n.html, failureSummary: n.failureSummary })),
-    })),
-  };
+  let canvasTargets = [];
+  try {
+    const patched = await applyCanvasContrastWorkaround();
+    canvasTargets = Array.isArray(patched) ? patched : [];
+    let builder = new AxeBuilder({ page }).withTags(requestedTags);
+    builder = builder.disableRules(DISABLED_AXE_RULES);
+    if (values.selector) builder = builder.include(values.selector);
+    const axe = await builder.analyze();
+    return {
+      status: 'ok',
+      violationCount: axe.violations.length,
+      passCount: axe.passes.length,
+      incompleteCount: axe.incomplete.length,
+      canvasWorkaround: {
+        applied: canvasTargets.length > 0,
+        targets: canvasTargets,
+      },
+      violations: axe.violations.map((v) => ({
+        id: v.id,
+        impact: v.impact,
+        help: v.help,
+        helpUrl: v.helpUrl,
+        tags: v.tags,
+        nodes: v.nodes.map((n) => ({ target: n.target, html: n.html, failureSummary: n.failureSummary })),
+      })),
+    };
+  } finally {
+    try {
+      await restoreCanvasContrastWorkaround();
+    } catch {
+      // The page may already have closed; the patch is session-local.
+    }
+  }
 }
 
 /** Tab traversal: focus order, tab stop count, and genuine keyboard traps. */
