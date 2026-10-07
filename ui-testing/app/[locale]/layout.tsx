@@ -7,7 +7,6 @@ import {
 import { PorscheDesignSystemProvider } from '@porsche-design-system/components-react/ssr';
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
-import { AnalyticsScripts } from '@/app/components/analytics/AnalyticsScripts';
 import { ProductFavoritesProvider } from '@/app/components/favorites/ProductFavoritesProvider';
 import { ProductFavoriteToasts } from '@/app/components/favorites/ProductFavoriteToasts';
 import { FeedbackCopyProvider } from '@/app/components/feedback/FeedbackCopyContext';
@@ -78,7 +77,6 @@ export default async function LocaleRootLayout({ children, params }: LocaleLayou
           </FeedbackCopyProvider>
           <GlobalFooter dictionary={dictionary} locale={locale} />
         </PorscheDesignSystemProvider>
-        <AnalyticsScripts />
       </body>
     </html>
   );
