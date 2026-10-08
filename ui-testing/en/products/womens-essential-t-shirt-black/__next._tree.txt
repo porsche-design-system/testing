@@ -1,6 +1,11 @@
-:HL["/testing/ui-testing/_next/static/chunks/0qezhg7fpa69_.css","style"]
+:HL["/testing/ui-testing/_next/static/chunks/0aoap-tfrzrk0.css","style"]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-regular.b8f1c20.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-semi-bold.b5f6fca.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-:HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.7.0.b99c82ac29b11dc8e699.js","script",{"crossOrigin":""}]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.8.0.c21a593e29d87dc35fa9.js","script",{"crossOrigin":""}]
 :HL["/testing/ui-testing/product-womens-t-shirt-essential-black.webp","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"locale","param":{"type":"d","key":"en","siblings":["components","data","hooks","i18n","lib"]},"prefetchHints":4144,"slots":{"children":{"name":"(default)","param":null,"prefetchHints":4160,"slots":{"children":{"name":"products","param":null,"prefetchHints":4192,"slots":{"children":{"name":"productSlug","param":{"type":"d","key":"womens-essential-t-shirt-black","siblings":[]},"prefetchHints":4192,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}}}}}}}}}},"staleTime":300,"buildId":"w67pRKO_vil4nv9hGwCWq"}
+5:[["children",{"s":"__PAGE__","h":160}]]
+4:[["children",{"s":{"n":"productSlug","t":"d","k":"womens-essential-t-shirt-black","s":[]},"h":65632,"c":"$Q5"}]]
+3:[["children",{"s":"products","h":131168,"c":"$Q4"}]]
+2:[["children",{"s":"(default)","h":131136,"c":"$Q3"}]]
+1:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","lib"]},"h":196656,"c":"$Q2"}]]
+0:{"b":"vbBFAG8yX_DUXIcHYbOWU","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
