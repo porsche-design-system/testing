@@ -50,3 +50,6 @@ dist-ssr
 
 # APM dependencies
 apm_modules/
+
+# Accessibility scan payloads
+.a11y/**/raw/

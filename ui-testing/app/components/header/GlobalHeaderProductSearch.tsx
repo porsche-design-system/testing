@@ -23,6 +23,7 @@ import type { CatalogProduct } from "@/app/data/get-catalog";
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { appHref, productDetailHref } from "@/app/i18n/href";
+import { formatCatalogCount } from "@/app/lib/catalog-query";
 import {
   PRODUCT_SEARCH_MIN_QUERY_LEN,
   rankProducts,
@@ -107,6 +108,23 @@ export function GlobalHeaderProductSearch({
   const showSearching =
     trimmed.length >= PRODUCT_SEARCH_MIN_QUERY_LEN &&
     trimmed !== deferredTrimmed;
+  const showResults =
+    !loadError &&
+    products.length > 0 &&
+    !showPrompt &&
+    !showSearching &&
+    results.length > 0;
+  const statusMessage = loadError
+    ? copy.loadError
+    : products.length === 0
+      ? copy.loading
+      : showPrompt
+        ? copy.emptyPrompt
+        : showSearching
+          ? copy.searching
+          : results.length === 0
+            ? copy.noMatches
+            : formatCatalogCount(copy.resultCount, results.length);
 
   const MODAL_STYLE = {
     "--p-modal-width": "min(100vw - 2rem, 760px)",
@@ -156,20 +174,16 @@ export function GlobalHeaderProductSearch({
             value={query}
           />
 
-          <div className="min-h-[120px]">
-            {loadError ? (
-              <PText color="contrast-medium">{copy.loadError}</PText>
-            ) : products.length === 0 ? (
-              <PText color="contrast-medium">{copy.loading}</PText>
-            ) : showPrompt ? (
-              <PText color="contrast-medium">{copy.emptyPrompt}</PText>
-            ) : showSearching ? (
-              <PText color="contrast-medium" size="sm">
-                {copy.searching}
+          <div className="flex min-h-[120px] flex-col gap-static-sm">
+            <div aria-atomic="true" role="status">
+              <PText
+                color="contrast-medium"
+                size={showSearching || showResults ? "sm" : undefined}
+              >
+                {statusMessage}
               </PText>
-            ) : results.length === 0 ? (
-              <PText color="contrast-medium">{copy.noMatches}</PText>
-            ) : (
+            </div>
+            {showResults ? (
               <ul className="flex flex-col gap-static-sm">
                 {results.map((product) => {
                   const img = product.images[0];
@@ -205,7 +219,7 @@ export function GlobalHeaderProductSearch({
                   );
                 })}
               </ul>
-            )}
+            ) : null}
           </div>
 
           <div className="flex justify-end">

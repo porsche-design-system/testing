@@ -26,7 +26,7 @@ import {
   pdsStringValue,
   validateContactForm,
 } from '@/app/lib/contact-form';
-import { PAGE_HEADING_ID } from '@/app/lib/skip-to-page-heading';
+import { PAGE_HEADING_CLASS_NAME, PAGE_HEADING_ID } from '@/app/lib/skip-to-page-heading';
 
 export type ContactFormCopy = Dictionary['pages']['contact'];
 
@@ -108,7 +108,7 @@ export function ContactForm({ copy }: Props) {
     <MainContent className="grid-template py-fluid-lg">
       <div className="col-wide flex max-w-prose flex-col gap-fluid-md">
         <div className="flex flex-col gap-fluid-sm">
-          <PHeading id={PAGE_HEADING_ID} tag="h1">
+          <PHeading className={PAGE_HEADING_CLASS_NAME} id={PAGE_HEADING_ID} tag="h1">
             {copy.title}
           </PHeading>
           <PText color="contrast-medium">{copy.intro}</PText>
