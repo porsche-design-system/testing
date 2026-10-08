@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { AnalyticsScripts } from "@/app/components/analytics/AnalyticsScripts";
 import { defaultLocale } from "@/app/i18n/config";
 import "@/app/globals.css";
 
@@ -30,10 +29,7 @@ export default function EntryRootLayout({ children }: Props) {
           }
         />
       </head>
-      <body>
-        {children}
-        <AnalyticsScripts />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
