@@ -134,6 +134,7 @@ describe("RouteFocus", () => {
   it("does not move focus when the pathname change comes from back or forward", () => {
     const focus = vi.spyOn(HTMLElement.prototype, "focus");
     const view = renderRoute("/en/products/");
+    window.history.pushState(null, "", "/en/");
     window.dispatchEvent(new PopStateEvent("popstate"));
 
     pathname = "/en/";
@@ -145,6 +146,25 @@ describe("RouteFocus", () => {
     );
 
     expect(focus).not.toHaveBeenCalled();
+  });
+
+  it("still focuses the heading after a query-only back or forward", () => {
+    const focus = vi.spyOn(HTMLElement.prototype, "focus");
+    const view = renderRoute("/en/products/");
+    window.history.pushState(null, "", "/en/products/?category=apparel");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+
+    sessionStorage.setItem(ROUTE_FOCUS_KEY, "keyboard");
+    pathname = "/en/contact/";
+    view.rerender(
+      <>
+        <h1 id={PAGE_HEADING_ID}>Contact</h1>
+        <RouteFocus />
+      </>,
+    );
+
+    expect(document.activeElement).toBe(document.getElementById(PAGE_HEADING_ID));
+    expect(focus).toHaveBeenCalledWith({ focusVisible: true });
   });
 
   it("records keyboard and pointer activations of in-app links", () => {

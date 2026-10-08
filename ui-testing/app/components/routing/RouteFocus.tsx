@@ -36,6 +36,16 @@ function normalizePath(pathname: string): string {
   return pathname;
 }
 
+/** `usePathname()` omits `NEXT_PUBLIC_BASE_PATH`; `location.pathname` includes it. */
+function pathnameFromLocation(): string {
+  const base = (process.env.NEXT_PUBLIC_BASE_PATH ?? "").replace(/\/$/, "");
+  let path = window.location.pathname;
+  if (base && (path === base || path.startsWith(`${base}/`))) {
+    path = path.slice(base.length) || "/";
+  }
+  return normalizePath(path);
+}
+
 function inAppRouteAnchor(event: Event): HTMLAnchorElement | null {
   for (const node of event.composedPath()) {
     if (!(node instanceof HTMLAnchorElement)) continue;
@@ -56,12 +66,20 @@ function inAppRouteAnchor(event: Event): HTMLAnchorElement | null {
 export function RouteFocus() {
   const pathname = usePathname();
   const previousPath = useRef<string | null>(null);
-  const ignorePopState = useRef(false);
+  const ignoredPopPath = useRef<string | null>(null);
   const pendingModality = useRef<"keyboard" | "pointer" | null>(null);
 
   useEffect(() => {
     const onPopState = () => {
-      ignorePopState.current = true;
+      const poppedPath = pathnameFromLocation();
+      const currentPath = previousPath.current ? normalizePath(previousPath.current) : null;
+      // A query or hash change does not update usePathname(). Remembering it
+      // would skip focus on the next real route change.
+      if (currentPath !== null && poppedPath === currentPath) {
+        ignoredPopPath.current = null;
+        return;
+      }
+      ignoredPopPath.current = poppedPath;
     };
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey || event.altKey || event.repeat) return;
@@ -94,10 +112,13 @@ export function RouteFocus() {
   }, []);
 
   useEffect(() => {
-    if (ignorePopState.current) {
-      ignorePopState.current = false;
-      previousPath.current = pathname;
-      return;
+    if (ignoredPopPath.current !== null) {
+      const poppedPath = ignoredPopPath.current;
+      ignoredPopPath.current = null;
+      if (poppedPath === normalizePath(pathname)) {
+        previousPath.current = pathname;
+        return;
+      }
     }
     if (previousPath.current === pathname) return;
 
