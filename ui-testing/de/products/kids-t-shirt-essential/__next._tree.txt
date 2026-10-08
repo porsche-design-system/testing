@@ -1,4 +1,4 @@
-:HL["/testing/ui-testing/_next/static/chunks/0aoap-tfrzrk0.css","style"]
+:HL["/testing/ui-testing/_next/static/chunks/07dqi4dvaj9d6.css","style"]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-regular.b8f1c20.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-semi-bold.b5f6fca.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.8.0.c21a593e29d87dc35fa9.js","script",{"crossOrigin":""}]
@@ -8,4 +8,4 @@
 3:[["children",{"s":"products","h":131168,"c":"$Q4"}]]
 2:[["children",{"s":"(default)","h":131136,"c":"$Q3"}]]
 1:[["children",{"s":{"n":"locale","t":"d","k":"de","s":["components","data","hooks","i18n","lib"]},"h":196656,"c":"$Q2"}]]
-0:{"b":"vbBFAG8yX_DUXIcHYbOWU","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+0:{"b":"j4zMc3GOb1pB3dgfBivFt","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
