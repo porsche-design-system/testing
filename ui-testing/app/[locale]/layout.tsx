@@ -8,6 +8,7 @@ import { PorscheDesignSystemProvider } from '@porsche-design-system/components-r
 import type { Metadata, Viewport } from 'next';
 import { notFound } from 'next/navigation';
 import { ProductFavoritesProvider } from '@/app/components/favorites/ProductFavoritesProvider';
+import { RouteFocus } from '@/app/components/routing/RouteFocus';
 import { ProductFavoriteToasts } from '@/app/components/favorites/ProductFavoriteToasts';
 import { FeedbackCopyProvider } from '@/app/components/feedback/FeedbackCopyContext';
 import { GlobalFooter } from '@/app/components/footer/GlobalFooter';
@@ -63,6 +64,7 @@ export default async function LocaleRootLayout({ children, params }: LocaleLayou
         {getMetaTagsAndIconLinks({ appTitle: APP_TITLE, format: 'jsx' })}
       </head>
       <body>
+        <RouteFocus />
         <PorscheDesignSystemProvider>
           <FeedbackCopyProvider copy={dictionary.feedback}>
             <ProductFavoritesProvider>

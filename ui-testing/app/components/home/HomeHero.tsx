@@ -12,7 +12,7 @@ import {
   PTextList,
   PTextListItem,
 } from "@porsche-design-system/components-react/ssr";
-import { PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
+import { PAGE_HEADING_CLASS_NAME, PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import { appHref } from "@/app/i18n/href";
 import type { Locale } from "@/app/i18n/config";
@@ -61,7 +61,7 @@ export function HomeHero({
       />
       <div className="z-2 col-extended row-span-full mb-fluid-xl flex flex-col gap-fluid-md items-start">
         <PHeading
-          className="whitespace-pre-line text-start"
+          className={`${PAGE_HEADING_CLASS_NAME} whitespace-pre-line text-start`}
           color="primary"
           id={PAGE_HEADING_ID}
           size="xl"

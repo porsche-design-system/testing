@@ -15,7 +15,7 @@ import { getCatalogProductBySlug, getHomeCatalog, getRelatedCatalogProducts } fr
 import { isLocale, type Locale, locales } from '@/app/i18n/config';
 import { getDictionary } from '@/app/i18n/get-dictionary';
 import { appHref, productsIndexHref } from '@/app/i18n/href';
-import { PAGE_HEADING_ID } from '@/app/lib/skip-to-page-heading';
+import { PAGE_HEADING_CLASS_NAME, PAGE_HEADING_ID } from '@/app/lib/skip-to-page-heading';
 
 export const dynamicParams = false;
 
@@ -106,7 +106,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             ))}
           </div>
           <div className="flex flex-col items-start gap-fluid-sm">
-            <PHeading id={PAGE_HEADING_ID} size="3xl" tag="h1">
+            <PHeading className={PAGE_HEADING_CLASS_NAME} id={PAGE_HEADING_ID} size="3xl" tag="h1">
               {product.name}
             </PHeading>
             <PText color="contrast-medium">{product.teaser}</PText>
