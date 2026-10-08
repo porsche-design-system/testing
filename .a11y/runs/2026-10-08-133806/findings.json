@@ -1,0 +1,548 @@
+{
+  "coverage": {
+    "not_checked": [
+      {
+        "criterion": "1.4.3 Contrast (Minimum)",
+        "reason": "9 component(s) colour slotted text through the <slot> element (p-button-pure, p-drilldown-link, p-link-pure, p-text, p-heading). Computed style on the host reports a different colour, so contrast results for this text \u2014 including axe-core's \u2014 may be wrong in either direction.",
+        "verifyBy": "Sample this text with a colour picker or the browser contrast inspector."
+      },
+      {
+        "criterion": "2.1.1 Keyboard (operability)",
+        "reason": "tabindex=\"-1\" is a legitimate pattern (roving tabindex, redundant links, programmatic focus targets), so it cannot be treated as a defect.",
+        "verifyBy": "Operate each control with Enter, Space and arrow keys."
+      },
+      {
+        "criterion": "2.4.7 Focus Visible",
+        "reason": "Focus indicators are commonly painted with ::before/::after or ::part(), which computed styles do not expose. Any automated verdict would be a guess.",
+        "verifyBy": "Tab through the page and confirm every stop shows a visible indicator."
+      }
+    ]
+  },
+  "dismissed": [],
+  "findings": [],
+  "overall": {
+    "counts": {
+      "critical": 0,
+      "minor": 0,
+      "moderate": 0,
+      "serious": 0
+    },
+    "dismissed_count": 0,
+    "finding_count": 0,
+    "grade": "A",
+    "score": 100
+  },
+  "pages": [
+    {
+      "counts": {
+        "critical": 0,
+        "minor": 0,
+        "moderate": 0,
+        "serious": 0
+      },
+      "dismissed_count": 0,
+      "finding_count": 0,
+      "grade": "A",
+      "score": 100,
+      "url": "http://localhost:3010/en/"
+    },
+    {
+      "counts": {
+        "critical": 0,
+        "minor": 0,
+        "moderate": 0,
+        "serious": 0
+      },
+      "dismissed_count": 0,
+      "finding_count": 0,
+      "grade": "A",
+      "score": 100,
+      "url": "http://localhost:3010/en/products/"
+    }
+  ],
+  "remediation_delta": {
+    "current_total": 0,
+    "fixed": 5,
+    "new": 0,
+    "persistent": 0,
+    "previous_total": 5
+  },
+  "scoring": {
+    "catalogVersion": "2026-q3",
+    "executedChecksByPage": {
+      "http://localhost:3010/en/": [
+        "axe",
+        "coverage",
+        "keyboard",
+        "tree",
+        "viewport"
+      ],
+      "http://localhost:3010/en/products/": [
+        "axe",
+        "coverage",
+        "keyboard",
+        "tree",
+        "viewport"
+      ]
+    },
+    "executedSourcesByPage": {
+      "http://localhost:3010/en/": [
+        "axe",
+        "playwright"
+      ],
+      "http://localhost:3010/en/products/": [
+        "axe",
+        "playwright"
+      ]
+    },
+    "model": "a11y-severity-scoring-v2",
+    "profile": "balanced",
+    "reviewedPhasesByPage": {
+      "http://localhost:3010/en/": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "9"
+      ],
+      "http://localhost:3010/en/products/": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "9"
+      ]
+    },
+    "scannerMetadata": [
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": "ok",
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": {
+          "applied": true,
+          "targets": [
+            "html",
+            "body"
+          ]
+        },
+        "catalogVersion": "2026-q3",
+        "colorScheme": "dark",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "axe",
+          "tree",
+          "coverage"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "axe": [
+              "stable"
+            ],
+            "coverage": [
+              "stable"
+            ],
+            "tree": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/",
+        "viewports": [
+          320,
+          768,
+          1024,
+          1440
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": "ok",
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": {
+          "applied": true,
+          "targets": [
+            "html",
+            "body"
+          ]
+        },
+        "catalogVersion": "2026-q3",
+        "colorScheme": "dark",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "axe",
+          "tree",
+          "coverage"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "axe": [
+              "stable"
+            ],
+            "coverage": [
+              "stable"
+            ],
+            "tree": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/products/",
+        "viewports": [
+          320,
+          768,
+          1024,
+          1440
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": "ok",
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": {
+          "applied": true,
+          "targets": [
+            "html",
+            "body"
+          ]
+        },
+        "catalogVersion": "2026-q3",
+        "colorScheme": "light",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "axe",
+          "tree",
+          "coverage"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "axe": [
+              "stable"
+            ],
+            "coverage": [
+              "stable"
+            ],
+            "tree": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/",
+        "viewports": [
+          320,
+          768,
+          1024,
+          1440
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": "ok",
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": {
+          "applied": true,
+          "targets": [
+            "html",
+            "body"
+          ]
+        },
+        "catalogVersion": "2026-q3",
+        "colorScheme": "light",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "axe",
+          "tree",
+          "coverage"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "axe": [
+              "stable"
+            ],
+            "coverage": [
+              "stable"
+            ],
+            "tree": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/products/",
+        "viewports": [
+          320,
+          768,
+          1024,
+          1440
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": null,
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": null,
+        "catalogVersion": "2026-q3",
+        "colorScheme": "dark",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "keyboard",
+          "viewport"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "keyboard": [
+              "stable"
+            ],
+            "viewport-1024": [
+              "stable"
+            ],
+            "viewport-320": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/",
+        "viewports": [
+          320,
+          1024
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": null,
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": null,
+        "catalogVersion": "2026-q3",
+        "colorScheme": "dark",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "keyboard",
+          "viewport"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "keyboard": [
+              "stable"
+            ],
+            "viewport-1024": [
+              "stable"
+            ],
+            "viewport-320": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/products/",
+        "viewports": [
+          320,
+          1024
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": null,
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": null,
+        "catalogVersion": "2026-q3",
+        "colorScheme": "light",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "keyboard",
+          "viewport"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "keyboard": [
+              "stable"
+            ],
+            "viewport-1024": [
+              "stable"
+            ],
+            "viewport-320": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/",
+        "viewports": [
+          320,
+          1024
+        ]
+      },
+      {
+        "axeCoreVersion": "4.13.0",
+        "axePlaywrightVersion": "4.13.0",
+        "axeStatus": null,
+        "browserVersion": "149.0.7827.55",
+        "canvasWorkaround": null,
+        "catalogVersion": "2026-q3",
+        "colorScheme": "light",
+        "loadDelay": 2000,
+        "maxTabs": 100,
+        "modes": [
+          "keyboard",
+          "viewport"
+        ],
+        "playwrightVersion": "1.61.0",
+        "readiness": {
+          "bestEffort": false,
+          "readySelector": null,
+          "results": {
+            "keyboard": [
+              "stable"
+            ],
+            "viewport-1024": [
+              "stable"
+            ],
+            "viewport-320": [
+              "stable"
+            ]
+          },
+          "stabilityWindow": 500
+        },
+        "runner": "a11y-scan",
+        "selector": null,
+        "storageState": null,
+        "tags": [
+          "wcag2a",
+          "wcag2aa",
+          "wcag21a",
+          "wcag21aa",
+          "wcag22aa"
+        ],
+        "timeout": 30000,
+        "url": "http://localhost:3010/en/products/",
+        "viewports": [
+          320,
+          1024
+        ]
+      }
+    ],
+    "sources": [
+      "agent-review",
+      "axe",
+      "playwright"
+    ]
+  }
+}
