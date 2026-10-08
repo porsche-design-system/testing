@@ -1,0 +1,10 @@
+:HL["/testing/pr-15/ui-testing/_next/static/chunks/0aoap-tfrzrk0.css","style"]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-regular.b8f1c20.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-semi-bold.b5f6fca.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.8.0.c21a593e29d87dc35fa9.js","script",{"crossOrigin":""}]
+5:[["children",{"s":"__PAGE__","h":160}]]
+4:[["children",{"s":{"n":"legalSlug","t":"d","k":"notice","s":[]},"h":65632,"c":"$Q5"}]]
+3:[["children",{"s":"legal","h":131168,"c":"$Q4"}]]
+2:[["children",{"s":"(default)","h":131136,"c":"$Q3"}]]
+1:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","lib"]},"h":196656,"c":"$Q2"}]]
+0:{"b":"W7-qarYAEChHaQ4S8O56R","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}

@@ -1,0 +1,45 @@
+3:"$Sreact.fragment"
+4:"/testing/pr-15/ui-testing/_next/static/chunks/0ovzfzjppwb7-.js"
+5:"/testing/pr-15/ui-testing/_next/static/chunks/0wg0znc8ip6ta.js"
+6:"GlobalHeaderSkipLink"
+7:I[92116,["$4","$5"],"$6"]
+8:"GlobalHeaderNavMenu"
+9:I[51289,["$4","$5"],"$8"]
+a:I[29079,["$4","$5"],"PCrest"]
+b:I[27182,["$4","$5"],"PWordmark"]
+c:"GlobalHeaderFavoritesLink"
+d:I[72524,["$4","$5"],"$c"]
+e:"GlobalHeaderProductSearch"
+f:I[36439,["$4","$5"],"$e"]
+10:"/testing/pr-15/ui-testing/_next/static/chunks/0umf92h1sb77c.js"
+11:I[39756,["$10"],"default"]
+12:I[37457,["$10"],"default"]
+1b:"/testing/pr-15/ui-testing/_next/static/chunks/2-hcq3frehgzq.js"
+1c:I[46310,["$4","$5","$1b"],"PHeading"]
+1d:I[75940,["$4","$5","$1b"],"PText"]
+1e:I[63634,["$4","$5","$1b"],"PageFeedback"]
+1f:I[97367,["$10"],"OutletBoundary"]
+20:"$Sreact.suspense"
+23:"ViewportBoundary"
+24:I[97367,["$10"],"$23"]
+25:"MetadataBoundary"
+26:I[97367,["$10"],"$25"]
+14:X
+17:X
+17:C
+1a:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$3","c",{"children":[["$","main",null,{"className":"grid-template py-fluid-lg","data-testid":"main-content","children":[["$","div",null,{"className":"col-wide flex max-w-prose flex-col gap-fluid-sm","children":[["$","$L1c",null,{"id":"page-heading","tag":"h1","children":"Porsche Cars North America"}],["$","$L1d",null,{"children":"This page is a placeholder only. It has no real content and exists for usability and accessibility testing."}]]}],["$","$L1e",null,{}]]}],[["$","script","script-0",{"src":"/testing/pr-15/ui-testing/_next/static/chunks/2-hcq3frehgzq.js","async":true}]],["$","$L1f",null,{"children":["$","$20",null,{"name":"Next.MetadataOutlet","children":"$@21"}]}]]}],"p":"$@22","v":null,"s":"$14"}}]]
+18:[["children",{"s":{"n":"companySlug","t":"d","k":"pcna","s":[]},"h":65632,"d":{"r":["$","$3","c",{"children":[null,["$","$L11",null,{"parallelRouterKey":"children","template":["$","$L12",null,{}]}]]}],"p":"$@19","v":"$17","s":"$14"},"c":"$Q1a"}]]
+15:[["children",{"s":"company","h":131168,"d":{"r":["$","$3","c",{"children":[null,["$","$L11",null,{"parallelRouterKey":"children","template":["$","$L12",null,{}]}]]}],"p":"$@16","v":"$17","s":"$14"},"c":"$Q18"}]]
+2:[["children",{"s":"(default)","h":131136,"d":{"r":["$","$3","c",{"children":[[["$","script","script-0",{"src":"/testing/pr-15/ui-testing/_next/static/chunks/0wg0znc8ip6ta.js","async":true}]],[["$","header",null,{"className":"grid-template bg-canvas py-fluid-sm md:py-fluid-md","data-testid":"global-header","children":["$","div",null,{"className":"col-wide grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-fluid-xs sm:gap-fluid-md","children":[["$","div",null,{"className":"relative flex min-w-0 flex-wrap items-center justify-start gap-static-xs sm:gap-static-sm","children":[["$","$L7",null,{"label":"Skip to main content"}],["$","nav",null,{"aria-label":"Main","className":"flex min-w-0 items-center","id":"main-navigation","children":["$","$L9",null,{"locale":"en","nav":{"main":"Main","menu":"Menu","shopCategories":"Shop categories","women":"Women","men":"Men","kids":"Kids","accessories":"Accessories","porscheOriginals":"Porsche Originals","porscheDesign":"Porsche Design","newReleases":"New Releases","viewAllWomen":"Women","viewAllMen":"Men","viewAllKids":"Kids","clothing":"Apparel","bagsLuggage":"Bags & Luggage","travelTransport":"Travel & Transport","chargingHardware":"Charging Hardware","viewAllProducts":"View all products"}}]}]]}],["$","div",null,{"className":"flex shrink-0 justify-center","children":[["$","$La",null,{"aria":{"aria-label":"Porsche"},"className":"sm:hidden","href":"/testing/pr-15/ui-testing/en/"}],["$","$Lb",null,{"className":"max-sm:hidden shrink-0","href":"/testing/pr-15/ui-testing/en/","size":"small"}]]}],["$","div",null,{"className":"flex min-w-0 flex-wrap items-center justify-end gap-static-xs sm:gap-static-md","children":[["$","$Ld",null,{"copy":{"favorites":"Favorites","favoritesAriaCount":"Favorites, {count} items saved","favoritesAriaEmpty":"Favorites, no items saved yet","favoritesLiveCount":"{count} favorites saved","favoritesLiveEmpty":"No favorites saved"},"locale":"en"}],["$","$Lf",null,{"copy":{"ariaLabel":"Search products","title":"Search the catalog","subtitle":"Find products by name, category or collection","queryLabel":"Search items","queryPlaceholder":"Try “cap”, “luggage”, “Porsche Design”, etc.","hint":"Type at least 2 characters. Ranked matches update as you type.","loading":"Loading catalog…","loadError":"Could not load the product list. Try again later.","emptyPrompt":"Start typing to see ranked suggestions from the full catalog.","searching":"Searching…","noMatches":"No products match that search. Try another word or browse all products.","close":"Close search"},"label":"Search","locale":"en"}]]}]]}]}],["$","$L11",null,{"parallelRouterKey":"children","template":["$","$L12",null,{}]}]]]}],"p":"$@13","v":null,"s":"$14"},"c":"$Q15"}]]
+1:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","lib"]},"h":196656,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$3","h",{"children":[null,["$","$L24",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]}],["$","$L26",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$20",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Porsche Cars North America | PDS UI Testing"}],["$","meta","1",{"name":"description","content":"Minimal technical baseline for accessibility testing of Porsche Design System components."}]]}]}],null]}],null]}],"p":"$@27","v":null,"s":"$14"}},"a":"$@28","u":"$@29","b":"W7-qarYAEChHaQ4S8O56R"}
+21:null
+29:true
+14:300
+14:C
+28:0
+19:"$undefined"
+16:"$undefined"
+13:"$undefined"
+27:"$undefined"
+22:"$undefined"
