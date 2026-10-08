@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
+import { beginRouteFocusHold, endRouteFocusHold } from "@/app/components/routing/route-focus-hold";
 
 const ROUTE_FOCUS_KEY = "pds-ui-testing:route-focus";
+const ROUTE_FOCUS_HOLD_MS = 1000;
 
 /**
  * Moves focus to the page heading after an in-app route change.
@@ -99,6 +101,7 @@ export function RouteFocus() {
     }
     if (previousPath.current === pathname) return;
 
+    beginRouteFocusHold();
     let cancelled = false;
     let attempts = 0;
     let decided = false;
@@ -108,6 +111,7 @@ export function RouteFocus() {
     const startedAt = performance.now();
     const stopForUser = () => {
       userTookOver = true;
+      endRouteFocusHold();
     };
     window.addEventListener("keydown", stopForUser, true);
     window.addEventListener("pointerdown", stopForUser, true);
@@ -120,6 +124,8 @@ export function RouteFocus() {
         if (attempts < 60) {
           attempts += 1;
           requestAnimationFrame(focusHeading);
+        } else {
+          endRouteFocusHold();
         }
         return;
       }
@@ -135,6 +141,7 @@ export function RouteFocus() {
           isDocumentEntry &&
           (pending === null || navigationType === "reload" || navigationType === "back_forward");
         shouldFocus = !restoredEntry;
+        if (!shouldFocus) endRouteFocusHold();
       }
       if (!shouldFocus) return;
 
@@ -144,13 +151,16 @@ export function RouteFocus() {
         }
         heading.focus({ focusVisible: pending === "keyboard" });
       }
-      if (performance.now() - startedAt < 1000) {
+      if (performance.now() - startedAt < ROUTE_FOCUS_HOLD_MS) {
         requestAnimationFrame(focusHeading);
+      } else {
+        endRouteFocusHold();
       }
     };
     const firstFrame = requestAnimationFrame(focusHeading);
     return () => {
       cancelled = true;
+      endRouteFocusHold();
       cancelAnimationFrame(firstFrame);
       window.removeEventListener("keydown", stopForUser, true);
       window.removeEventListener("pointerdown", stopForUser, true);

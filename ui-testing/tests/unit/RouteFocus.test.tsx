@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RouteFocus } from "@/app/components/routing/RouteFocus";
+import { isRouteFocusHolding } from "@/app/components/routing/route-focus-hold";
 import { PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
 
 const ROUTE_FOCUS_KEY = "pds-ui-testing:route-focus";
@@ -68,6 +69,7 @@ describe("RouteFocus", () => {
 
     expect(document.activeElement).not.toHaveProperty("id", PAGE_HEADING_ID);
     expect(focus).not.toHaveBeenCalled();
+    expect(isRouteFocusHolding()).toBe(false);
   });
 
   it("does not move focus on reload or back/forward", () => {
@@ -98,6 +100,7 @@ describe("RouteFocus", () => {
     expect(heading).toHaveAttribute("tabindex", "-1");
     expect(focus).toHaveBeenCalledWith({ focusVisible: true });
     expect(sessionStorage.getItem(ROUTE_FOCUS_KEY)).toBeNull();
+    expect(isRouteFocusHolding()).toBe(false);
   });
 
   it("focuses the heading after a pointer route change without a focus ring", () => {
