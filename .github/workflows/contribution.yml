@@ -55,7 +55,7 @@ jobs:
     name: 'Build'
     uses: ./.github/workflows/build.yml
     with:
-      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
       gh-pages-slug: ${{ needs.context.outputs.gh-pages-slug }}
     needs:
       - context
@@ -64,7 +64,7 @@ jobs:
     name: 'Test'
     uses: ./.github/workflows/test.yml
     with:
-      image: mcr.microsoft.com/playwright:v1.64.0-noble
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
     needs:
       - build
 
