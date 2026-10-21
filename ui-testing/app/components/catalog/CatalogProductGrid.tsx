@@ -45,11 +45,11 @@ export function CatalogProductGrid({
               pricingCopy={pricingCopy}
               product={product}
             >
-              <span slot="header">
+              <span className="relative z-1" slot="header">
                 {productHasNewReleaseFlag(product) ? (
                   <PTag compact>{newReleaseTagLabel}</PTag>
                 ) : null}
-                <PPopover className="z-1">{product.description}</PPopover>
+                <PPopover>{product.description}</PPopover>
               </span>
             </FavoriteLinkTileProduct>
           </article>
