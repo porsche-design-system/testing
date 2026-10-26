@@ -1,0 +1,13 @@
+:HL["/testing/pr-21/ui-testing/_next/static/chunks/3lb1zygf9rjza.css","style"]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-regular.b8f1c20.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-semi-bold.b5f6fca.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+:HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.10.1.e8da2aee48a1a1459322.js","script",{"crossOrigin":""}]
+:HL["/testing/pr-21/ui-testing/home-lifestyle-timeless.jpg","image"]
+:HL["/testing/pr-21/ui-testing/home-lifestyle-loyalist.jpg","image"]
+:HL["/testing/pr-21/ui-testing/home-lifestyle-urbanist.jpg","image"]
+:HL["/testing/pr-21/ui-testing/home-feature-roadster.png","image"]
+:HL["/testing/pr-21/ui-testing/home-feature-travel-transport.jpg","image"]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":"(home)","h":64,"c":"$Q3"}]]
+1:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","lib"]},"h":65584,"c":"$Q2"}]]
+0:{"b":"eGzLq_zznuHbfJjPu1iKA","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
