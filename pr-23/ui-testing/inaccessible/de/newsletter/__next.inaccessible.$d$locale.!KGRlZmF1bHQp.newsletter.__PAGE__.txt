@@ -1,0 +1,43 @@
+4:"$Sreact.fragment"
+5:"/testing/pr-23/ui-testing/_next/static/chunks/2ngs0g8yii0nn.js"
+6:"/testing/pr-23/ui-testing/_next/static/chunks/3zh9130ngwspk.js"
+7:"GlobalHeaderNavMenu"
+8:I[75420,["$5","$6"],"$7"]
+9:I[29079,["$5","$6"],"PCrest"]
+a:I[27182,["$5","$6"],"PWordmark"]
+b:"GlobalHeaderFavoritesLink"
+c:I[18720,["$5","$6"],"$b"]
+d:"GlobalHeaderProductSearch"
+e:I[59130,["$5","$6"],"$d"]
+f:"/testing/pr-23/ui-testing/_next/static/chunks/0umf92h1sb77c.js"
+10:I[39756,["$f"],"default"]
+11:I[37457,["$f"],"default"]
+18:"/testing/pr-23/ui-testing/_next/static/chunks/11j6l5fvsw606.js"
+19:"NewsletterSubscriptionForm"
+1a:I[60925,["$5","$6","$18"],"$19"]
+1e:"ViewportBoundary"
+1f:I[97367,["$f"],"$1e"]
+20:"MetadataBoundary"
+21:I[97367,["$f"],"$20"]
+22:"$Sreact.suspense"
+13:X
+16:X
+16:C
+17:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$4","c",{"children":[["$","$L1a",null,{"copy":{"title":"Newsletter","intro":"Melden Sie sich an, um die neuesten Porsche-News und Updates in Ihrem Posteingang zu erhalten. Dies ist nur ein Demo-Formular — es werden keine Daten übermittelt.","fieldsetLabel":"Ihre Angaben","firstName":"Vorname","email":"E-Mail-Adresse","privacy":"Ich stimme zu, dass meine Angaben für diese Demo-Anmeldung verarbeitet werden dürfen.","privacyPopover":"Dies ist nur ein Demo-Formular: Ihre Angaben werden nicht gespeichert oder an einen Server gesendet. Das Kontrollkästchen simuliert die Einwilligung, damit wir Validierung und dieses Informations-Popover im Porsche Design System testen können.","submit":"Anmelden","submittingHint":"Anmeldung läuft…","successHeading":"Anmeldung bestätigt","successDescription":"Ihre Anmeldung war erfolgreich (nur Demo; es werden keine Daten übermittelt).","subscribeAgain":"Weitere E-Mail anmelden","errors":{"formSummaryHeading":"Eingaben prüfen","formSummary":"Einige Pflichtfelder fehlen oder sind ungültig. Bitte prüfen Sie die Hinweise unten.","emailRequired":"Geben Sie Ihre E-Mail-Adresse ein.","emailInvalid":"Geben Sie eine gültige E-Mail-Adresse ein.","firstNameRequired":"Geben Sie Ihren Vornamen ein.","privacyRequired":"Bestätigen Sie, dass Sie der Verarbeitung Ihrer Angaben zustimmen."}}}],["$L1b"],"$L1c"]}],"p":"$@1d","v":null,"s":"$13"}}]]
+14:[["children",{"s":"newsletter","h":96,"d":{"r":["$","$4","c",{"children":[null,["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]}],"p":"$@15","v":"$16","s":"$13"},"c":"$Q17"}]]
+3:[["children",{"s":"(default)","h":64,"d":{"r":["$","$4","c",{"children":[[["$","script","script-0",{"src":"/testing/pr-23/ui-testing/_next/static/chunks/3zh9130ngwspk.js","async":true}]],[["$","div",null,{"className":"grid-template bg-canvas py-fluid-sm md:py-fluid-md","data-testid":"global-header","children":["$","div",null,{"className":"col-wide grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-fluid-xs sm:gap-fluid-md","children":[["$","div",null,{"className":"relative flex min-w-0 flex-wrap items-center justify-start gap-static-xs sm:gap-static-sm","children":["$","div",null,{"className":"flex min-w-0 items-center","id":"main-navigation","children":["$","$L8",null,{"locale":"de","nav":{"main":"Hauptnavigation","menu":"Menü","shopCategories":"Shop-Kategorien","women":"Damen","men":"Herren","kids":"Kinder","accessories":"Accessoires","porscheOriginals":"Porsche Originals","porscheDesign":"Porsche Design","newReleases":"Neuheiten","viewAllWomen":"Damen","viewAllMen":"Herren","viewAllKids":"Kinder","clothing":"Bekleidung","bagsLuggage":"Taschen & Gepäck","travelTransport":"Reise & Transport","chargingHardware":"Lade-Hardware","viewAllProducts":"Alle Produkte anzeigen"}}]}]}],["$","div",null,{"className":"flex shrink-0 justify-center","children":[["$","$L9",null,{"className":"sm:hidden","href":"/testing/pr-23/ui-testing/inaccessible/de/"}],["$","$La",null,{"className":"max-sm:hidden shrink-0","href":"/testing/pr-23/ui-testing/inaccessible/de/","size":"small"}]]}],["$","div",null,{"className":"flex min-w-0 flex-wrap items-center justify-end gap-static-xs sm:gap-static-md","children":[["$","$Lc",null,{"copy":{"favorites":"Merkliste","favoritesAriaCount":"Merkliste, {count} Artikel gespeichert","favoritesAriaEmpty":"Merkliste, noch keine Artikel gespeichert","favoritesLiveCount":"{count} Favoriten gespeichert","favoritesLiveEmpty":"Keine Favoriten gespeichert"},"locale":"de"}],["$","$Le",null,{"copy":{"ariaLabel":"Produktsuche","title":"Katalog durchsuchen","subtitle":"Finden Sie Produkte nach Name, Kategorie oder Kollektion","queryLabel":"Produktsuche","queryPlaceholder":"z. B. „Cap“, „Gepäck“, „Porsche Design“, etc.","hint":"Mindestens 2 Zeichen. Treffer werden beim Tippen gewichtet und sortiert.","loading":"Katalog wird geladen…","loadError":"Die Produktliste konnte nicht geladen werden. Bitte später erneut versuchen.","emptyPrompt":"Tippen Sie los, um Vorschläge aus dem gesamten Katalog zu sehen.","searching":"Suche läuft…","noMatches":"Keine Treffer für diese Suche. Anderes Wort probieren oder alle Produkte anzeigen.","resultCount":"{count} Produkte","close":"Suche schließen"},"label":"Suche","locale":"de"}]]}]]}]}],["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]]}],"p":"$@12","v":null,"s":"$13"},"c":"$Q14"}]]
+2:[["children",{"s":{"n":"locale","t":"d","k":"de","s":[]},"h":65584,"c":"$Q3"}]]
+1:[["children",{"s":"inaccessible","h":131184,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$4","h",{"children":[null,["$","$L1f",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}]]}],["$","$L21",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$22",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Shop"}]]}]}],null]}],null]}],"p":"$@23","v":null,"s":"$13"}},"a":"$@24","u":"$@25","b":"LKVgQ-93xi5k-omPYBpY4"}
+26:I[97367,["$f"],"OutletBoundary"]
+1b:["$","script","script-0",{"src":"/testing/pr-23/ui-testing/_next/static/chunks/11j6l5fvsw606.js","async":true}]
+1c:["$","$L26",null,{"children":["$","$22",null,{"name":"Next.MetadataOutlet","children":"$@27"}]}]
+25:true
+13:300
+27:null
+13:C
+24:0
+15:"$undefined"
+12:"$undefined"
+23:"$undefined"
+1d:"$undefined"
