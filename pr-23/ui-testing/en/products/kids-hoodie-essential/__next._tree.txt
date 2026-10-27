@@ -3,9 +3,10 @@
 :HL["https://cdn.ui.porsche.com/porsche-design-system/fonts/porsche-next-latin-semi-bold.b5f6fca.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["https://cdn.ui.porsche.com/porsche-design-system/components/porsche-design-system.v4.10.1.e8da2aee48a1a1459322.js","script",{"crossOrigin":""}]
 :HL["/testing/pr-23/ui-testing/product-kids-hoodie-essential.webp","image"]
-5:[["children",{"s":"__PAGE__","h":160}]]
-4:[["children",{"s":{"n":"productSlug","t":"d","k":"kids-hoodie-essential","s":[]},"h":65632,"c":"$Q5"}]]
-3:[["children",{"s":"products","h":131168,"c":"$Q4"}]]
-2:[["children",{"s":"(default)","h":131136,"c":"$Q3"}]]
-1:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","inaccessible","lib"]},"h":196656,"c":"$Q2"}]]
-0:{"b":"LKVgQ-93xi5k-omPYBpY4","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
+6:[["children",{"s":"__PAGE__","h":160}]]
+5:[["children",{"s":{"n":"productSlug","t":"d","k":"kids-hoodie-essential","s":[]},"h":65632,"c":"$Q6"}]]
+4:[["children",{"s":"products","h":131168,"c":"$Q5"}]]
+3:[["children",{"s":"(default)","h":131136,"c":"$Q4"}]]
+2:[["children",{"s":{"n":"locale","t":"d","k":"en","s":["components","data","hooks","i18n","inaccessible","lib"]},"h":196656,"c":"$Q3"}]]
+1:[["children",{"s":"(accessible)","h":131184,"c":"$Q2"}]]
+0:{"b":"DkLxj2lMzNn98ryg-olBJ","t":{"t":{"s":"","h":131152,"c":"$Q1"}}}
