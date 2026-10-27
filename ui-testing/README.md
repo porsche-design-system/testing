@@ -5,6 +5,7 @@ A Next.js demo shop and technical baseline for testing Porsche Design System com
 ## GitHub Pages
 
 The ui-testing app is automatically deployed to GitHub Pages at:
+
 ```
 https://porsche-design-system.github.io/testing/ui-testing/
 ```
@@ -160,6 +161,7 @@ Locale switching is available in the application footer. The i18n setup uses sta
 5. Merge when all checks pass
 
 All PRs automatically get:
+
 - Build verification
 - Unit, E2E, and accessibility test runs
 - Automated deployment to GitHub Pages for preview

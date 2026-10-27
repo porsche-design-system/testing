@@ -693,8 +693,7 @@ export function ProductInquiryFlyout({
                   </div>
                 ) : null}
 
-                {activeScolor="inherit"
-                        tepIndex === 3 ? (
+                {activeStepIndex === 3 ? (
                   <div className="grid gap-static-md">
                     <div>
                       <div className="font-semibold">
@@ -702,6 +701,7 @@ export function ProductInquiryFlyout({
                       </div>
                       <PText
                         className="mt-static-sm inaccessible-low-contrast"
+                        color="inherit"
                         size="sm"
                       >
                         {copy.schedulingHint}
