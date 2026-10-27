@@ -135,7 +135,7 @@ export default async function InaccessibleProductDetailPage({
             <div className="prose-heading-3xl font-semibold">
               {product.name}
             </div>
-            <PText className="inaccessible-low-contrast">
+            <PText className="inaccessible-low-contrast" color="inherit">
               {product.teaser}
             </PText>
           </div>

@@ -23,7 +23,7 @@ export function ProductsIndexContent({ copy, locale, products }: Props) {
     <MainContent className="grid-template mt-fluid-xl">
       <div className="col-wide mx-auto flex max-w-[720px] flex-col items-center gap-fluid-sm text-center">
         <div className="prose-heading-3xl font-semibold">{copy.title}</div>
-        <PText className="inaccessible-low-contrast" size="sm">
+        <PText className="inaccessible-low-contrast" color="inherit" size="sm">
           {copy.subtitle}
         </PText>
       </div>

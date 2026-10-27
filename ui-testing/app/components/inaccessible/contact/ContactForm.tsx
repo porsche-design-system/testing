@@ -84,7 +84,9 @@ export function ContactForm({ copy }: Props) {
         <div className="flex flex-col gap-fluid-sm">
           {/* Intentional defect: styled <div> instead of <h1> */}
           <div className="prose-heading-xl font-semibold">{copy.title}</div>
-          <PText className="inaccessible-low-contrast">{copy.intro}</PText>
+          <PText className="inaccessible-low-contrast" color="inherit">
+            {copy.intro}
+          </PText>
           {/* Intentional axe `image-alt` violation */}
           {/* biome-ignore lint/a11y/useAltText: Intentional defect for inaccessible testing variant. */}
           <img
@@ -108,7 +110,11 @@ export function ContactForm({ copy }: Props) {
         ) : postSubmitPhase === "pending" ? (
           <div className="flex min-h-[200px] flex-col items-center justify-center gap-static-md py-fluid-lg">
             <PSpinner size="lg" />
-            <PText className="inaccessible-low-contrast" size="sm">
+            <PText
+              className="inaccessible-low-contrast"
+              color="inherit"
+              size="sm"
+            >
               {copy.submittingHint}
             </PText>
           </div>

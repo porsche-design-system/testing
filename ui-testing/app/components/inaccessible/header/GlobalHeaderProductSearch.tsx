@@ -165,7 +165,11 @@ export function GlobalHeaderProductSearch({
             <PHeading size="lg" tag="h5">
               {copy.title}
             </PHeading>
-            <PText className="inaccessible-low-contrast" size="sm">
+            <PText
+              className="inaccessible-low-contrast"
+              color="inherit"
+              size="sm"
+            >
               {copy.subtitle}
             </PText>
           </div>
@@ -187,6 +191,7 @@ export function GlobalHeaderProductSearch({
             <div>
               <PText
                 className="inaccessible-low-contrast"
+                color="inherit"
                 size={showSearching || showResults ? "sm" : undefined}
               >
                 {statusMessage}

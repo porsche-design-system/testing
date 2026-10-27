@@ -354,7 +354,7 @@ export function ProductCatalogBrowser({ copy, locale, products }: Props) {
               {copy.filterButtonLabel}
             </PButton>
             {/* Intentional defect: no aria-live="polite" and low-contrast text */}
-            <PText className="inaccessible-low-contrast">
+            <PText className="inaccessible-low-contrast" color="inherit">
               {resultCountLabel}
             </PText>
           </div>

@@ -313,7 +313,11 @@ export function ProductInquiryFlyout({
               <PHeading size="sm" tag="h5">
                 {productName}
               </PHeading>
-              <PText className="inaccessible-low-contrast" size="sm">
+              <PText
+                className="inaccessible-low-contrast"
+                color="inherit"
+                size="sm"
+              >
                 {copy.subtitle}
               </PText>
             </div>
@@ -333,7 +337,11 @@ export function ProductInquiryFlyout({
               <div className="flex min-h-[200px] flex-col items-center justify-center gap-static-md py-fluid-lg">
                 {/* Intentional PDS Don't: PSpinner without aria-label */}
                 <PSpinner size="lg" />
-                <PText className="inaccessible-low-contrast" size="sm">
+                <PText
+                  className="inaccessible-low-contrast"
+                  color="inherit"
+                  size="sm"
+                >
                   {copy.submittingHint}
                 </PText>
               </div>
@@ -685,7 +693,8 @@ export function ProductInquiryFlyout({
                   </div>
                 ) : null}
 
-                {activeStepIndex === 3 ? (
+                {activeScolor="inherit"
+                        tepIndex === 3 ? (
                   <div className="grid gap-static-md">
                     <div>
                       <div className="font-semibold">

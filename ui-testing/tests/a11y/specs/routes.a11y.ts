@@ -108,9 +108,15 @@ test.describe('A11y route defect verification (inaccessible variant)', () => {
       await waitForPorscheDesignSystemComponents(page);
       const results = await makeAxeBuilder().analyze();
       const ruleIds = results.violations.map((v) => v.id);
-      expect(results.violations.length).toBeGreaterThanOrEqual(4);
+      expect(results.violations.length).toBeGreaterThanOrEqual(5);
       expect(ruleIds).toEqual(
-        expect.arrayContaining(['html-has-lang', 'meta-viewport', 'image-alt', 'empty-heading'])
+        expect.arrayContaining([
+          'html-has-lang',
+          'meta-viewport',
+          'image-alt',
+          'empty-heading',
+          'color-contrast',
+        ])
       );
     });
   }

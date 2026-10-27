@@ -62,7 +62,12 @@ export function HomeHero({ ctaLabel, heading, modal, productsHref }: Props) {
         <PModal onDismiss={() => setIsModalOpen(false)} open={isModalOpen}>
           <div className="grid gap-fluid-md">
             <div className="grid gap-static-sm">
-              <PText className="inaccessible-low-contrast" size="sm" weight="semibold">
+              <PText
+                className="inaccessible-low-contrast"
+                color="inherit"
+                size="sm"
+                weight="semibold"
+              >
                 {modal.eyebrow}
               </PText>
               <PHeading size="2xl" tag="h5">
@@ -75,7 +80,9 @@ export function HomeHero({ ctaLabel, heading, modal, productsHref }: Props) {
                 <PTextListItem key={highlight}>{highlight}</PTextListItem>
               ))}
             </PTextList>
-            <PText className="inaccessible-low-contrast">{modal.outro}</PText>
+            <PText className="inaccessible-low-contrast" color="inherit">
+              {modal.outro}
+            </PText>
             <div>
               <PLink href={productsHref} variant="secondary">
                 {modal.close}

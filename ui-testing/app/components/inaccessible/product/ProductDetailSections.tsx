@@ -73,7 +73,11 @@ export function ProductDetailSections({ product, copy }: Props) {
               ))}
             </PTextList>
           ) : null}
-          <PText className="inaccessible-low-contrast" size="sm">
+          <PText
+            className="inaccessible-low-contrast"
+            color="inherit"
+            size="sm"
+          >
             {copy.detailsFields.itemNumber}: {product.sku}
           </PText>
         </div>

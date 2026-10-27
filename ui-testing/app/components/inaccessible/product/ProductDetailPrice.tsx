@@ -23,7 +23,7 @@ export function ProductDetailPrice({ product }: Props) {
         <PText size="lg" weight="semibold">
           {product.price.formatted}
         </PText>
-        <PText className="inaccessible-low-contrast" size="sm">
+        <PText className="inaccessible-low-contrast" color="inherit" size="sm">
           {product.vatNote}
         </PText>
       </div>
@@ -36,13 +36,13 @@ export function ProductDetailPrice({ product }: Props) {
         <PText size="lg" weight="semibold">
           {product.price.formatted}
         </PText>
-        <PText className="inaccessible-low-contrast" size="lg">
+        <PText className="inaccessible-low-contrast" color="inherit" size="lg">
           <span className="line-through">
             {product.priceOriginal.formatted}
           </span>
         </PText>
       </div>
-      <PText className="inaccessible-low-contrast" size="sm">
+      <PText className="inaccessible-low-contrast" color="inherit" size="sm">
         {product.vatNote}
       </PText>
     </div>

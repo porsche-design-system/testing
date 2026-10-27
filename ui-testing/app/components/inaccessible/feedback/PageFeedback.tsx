@@ -101,6 +101,7 @@ export function PageFeedback() {
             <PText
               align="start"
               className="col-1 row-2 justify-self-start max-sm:hidden md:col-auto md:row-auto inaccessible-low-contrast"
+              color="inherit"
               size="small"
             >
               {copy.scaleStart}
@@ -126,6 +127,7 @@ export function PageFeedback() {
             <PText
               align="end"
               className="col-2 row-2 justify-self-end max-sm:hidden md:col-auto md:row-auto inaccessible-low-contrast"
+              color="inherit"
               size="small"
             >
               {copy.scaleEnd}

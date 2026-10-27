@@ -17,7 +17,9 @@ export function FooterDummyPage({ title, notice }: Props) {
     <MainContent className="grid-template py-fluid-lg">
       <div className="col-wide flex max-w-prose flex-col gap-fluid-sm">
         <div className="prose-heading-xl font-semibold">{title}</div>
-        <PText className="inaccessible-low-contrast">{notice}</PText>
+        <PText className="inaccessible-low-contrast" color="inherit">
+          {notice}
+        </PText>
         {/* Intentional axe `image-alt` violation */}
         {/* biome-ignore lint/a11y/useAltText: Intentional defect for inaccessible testing variant. */}
         <img
