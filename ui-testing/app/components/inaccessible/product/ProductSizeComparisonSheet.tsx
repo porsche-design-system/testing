@@ -16,7 +16,7 @@ import {
   type TableHeadCellSort,
   type TableUpdateEventDetail,
 } from "@porsche-design-system/components-react/ssr";
-import type { ProductSizeComparisonCopy } from "@/app/components/product/ProductSizeComparisonSheet";
+import type { ProductSizeComparisonCopy } from "@/app/components/accessible/product/ProductSizeComparisonSheet";
 import {
   type ApparelSizeChartRow,
   apparelSizeChart,

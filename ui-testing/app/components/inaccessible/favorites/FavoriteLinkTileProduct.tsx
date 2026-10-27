@@ -2,8 +2,8 @@
 
 import { useCallback } from "react";
 import { PLinkTileProduct } from "@porsche-design-system/components-react/ssr";
-import type { TilePricingCopy } from "@/app/components/favorites/FavoriteLinkTileProduct";
-import { useProductFavorites } from "@/app/components/favorites/ProductFavoritesProvider";
+import type { TilePricingCopy } from "@/app/components/accessible/favorites/FavoriteLinkTileProduct";
+import { useProductFavorites } from "@/app/components/shared/favorites/ProductFavoritesProvider";
 import { isReducedProduct } from "@/app/data/catalog-price";
 import type { CatalogProduct } from "@/app/data/get-catalog";
 import type { Locale } from "@/app/i18n/config";

@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   ProductDetailSections,
   type ProductDetailSectionsCopy,
-} from "@/app/components/product/ProductDetailSections";
+} from "@/app/components/accessible/product/ProductDetailSections";
 import { createCatalogProduct } from "./fixtures/catalog-product";
 
 vi.mock("@porsche-design-system/components-react/ssr", () => ({

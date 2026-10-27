@@ -39,7 +39,7 @@ import {
   PTextarea,
   type StepperHorizontalUpdateEventDetail,
 } from "@porsche-design-system/components-react/ssr";
-import type { ProductInquiryCopy } from "@/app/components/product/ProductInquiryFlyout";
+import type { ProductInquiryCopy } from "@/app/components/accessible/product/ProductInquiryFlyout";
 import {
   createInitialInquiryFormState,
   createInquirySteps,

@@ -12,7 +12,7 @@ import {
 } from "@porsche-design-system/components-react/ssr";
 import { useCallback, useEffect, useState } from "react";
 import { MainContent } from "@/app/components/inaccessible/layout/MainContent";
-import type { NewsletterSubscriptionCopy } from "@/app/components/newsletter/NewsletterSubscriptionForm";
+import type { NewsletterSubscriptionCopy } from "@/app/components/accessible/newsletter/NewsletterSubscriptionForm";
 import {
   createInitialNewsletterFormState,
   hasNewsletterValidationErrors,

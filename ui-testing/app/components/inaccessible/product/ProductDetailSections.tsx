@@ -11,7 +11,7 @@ import {
   PTextList,
   PTextListItem,
 } from "@porsche-design-system/components-react/ssr";
-import type { ProductDetailSectionsCopy } from "@/app/components/product/ProductDetailSections";
+import type { ProductDetailSectionsCopy } from "@/app/components/accessible/product/ProductDetailSections";
 import type { CatalogProduct } from "@/app/data/get-catalog";
 import type { Locale } from "@/app/i18n/config";
 

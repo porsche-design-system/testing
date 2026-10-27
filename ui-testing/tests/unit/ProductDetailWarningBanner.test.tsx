@@ -4,11 +4,11 @@ import {
   PRODUCT_DETAIL_BANNER_DELAY_MS,
   ProductDetailWarningBanner,
   ROUTE_FOCUS_RELEASE_POLL_MS,
-} from "@/app/components/product/ProductDetailWarningBanner";
+} from "@/app/components/accessible/product/ProductDetailWarningBanner";
 import {
   beginRouteFocusHold,
   endRouteFocusHold,
-} from "@/app/components/routing/route-focus-hold";
+} from "@/app/components/accessible/routing/route-focus-hold";
 import { PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
 
 vi.mock("@porsche-design-system/components-react/ssr", () => ({

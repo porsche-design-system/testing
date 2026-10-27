@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PBanner } from "@porsche-design-system/components-react/ssr";
-import type { ProductDetailWarningBannerCopy } from "@/app/components/product/ProductDetailWarningBanner";
+import type { ProductDetailWarningBannerCopy } from "@/app/components/accessible/product/ProductDetailWarningBanner";
 
 type Props = {
   copy: ProductDetailWarningBannerCopy;

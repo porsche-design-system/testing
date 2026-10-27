@@ -19,7 +19,7 @@ import {
   PTabsBar,
   PText,
 } from "@porsche-design-system/components-react/ssr";
-import { useProductFavorites } from "@/app/components/favorites/ProductFavoritesProvider";
+import { useProductFavorites } from "@/app/components/shared/favorites/ProductFavoritesProvider";
 import { CatalogProductGrid } from "@/app/components/inaccessible/catalog/CatalogProductGrid";
 import {
   type AudienceSlug,

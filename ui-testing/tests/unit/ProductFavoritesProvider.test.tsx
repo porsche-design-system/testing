@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   ProductFavoritesProvider,
   useProductFavorites,
-} from "@/app/components/favorites/ProductFavoritesProvider";
+} from "@/app/components/shared/favorites/ProductFavoritesProvider";
 import { writeFavoriteProductSlugs } from "@/app/lib/product-favorites-storage";
 import { createMockSessionStorage } from "./helpers/mock-session-storage";
 

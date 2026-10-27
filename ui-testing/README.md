@@ -39,25 +39,20 @@ Locales: `en` (default), `de`.
 
 ```
 app/
-  (entry)/              # Minimal root for `/` redirect only
-  [locale]/             # Accessible locale shell: <html lang>, PDS provider, footer, favorites
-    (home)/             # Transparent header (home only)
-    (default)/          # Opaque header (products, newsletter, contact, company, legal)
-  inaccessible/         # Intentionally inaccessible route tree (dual root layout)
+  (accessible)/         # Accessible site route group (URLs: `/`, `/[locale]/…`)
+    (entry)/            # Minimal root for `/` redirect only
+    [locale]/           # Accessible locale shell: <html lang>, PDS provider, footer, favorites
+      (home)/           # Transparent header (home only)
+      (default)/        # Opaque header (products, newsletter, contact, company, legal)
+  inaccessible/         # Intentionally inaccessible site (URLs: `/inaccessible/`, `/inaccessible/[locale]/…`)
     (entry)/            # Redirects `/inaccessible/` -> `/inaccessible/en/`
     [locale]/           # Inaccessible shell: missing `lang`, zoom-blocking viewport, suppressed focus rings
       (home)/
       (default)/
   components/
-    header/             # GlobalHeader, skip link, nav, search, favorites link
-    catalog/            # Catalog browser, grid, products index shell
-    product/            # Detail price, inquiry flyout, size tools
-    favorites/          # Provider, toasts, favorite product tiles
-    home/               # Hero, landing sections
-    footer/             # GlobalFooter, footer placeholders, language switch
-    newsletter/         # Newsletter subscription form
-    contact/            # Contact form
-    inaccessible/       # Hybrid PDS ("Don'ts") + Tailwind anti-pattern components mirroring `components/`
+    accessible/         # WCAG 2.2 AA compliant PDS components (header, catalog, product, home, footer, …)
+    inaccessible/       # Hybrid PDS ("Don'ts") + Tailwind anti-pattern components (1:1 mirror of `accessible/`)
+    shared/             # Variant-agnostic React providers (`ProductFavoritesProvider`, `FeedbackCopyContext`)
   data/                 # Shared catalog JSON and helpers
   hooks/                # Shared client hooks (e.g. catalog URL query sync)
   i18n/                 # Shared locale config, dictionaries, prefix-aware href builders

@@ -8,7 +8,7 @@ import {
   PTag,
   PText,
 } from "@porsche-design-system/components-react/ssr";
-import type { TilePricingCopy } from "@/app/components/favorites/FavoriteLinkTileProduct";
+import type { TilePricingCopy } from "@/app/components/accessible/favorites/FavoriteLinkTileProduct";
 import { FavoriteLinkTileProduct } from "@/app/components/inaccessible/favorites/FavoriteLinkTileProduct";
 import {
   isLifestyleTagSlug,

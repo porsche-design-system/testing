@@ -7,8 +7,8 @@ import {
 import { PorscheDesignSystemProvider } from "@porsche-design-system/components-react/ssr";
 import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
-import { ProductFavoritesProvider } from "@/app/components/favorites/ProductFavoritesProvider";
-import { FeedbackCopyProvider } from "@/app/components/feedback/FeedbackCopyContext";
+import { ProductFavoritesProvider } from "@/app/components/shared/favorites/ProductFavoritesProvider";
+import { FeedbackCopyProvider } from "@/app/components/shared/feedback/FeedbackCopyContext";
 import { ProductFavoriteToasts } from "@/app/components/inaccessible/favorites/ProductFavoriteToasts";
 import { GlobalFooter } from "@/app/components/inaccessible/footer/GlobalFooter";
 import { isLocale, type Locale, locales } from "@/app/i18n/config";

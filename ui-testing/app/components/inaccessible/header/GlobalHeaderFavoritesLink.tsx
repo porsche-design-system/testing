@@ -1,7 +1,7 @@
 "use client";
 
 import { PLinkPure } from "@porsche-design-system/components-react/ssr";
-import { useProductFavorites } from "@/app/components/favorites/ProductFavoritesProvider";
+import { useProductFavorites } from "@/app/components/shared/favorites/ProductFavoritesProvider";
 import type { Locale } from "@/app/i18n/config";
 import type { Dictionary } from "@/app/i18n/get-dictionary";
 import {

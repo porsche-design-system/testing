@@ -9,7 +9,7 @@ import {
   PTextarea,
 } from "@porsche-design-system/components-react/ssr";
 import { useEffect, useRef, useState } from "react";
-import { useFeedbackCopy } from "@/app/components/feedback/FeedbackCopyContext";
+import { useFeedbackCopy } from "@/app/components/shared/feedback/FeedbackCopyContext";
 import { pdsStringValue } from "@/app/lib/product-inquiry";
 
 type Phase = "form" | "thanks";

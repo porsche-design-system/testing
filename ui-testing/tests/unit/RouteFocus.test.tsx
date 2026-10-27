@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { RouteFocus } from "@/app/components/routing/RouteFocus";
-import { isRouteFocusHolding } from "@/app/components/routing/route-focus-hold";
+import { RouteFocus } from "@/app/components/accessible/routing/RouteFocus";
+import { isRouteFocusHolding } from "@/app/components/accessible/routing/route-focus-hold";
 import { PAGE_HEADING_ID } from "@/app/lib/skip-to-page-heading";
 
 const ROUTE_FOCUS_KEY = "pds-ui-testing:route-focus";

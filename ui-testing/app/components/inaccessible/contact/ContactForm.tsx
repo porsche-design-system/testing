@@ -12,7 +12,7 @@ import {
   PTextarea,
 } from "@porsche-design-system/components-react/ssr";
 import { useCallback, useEffect, useState } from "react";
-import type { ContactFormCopy } from "@/app/components/contact/ContactForm";
+import type { ContactFormCopy } from "@/app/components/accessible/contact/ContactForm";
 import { MainContent } from "@/app/components/inaccessible/layout/MainContent";
 import {
   type ContactFieldErrorKey,

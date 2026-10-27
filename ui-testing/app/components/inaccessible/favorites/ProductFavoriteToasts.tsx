@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useProductFavorites } from "@/app/components/favorites/ProductFavoritesProvider";
-import type { FavoriteToastCopy } from "@/app/components/favorites/ProductFavoriteToasts";
+import { useProductFavorites } from "@/app/components/shared/favorites/ProductFavoritesProvider";
+import type { FavoriteToastCopy } from "@/app/components/accessible/favorites/ProductFavoriteToasts";
 
 type Props = {
   copy: FavoriteToastCopy;
