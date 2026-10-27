@@ -1,0 +1,251 @@
+"use client";
+
+import {
+  type CSSProperties,
+  useDeferredValue,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { usePathname } from "next/navigation";
+import {
+  PButton,
+  PButtonPure,
+  PHeading,
+  PInputSearch,
+  PLinkPure,
+  PModal,
+  PText,
+} from "@porsche-design-system/components-react/ssr";
+import type { CatalogProduct } from "@/app/data/get-catalog";
+import type { Locale } from "@/app/i18n/config";
+import type { Dictionary } from "@/app/i18n/get-dictionary";
+import {
+  appHref,
+  INACCESSIBLE_ROUTE_PREFIX,
+  productDetailHref,
+} from "@/app/i18n/href";
+import { formatCatalogCount } from "@/app/lib/catalog-query";
+import {
+  PRODUCT_SEARCH_MIN_QUERY_LEN,
+  rankProducts,
+  searchInputValue,
+} from "@/app/lib/product-search";
+
+export type GlobalHeaderSearchCopy = Dictionary["header"]["searchModal"];
+
+type Props = {
+  copy: GlobalHeaderSearchCopy;
+  label: string;
+  locale: Locale;
+  triggerSchemeClassName?: string;
+};
+
+function loadProducts(locale: Locale): Promise<CatalogProduct[]> {
+  return (
+    locale === "de"
+      ? import("@/app/data/catalog/products.de.json")
+      : import("@/app/data/catalog/products.en.json")
+  ).then((m) => m.default.products);
+}
+
+/**
+ * Intentional PDS & HTML accessibility defects:
+ * - Trigger `PButtonPure` uses `hideLabel={true}` with empty children and no `aria-haspopup`
+ * - `PModal` omits `aria={{ "aria-label": ... }}`
+ * - `PInputSearch` uses `hideLabel={true}` and `label=""` (no accessible name)
+ * - Result count omits `role="status"` and `aria-atomic` (WCAG 4.1.3)
+ * - Result thumbnail `<img>` omits `alt` attribute (`image-alt`)
+ */
+export function GlobalHeaderProductSearch({
+  copy,
+  locale,
+  triggerSchemeClassName,
+}: Props) {
+  const pathname = usePathname();
+  const pathWhenOpenedRef = useRef<string | null>(null);
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const [products, setProducts] = useState<CatalogProduct[]>([]);
+  const [loadError, setLoadError] = useState(false);
+  const deferredQuery = useDeferredValue(query);
+  const prevOpenRef = useRef(false);
+
+  useEffect(() => {
+    if (open && !prevOpenRef.current) {
+      pathWhenOpenedRef.current = pathname;
+    }
+    prevOpenRef.current = open;
+  }, [open, pathname]);
+
+  useEffect(() => {
+    if (!open || pathWhenOpenedRef.current === null) return;
+    if (pathname !== pathWhenOpenedRef.current) setOpen(false);
+  }, [pathname, open]);
+
+  useEffect(() => {
+    if (!open) return;
+    let cancelled = false;
+    setLoadError(false);
+    loadProducts(locale).then(
+      (list) => {
+        if (!cancelled) setProducts(list);
+      },
+      () => {
+        if (!cancelled) setLoadError(true);
+      },
+    );
+    return () => {
+      cancelled = true;
+    };
+  }, [open, locale]);
+
+  useEffect(() => {
+    if (open) return;
+    setQuery("");
+    setProducts([]);
+  }, [open]);
+
+  const results = useMemo(
+    () => rankProducts(products, deferredQuery),
+    [deferredQuery, products],
+  );
+
+  const trimmed = query.trim();
+  const deferredTrimmed = deferredQuery.trim();
+  const showPrompt = trimmed.length < PRODUCT_SEARCH_MIN_QUERY_LEN;
+  const showSearching =
+    trimmed.length >= PRODUCT_SEARCH_MIN_QUERY_LEN &&
+    trimmed !== deferredTrimmed;
+  const showResults =
+    !loadError &&
+    products.length > 0 &&
+    !showPrompt &&
+    !showSearching &&
+    results.length > 0;
+  const statusMessage = loadError
+    ? copy.loadError
+    : products.length === 0
+      ? copy.loading
+      : showPrompt
+        ? copy.emptyPrompt
+        : showSearching
+          ? copy.searching
+          : results.length === 0
+            ? copy.noMatches
+            : formatCatalogCount(copy.resultCount, results.length);
+
+  const MODAL_STYLE = {
+    "--p-modal-width": "min(100vw - 2rem, 760px)",
+  } as CSSProperties;
+
+  return (
+    <>
+      <PButtonPure
+        className={`p-static-xs -m-static-xs ${triggerSchemeClassName ?? ""}`}
+        data-testid="search-modal-trigger"
+        hideLabel={true}
+        icon="search"
+        onClick={() => setOpen(true)}
+        size={{ base: "sm", m: "md" }}
+        type="button"
+      />
+
+      <PModal
+        backdrop="blur"
+        className="scheme-light"
+        onDismiss={() => setOpen(false)}
+        open={open}
+        style={MODAL_STYLE}
+      >
+        <div className="flex flex-col gap-fluid-md">
+          <div className="grid gap-static-xs">
+            {/* Intentional heading mismatch: tag="h5" with visual size="lg" */}
+            <PHeading size="lg" tag="h5">
+              {copy.title}
+            </PHeading>
+            <PText className="inaccessible-low-contrast" size="sm">
+              {copy.subtitle}
+            </PText>
+          </div>
+
+          <PInputSearch
+            clear
+            hideLabel={true}
+            indicator
+            label=""
+            name="global-header-product-search"
+            onChange={(e) => setQuery(searchInputValue(e as Event))}
+            onInput={(e) => setQuery(searchInputValue(e as Event))}
+            placeholder={copy.queryPlaceholder}
+            value={query}
+          />
+
+          <div className="flex min-h-[120px] flex-col gap-static-sm">
+            {/* Intentional defect: omit role="status" and aria-live */}
+            <div>
+              <PText
+                className="inaccessible-low-contrast"
+                size={showSearching || showResults ? "sm" : undefined}
+              >
+                {statusMessage}
+              </PText>
+            </div>
+            {showResults ? (
+              <div className="flex flex-col gap-static-sm">
+                {results.map((product) => {
+                  const img = product.images[0];
+                  return (
+                    <div key={product.id} className="p-static-sm">
+                      <PLinkPure
+                        href={productDetailHref(
+                          locale,
+                          product.slug,
+                          INACCESSIBLE_ROUTE_PREFIX,
+                        )}
+                        icon="none"
+                        stretch
+                      >
+                        <span className="flex gap-static-sm p-static-xs">
+                          {/* Intentional axe `image-alt` violation: <img> without alt attribute */}
+                          {/* biome-ignore lint/a11y/useAltText: Intentional defect for inaccessible testing variant. */}
+                          <img
+                            className="h-12 w-12 shrink-0 rounded-md object-cover"
+                            src={appHref(
+                              img?.src ?? "/home-product-keychain.jpg",
+                            )}
+                          />
+                          <PText color="contrast-medium" size="sm">
+                            <span className="font-semibold">
+                              {product.name}
+                            </span>
+                            <br />
+                            {product.teaser}
+                            <span className="ms-static-xs font-semibold">
+                              {product.price.formatted}
+                            </span>
+                          </PText>
+                        </span>
+                      </PLinkPure>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex justify-end">
+            <PButton
+              onClick={() => setOpen(false)}
+              type="button"
+              variant="secondary"
+            >
+              {copy.close}
+            </PButton>
+          </div>
+        </div>
+      </PModal>
+    </>
+  );
+}

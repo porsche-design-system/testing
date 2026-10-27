@@ -11,6 +11,8 @@ https://porsche-design-system.github.io/testing/ui-testing/
 
 ## Routes
 
+### Accessible Baseline (`/[locale]/…` — WCAG 2.2 AA Compliant)
+
 - `/` — server-side redirect to the default locale home (statically exported)
 - `/[locale]/` — home (hero, lifestyle tiles, trending products; transparent header)
 - `/[locale]/products/` — product catalog (filters, sort, favorites view)
@@ -20,6 +22,17 @@ https://porsche-design-system.github.io/testing/ui-testing/
 - `/[locale]/company/[companySlug]/` — footer company placeholders
 - `/[locale]/legal/[legalSlug]/` — footer legal placeholders
 
+### Inaccessible Testing Variant (`/inaccessible/[locale]/…`)
+
+A parallel, visually matching, mouse-functional variant with intentional accessibility defects for testing accessibility tools, linters, `axe-core`, and AI accessibility audit/remediation skills:
+
+- `/inaccessible/` — redirects to `/inaccessible/en/`
+- `/inaccessible/[locale]/` — home with missing `alt` attributes, `<div onClick>` hero CTA, missing carousel `aria-label`, and broken heading hierarchy
+- `/inaccessible/[locale]/products/` — product catalog with unlabeled sort/filter controls, mouse-only `<div onClick>` filter chips, and missing live regions
+- `/inaccessible/[locale]/products/[productSlug]/` — product detail with mouse-only `<div onClick>` size selector, uncaptioned size comparison `PTable`, and multi-step `ProductInquiryFlyout` with PDS `hideLabel={true}` + `label=""` anti-patterns
+- `/inaccessible/[locale]/newsletter/` & `/inaccessible/[locale]/contact/` — forms with unassociated visual labels/errors, omitted `<PFieldset>`, and no error focus or status live regions
+- `/inaccessible/[locale]/company/[companySlug]/` & `/inaccessible/[locale]/legal/[legalSlug]/` — placeholder pages with missing `<h1>`, low contrast, and missing `alt` attributes
+
 Locales: `en` (default), `de`.
 
 ## App structure
@@ -27,9 +40,14 @@ Locales: `en` (default), `de`.
 ```
 app/
   (entry)/              # Minimal root for `/` redirect only
-  [locale]/             # Locale shell: <html>, PDS provider, footer, favorites
+  [locale]/             # Accessible locale shell: <html lang>, PDS provider, footer, favorites
     (home)/             # Transparent header (home only)
     (default)/          # Opaque header (products, newsletter, contact, company, legal)
+  inaccessible/         # Intentionally inaccessible route tree (dual root layout)
+    (entry)/            # Redirects `/inaccessible/` -> `/inaccessible/en/`
+    [locale]/           # Inaccessible shell: missing `lang`, zoom-blocking viewport, suppressed focus rings
+      (home)/
+      (default)/
   components/
     header/             # GlobalHeader, skip link, nav, search, favorites link
     catalog/            # Catalog browser, grid, products index shell
@@ -39,10 +57,11 @@ app/
     footer/             # GlobalFooter, footer placeholders, language switch
     newsletter/         # Newsletter subscription form
     contact/            # Contact form
-  data/                 # Catalog JSON and helpers
-  hooks/                # Client hooks (e.g. catalog URL query sync)
-  i18n/                 # Locale config, dictionaries, href builders
-  lib/                  # Pure logic (query, search, form validation, a11y scroll)
+    inaccessible/       # Hybrid PDS ("Don'ts") + Tailwind anti-pattern components mirroring `components/`
+  data/                 # Shared catalog JSON and helpers
+  hooks/                # Shared client hooks (e.g. catalog URL query sync)
+  i18n/                 # Shared locale config, dictionaries, prefix-aware href builders
+  lib/                  # Shared pure logic (query, search, form validation, a11y scroll)
 ```
 
 ## Commands

@@ -27,4 +27,17 @@ describe("replaceLocaleInPath", () => {
     const base = "/base/";
     expect(replaceLocaleInPath("/base/en/", base, "de")).toBe("/base/de/");
   });
+
+  it("preserves /inaccessible prefix when swapping locale", () => {
+    expect(replaceLocaleInPath("/inaccessible/en/products/", "", "de")).toBe(
+      "/inaccessible/de/products/",
+    );
+    expect(
+      replaceLocaleInPath(
+        "/testing/ui-testing/inaccessible/de/contact/",
+        "/testing/ui-testing",
+        "en",
+      ),
+    ).toBe("/testing/ui-testing/inaccessible/en/contact/");
+  });
 });
