@@ -18,3 +18,27 @@
   top: 0;
   opacity: 1;
 }
+
+/* Intentional accessibility defects for the /inaccessible variant (WCAG 2.4.7 & 1.4.3).
+   PDS components use `outline: 2px solid var(--p-color-focus)` inside their Shadow DOM;
+   overriding `--p-color-focus` and `--color-focus` to `transparent` pierces all Shadow DOMs. */
+.inaccessible-app,
+.inaccessible-app *,
+.inaccessible-app .scheme-light,
+.inaccessible-app .scheme-dark,
+.inaccessible-app .scheme-light-dark {
+  --p-color-focus: transparent !important;
+  --color-focus: transparent !important;
+  --_color-focus: transparent !important;
+  --_color-focus-dynamic: transparent !important;
+}
+
+.inaccessible-app *:focus,
+.inaccessible-app *:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.inaccessible-low-contrast {
+  color: #b5b6b8 !important;
+}

@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  INACCESSIBLE_ROUTE_PREFIX,
   PRODUCTS_FAVORITES_QUERY,
   PRODUCTS_FAVORITES_VALUE,
   appHref,
@@ -66,6 +67,34 @@ describe("href helpers", () => {
     it("builds contact href with trailing slash", () => {
       expect(contactHref("en")).toBe("/en/contact/");
       expect(contactHref("de")).toBe("/de/contact/");
+    });
+
+    it("supports INACCESSIBLE_ROUTE_PREFIX on all route builders", () => {
+      expect(localeHomeHref("en", INACCESSIBLE_ROUTE_PREFIX)).toBe(
+        "/inaccessible/en/",
+      );
+      expect(productsIndexHref("de", INACCESSIBLE_ROUTE_PREFIX)).toBe(
+        "/inaccessible/de/products/",
+      );
+      expect(
+        productDetailHref("en", "test-slug", INACCESSIBLE_ROUTE_PREFIX),
+      ).toBe("/inaccessible/en/products/test-slug/");
+      expect(productsFavoritesHref("en", INACCESSIBLE_ROUTE_PREFIX)).toBe(
+        `/inaccessible/en/products/?${PRODUCTS_FAVORITES_QUERY}=${PRODUCTS_FAVORITES_VALUE}`,
+      );
+      expect(newsletterHref("en", INACCESSIBLE_ROUTE_PREFIX)).toBe(
+        "/inaccessible/en/newsletter/",
+      );
+      expect(contactHref("de", INACCESSIBLE_ROUTE_PREFIX)).toBe(
+        "/inaccessible/de/contact/",
+      );
+      expect(
+        productsFilterHref(
+          "en",
+          { categories: ["apparel"] },
+          INACCESSIBLE_ROUTE_PREFIX,
+        ),
+      ).toBe("/inaccessible/en/products/?category=apparel");
     });
   });
 

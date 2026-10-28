@@ -49,7 +49,11 @@ const getPageRoutes = (dir: string, parentParts: string[] = []): string[] => {
 // __dirname is provided by Playwright's TS loader (CJS).
 const projectRoot = join(__dirname, '..', '..', '..');
 const appDir = join(projectRoot, 'app');
-const testRoutes = Array.from(new Set(getPageRoutes(appDir))).sort((a, b) => a.localeCompare(b));
+const allRoutes = Array.from(new Set(getPageRoutes(appDir))).sort((a, b) => a.localeCompare(b));
+const compliantRoutes = allRoutes.filter((route) => !route.startsWith('/inaccessible'));
+const inaccessibleRoutes = allRoutes.filter(
+  (route) => route.startsWith('/inaccessible/') && route !== '/inaccessible'
+);
 
 /** Static export uses `trailingSlash: true`; serve expects trailing slashes on paths. */
 const toStaticExportPath = (route: string): string => {
@@ -83,8 +87,8 @@ const waitForPorscheDesignSystemComponents = async (page: Page): Promise<void> =
   );
 };
 
-test.describe('A11y route smoke tests', () => {
-  for (const route of testRoutes) {
+test.describe('A11y route smoke tests (compliant)', () => {
+  for (const route of compliantRoutes) {
     test(`axe has no critical violations on ${route}`, async ({ page, makeAxeBuilder }) => {
       await page.goto(toStaticExportPath(route), { waitUntil: 'networkidle' });
       await expect(page.getByTestId('main-content')).toBeVisible();
@@ -92,6 +96,28 @@ test.describe('A11y route smoke tests', () => {
       await waitForPorscheDesignSystemComponents(page);
       const results = await makeAxeBuilder().analyze();
       expect(results.violations).toEqual([]);
+    });
+  }
+});
+
+test.describe('A11y route defect verification (inaccessible variant)', () => {
+  for (const route of inaccessibleRoutes) {
+    test(`axe detects intentional violations on ${route}`, async ({ page, makeAxeBuilder }) => {
+      await page.goto(toStaticExportPath(route), { waitUntil: 'networkidle' });
+      await expect(page.getByTestId('main-content')).toBeVisible();
+      await waitForPorscheDesignSystemComponents(page);
+      const results = await makeAxeBuilder().analyze();
+      const ruleIds = results.violations.map((v) => v.id);
+      expect(results.violations.length).toBeGreaterThanOrEqual(5);
+      expect(ruleIds).toEqual(
+        expect.arrayContaining([
+          'html-has-lang',
+          'meta-viewport',
+          'image-alt',
+          'empty-heading',
+          'color-contrast',
+        ])
+      );
     });
   }
 });

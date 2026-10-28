@@ -19,6 +19,13 @@ export function replaceLocaleInPath(
   const first = parts[0];
   if (first !== undefined && isLocale(first)) {
     parts[0] = next;
+  } else if (first === "inaccessible") {
+    const second = parts[1];
+    if (second !== undefined && isLocale(second)) {
+      parts[1] = next;
+    } else {
+      parts.splice(1, 0, next);
+    }
   } else {
     parts.unshift(next);
   }

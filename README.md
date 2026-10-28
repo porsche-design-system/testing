@@ -46,6 +46,7 @@ https://porsche-design-system.github.io/testing/ui-testing/
 - `/products/` — Product catalog (filters, sort, favorites)
 - `/products/[slug]/` — Product detail (inquiry flyout, sizing)
 - `/newsletter/`, `/contact/` — Form demos
+- `/inaccessible/[locale]/…` — Parallel, mouse-functional variant with intentional accessibility defects (PDS "Don'ts" + Tailwind anti-patterns) for testing accessibility tools and skills
 - Locale support: `en`, `de`
 
 **For more details, see** [**`ui-testing/README.md`**](./ui-testing/README.md)
