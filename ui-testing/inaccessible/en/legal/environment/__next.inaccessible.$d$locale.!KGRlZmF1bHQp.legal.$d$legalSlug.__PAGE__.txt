@@ -1,0 +1,43 @@
+4:"$Sreact.fragment"
+5:"/testing/ui-testing/_next/static/chunks/2zby91v25775z.js"
+6:"/testing/ui-testing/_next/static/chunks/22qbyd_qu61-d.js"
+7:"GlobalHeaderNavMenu"
+8:I[75420,["$5","$6"],"$7"]
+9:I[29079,["$5","$6"],"PCrest"]
+a:I[27182,["$5","$6"],"PWordmark"]
+b:"GlobalHeaderFavoritesLink"
+c:I[18720,["$5","$6"],"$b"]
+d:"GlobalHeaderProductSearch"
+e:I[59130,["$5","$6"],"$d"]
+f:"/testing/ui-testing/_next/static/chunks/0umf92h1sb77c.js"
+10:I[39756,["$f"],"default"]
+11:I[37457,["$f"],"default"]
+1a:"/testing/ui-testing/_next/static/chunks/34avmlrmcrhit.js"
+1b:I[75940,["$5","$6","$1a"],"PText"]
+1c:I[98079,["$5","$6","$1a"],"PageFeedback"]
+1d:I[97367,["$f"],"OutletBoundary"]
+1e:"$Sreact.suspense"
+21:"ViewportBoundary"
+22:I[97367,["$f"],"$21"]
+23:"MetadataBoundary"
+24:I[97367,["$f"],"$23"]
+13:X
+16:X
+16:C
+19:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$4","c",{"children":[["$","div",null,{"className":"grid-template py-fluid-lg","data-testid":"main-content","children":[["$","h2",null,{"className":"sr-only","id":"duplicate-section-id"}],["$","span",null,{"className":"hidden","id":"duplicate-section-id"}],["$","div",null,{"className":"col-wide flex max-w-prose flex-col gap-fluid-sm","children":[["$","div",null,{"className":"prose-heading-xl font-semibold","children":"Environmental information disclosure"}],["$","$L1b",null,{"className":"inaccessible-low-contrast","color":"inherit","children":"This page is a placeholder only. It has no real content and exists for usability and accessibility testing."}],["$","img",null,{"className":"h-1 w-1 opacity-10","src":"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"}]]}],["$","$L1c",null,{}]]}],[["$","script","script-0",{"src":"/testing/ui-testing/_next/static/chunks/34avmlrmcrhit.js","async":true}]],["$","$L1d",null,{"children":["$","$1e",null,{"name":"Next.MetadataOutlet","children":"$@1f"}]}]]}],"p":"$@20","v":null,"s":"$13"}}]]
+17:[["children",{"s":{"n":"legalSlug","t":"d","k":"environment","s":[]},"h":65632,"d":{"r":["$","$4","c",{"children":[null,["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]}],"p":"$@18","v":"$16","s":"$13"},"c":"$Q19"}]]
+14:[["children",{"s":"legal","h":131168,"d":{"r":["$","$4","c",{"children":[null,["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]}],"p":"$@15","v":"$16","s":"$13"},"c":"$Q17"}]]
+3:[["children",{"s":"(default)","h":131136,"d":{"r":["$","$4","c",{"children":[[["$","script","script-0",{"src":"/testing/ui-testing/_next/static/chunks/22qbyd_qu61-d.js","async":true}]],[["$","div",null,{"className":"grid-template bg-canvas py-fluid-sm md:py-fluid-md","data-testid":"global-header","children":["$","div",null,{"className":"col-wide grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-fluid-xs sm:gap-fluid-md","children":[["$","div",null,{"className":"relative flex min-w-0 flex-wrap items-center justify-start gap-static-xs sm:gap-static-sm","children":["$","div",null,{"className":"flex min-w-0 items-center","id":"main-navigation","children":["$","$L8",null,{"locale":"en","nav":{"main":"Main","menu":"Menu","shopCategories":"Shop categories","women":"Women","men":"Men","kids":"Kids","accessories":"Accessories","porscheOriginals":"Porsche Originals","porscheDesign":"Porsche Design","newReleases":"New Releases","viewAllWomen":"Women","viewAllMen":"Men","viewAllKids":"Kids","clothing":"Apparel","bagsLuggage":"Bags & Luggage","travelTransport":"Travel & Transport","chargingHardware":"Charging Hardware","viewAllProducts":"View all products"}}]}]}],["$","div",null,{"className":"flex shrink-0 justify-center","children":[["$","$L9",null,{"className":"sm:hidden","href":"/testing/ui-testing/inaccessible/en/"}],["$","$La",null,{"className":"max-sm:hidden shrink-0","href":"/testing/ui-testing/inaccessible/en/","size":"small"}]]}],["$","div",null,{"className":"flex min-w-0 flex-wrap items-center justify-end gap-static-xs sm:gap-static-md","children":[["$","$Lc",null,{"copy":{"favorites":"Favorites","favoritesAriaCount":"Favorites, {count} items saved","favoritesAriaEmpty":"Favorites, no items saved yet","favoritesLiveCount":"{count} favorites saved","favoritesLiveEmpty":"No favorites saved"},"locale":"en"}],["$","$Le",null,{"copy":{"ariaLabel":"Search products","title":"Search the catalog","subtitle":"Find products by name, category or collection","queryLabel":"Search items","queryPlaceholder":"Try “cap”, “luggage”, “Porsche Design”, etc.","hint":"Type at least 2 characters. Ranked matches update as you type.","loading":"Loading catalog…","loadError":"Could not load the product list. Try again later.","emptyPrompt":"Start typing to see ranked suggestions from the full catalog.","searching":"Searching…","noMatches":"No products match that search. Try another word or browse all products.","resultCount":"{count} products","close":"Close search"},"label":"Search","locale":"en"}]]}]]}]}],["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]]}],"p":"$@12","v":null,"s":"$13"},"c":"$Q14"}]]
+2:[["children",{"s":{"n":"locale","t":"d","k":"en","s":[]},"h":196656,"c":"$Q3"}]]
+1:[["children",{"s":"inaccessible","h":131184,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$4","h",{"children":[null,["$","$L22",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}]]}],["$","$L24",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$1e",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Shop"}]]}]}],null]}],null]}],"p":"$@25","v":null,"s":"$13"}},"a":"$@26","u":"$@27","b":"xECm1-dSe67io606OgNDk"}
+1f:null
+27:true
+13:300
+13:C
+26:0
+18:"$undefined"
+15:"$undefined"
+12:"$undefined"
+25:"$undefined"
+20:"$undefined"
