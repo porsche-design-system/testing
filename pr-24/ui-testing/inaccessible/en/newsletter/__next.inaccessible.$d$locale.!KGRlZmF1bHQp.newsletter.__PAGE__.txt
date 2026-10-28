@@ -1,0 +1,43 @@
+4:"$Sreact.fragment"
+5:"/testing/pr-24/ui-testing/_next/static/chunks/0yicqd-a7_gsv.js"
+6:"/testing/pr-24/ui-testing/_next/static/chunks/197gvv2981r7g.js"
+7:"GlobalHeaderNavMenu"
+8:I[75420,["$5","$6"],"$7"]
+9:I[29079,["$5","$6"],"PCrest"]
+a:I[27182,["$5","$6"],"PWordmark"]
+b:"GlobalHeaderFavoritesLink"
+c:I[18720,["$5","$6"],"$b"]
+d:"GlobalHeaderProductSearch"
+e:I[59130,["$5","$6"],"$d"]
+f:"/testing/pr-24/ui-testing/_next/static/chunks/0umf92h1sb77c.js"
+10:I[39756,["$f"],"default"]
+11:I[37457,["$f"],"default"]
+18:"/testing/pr-24/ui-testing/_next/static/chunks/1zakxcop6a1-z.js"
+19:"NewsletterSubscriptionForm"
+1a:I[60925,["$5","$6","$18"],"$19"]
+1e:"ViewportBoundary"
+1f:I[97367,["$f"],"$1e"]
+20:"MetadataBoundary"
+21:I[97367,["$f"],"$20"]
+22:"$Sreact.suspense"
+13:X
+16:X
+16:C
+17:[["children",{"s":"__PAGE__","h":160,"d":{"r":["$","$4","c",{"children":[["$","$L1a",null,{"copy":{"title":"Newsletter","intro":"Subscribe to receive the latest Porsche news and updates in your inbox. This is a demo form only — no data is transmitted.","fieldsetLabel":"Your details","firstName":"First name","email":"Email address","privacy":"I agree that my details may be processed for this demo subscription.","privacyPopover":"This is a demo form only: your details are not stored or sent to any server. The checkbox simulates consent so we can test validation and this information popover in the Porsche Design System.","submit":"Subscribe","submittingHint":"Subscribing…","successHeading":"Subscription confirmed","successDescription":"Your subscription was successful (demo only; no data is transmitted).","subscribeAgain":"Subscribe another email","errors":{"formSummaryHeading":"Check your entries","formSummary":"Some required fields are missing or invalid. Review the messages below.","emailRequired":"Enter your email address.","emailInvalid":"Enter a valid email address.","firstNameRequired":"Enter your first name.","privacyRequired":"Confirm that you agree to the processing of your details."}}}],["$L1b"],"$L1c"]}],"p":"$@1d","v":null,"s":"$13"}}]]
+14:[["children",{"s":"newsletter","h":96,"d":{"r":["$","$4","c",{"children":[null,["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]}],"p":"$@15","v":"$16","s":"$13"},"c":"$Q17"}]]
+3:[["children",{"s":"(default)","h":64,"d":{"r":["$","$4","c",{"children":[[["$","script","script-0",{"src":"/testing/pr-24/ui-testing/_next/static/chunks/197gvv2981r7g.js","async":true}]],[["$","div",null,{"className":"grid-template bg-canvas py-fluid-sm md:py-fluid-md","data-testid":"global-header","children":["$","div",null,{"className":"col-wide grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-fluid-xs sm:gap-fluid-md","children":[["$","div",null,{"className":"relative flex min-w-0 flex-wrap items-center justify-start gap-static-xs sm:gap-static-sm","children":["$","div",null,{"className":"flex min-w-0 items-center","id":"main-navigation","children":["$","$L8",null,{"locale":"en","nav":{"main":"Main","menu":"Menu","shopCategories":"Shop categories","women":"Women","men":"Men","kids":"Kids","accessories":"Accessories","porscheOriginals":"Porsche Originals","porscheDesign":"Porsche Design","newReleases":"New Releases","viewAllWomen":"Women","viewAllMen":"Men","viewAllKids":"Kids","clothing":"Apparel","bagsLuggage":"Bags & Luggage","travelTransport":"Travel & Transport","chargingHardware":"Charging Hardware","viewAllProducts":"View all products"}}]}]}],["$","div",null,{"className":"flex shrink-0 justify-center","children":[["$","$L9",null,{"className":"sm:hidden","href":"/testing/pr-24/ui-testing/inaccessible/en/"}],["$","$La",null,{"className":"max-sm:hidden shrink-0","href":"/testing/pr-24/ui-testing/inaccessible/en/","size":"small"}]]}],["$","div",null,{"className":"flex min-w-0 flex-wrap items-center justify-end gap-static-xs sm:gap-static-md","children":[["$","$Lc",null,{"copy":{"favorites":"Favorites","favoritesAriaCount":"Favorites, {count} items saved","favoritesAriaEmpty":"Favorites, no items saved yet","favoritesLiveCount":"{count} favorites saved","favoritesLiveEmpty":"No favorites saved"},"locale":"en"}],["$","$Le",null,{"copy":{"ariaLabel":"Search products","title":"Search the catalog","subtitle":"Find products by name, category or collection","queryLabel":"Search items","queryPlaceholder":"Try “cap”, “luggage”, “Porsche Design”, etc.","hint":"Type at least 2 characters. Ranked matches update as you type.","loading":"Loading catalog…","loadError":"Could not load the product list. Try again later.","emptyPrompt":"Start typing to see ranked suggestions from the full catalog.","searching":"Searching…","noMatches":"No products match that search. Try another word or browse all products.","resultCount":"{count} products","close":"Close search"},"label":"Search","locale":"en"}]]}]]}]}],["$","$L10",null,{"parallelRouterKey":"children","template":["$","$L11",null,{}]}]]]}],"p":"$@12","v":null,"s":"$13"},"c":"$Q14"}]]
+2:[["children",{"s":{"n":"locale","t":"d","k":"en","s":[]},"h":65584,"c":"$Q3"}]]
+1:[["children",{"s":"inaccessible","h":131184,"c":"$Q2"}]]
+0:{"t":{"t":{"s":"","h":131152,"c":"$Q1"},"h":{"r":["$","$4","h",{"children":[null,["$","$L1f",null,{"children":[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"}]]}],["$","$L21",null,{"children":[["$","div",null,{"hidden":true,"children":["$","$22",null,{"name":"Next.Metadata","children":[["$","title","0",{"children":"Shop"}]]}]}],null]}],null]}],"p":"$@23","v":null,"s":"$13"}},"a":"$@24","u":"$@25","b":"F1hDfImHL1dgjOUsejK38"}
+26:I[97367,["$f"],"OutletBoundary"]
+1b:["$","script","script-0",{"src":"/testing/pr-24/ui-testing/_next/static/chunks/1zakxcop6a1-z.js","async":true}]
+1c:["$","$L26",null,{"children":["$","$22",null,{"name":"Next.MetadataOutlet","children":"$@27"}]}]
+25:true
+13:300
+27:null
+13:C
+24:0
+15:"$undefined"
+12:"$undefined"
+23:"$undefined"
+1d:"$undefined"
