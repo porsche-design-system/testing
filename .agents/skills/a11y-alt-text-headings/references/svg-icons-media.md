@@ -1,5 +1,11 @@
 # SVG, Icons, Media, and Figures
 
+## Contents
+- SVG Accessibility
+- Icon Fonts
+- Video and Audio
+- Figures and Figcaptions
+
 ## SVG Accessibility
 
 ### Inline SVGs
@@ -75,7 +81,7 @@ Icon fonts are worse than SVGs for accessibility but still common:
 
 ## Video and Audio
 
-For full WCAG 1.2.x captions, audio description, live media, and player checks, **Read and apply the `a11y-media` skill**. Summary requirements:
+Full WCAG 1.2.x caption, audio description, live media, and player checks are covered by `a11y-media` in Phase 2. Summary requirements:
 
 ### Video
 

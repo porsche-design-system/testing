@@ -1,6 +1,6 @@
 ---
 name: a11y-aria
-description: "ARIA roles, states, properties, and custom widget patterns for accessibility audits."
+description: Reviews ARIA roles, states, properties, accessible names, region landmarks, and custom widget patterns against WAI-ARIA and APG rules. Use when auditing interactive components or custom widgets in Phase 7.
 user-invocable: false
 ---
 
@@ -55,8 +55,8 @@ Exception: Multiple `<nav>` elements on one page need `aria-label` to differenti
 Requirements:
 - `role="dialog"` and `aria-modal="true"` on `<dialog>`
 - `aria-labelledby` pointing to the heading
-- Focus lands on Close button immediately (no Tab needed)
-- Close button is first element inside modal
+- Initial focus follows dialog purpose (first interactive control, least destructive action for confirmations, or `tabindex="-1"` heading for complex content)
+- Visible close button inside the modal
 - Escape closes and returns focus to trigger
 - Heading starts at H2 (H1 is the page title)
 - Trigger button gets `aria-haspopup="dialog"`

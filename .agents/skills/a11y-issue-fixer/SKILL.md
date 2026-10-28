@@ -1,6 +1,6 @@
 ---
 name: a11y-issue-fixer
-description: "Apply auto-fixable and guided accessibility fixes to web source code from an audit report."
+description: Applies auto-fixable and guided accessibility fixes to web source code from an audit report and coordinates post-fix verification. Use in Phase 12 when the user opts into fixing audit findings.
 user-invocable: false
 ---
 

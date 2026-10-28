@@ -1,6 +1,6 @@
 ---
 name: a11y-export
-description: "Export accessibility audit findings to CSV, SARIF, and self-contained HTML for spreadsheets, CI code scanning, and stakeholder sharing."
+description: Exports normalized accessibility audit findings to markdown summaries, CSV, SARIF, and self-contained HTML reports. Use in Phase 11 for report summary numbers or in Phase 12 when the user requests CSV, SARIF, or HTML exports.
 user-invocable: false
 ---
 

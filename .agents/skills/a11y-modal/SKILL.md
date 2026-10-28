@@ -1,6 +1,6 @@
 ---
 name: a11y-modal
-description: "Modals, dialogs, drawers, focus traps, and overlay accessibility for audits."
+description: Reviews modal dialogs, alertdialogs, drawers, popovers, focus containment, Escape dismissal, and focus restoration. Use when auditing overlays in Phase 3.
 user-invocable: false
 ---
 
@@ -249,7 +249,7 @@ When reviewing any modal:
 ## Common Mistakes You Must Catch
 
 - Modal built from `<div>` with `role="dialog"` but no focus trapping
-- Focus landing on the heading instead of Close button
+- Always focusing the Close button in confirmation or complex-content dialogs instead of following scenario-based initial focus
 - Missing focus return on close (focus drops to top of page)
 - Nested modals (modal opens another modal) without proper focus stack
 - Backdrop click closes modal but does not return focus

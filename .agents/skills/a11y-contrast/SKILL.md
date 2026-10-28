@@ -1,6 +1,6 @@
 ---
 name: a11y-contrast
-description: "Color contrast, themes, focus indicators, and visual accessibility for audits."
+description: Checks color contrast, color-only meaning, themes, focus indicators, motion preferences, and visual accessibility. Use when auditing visual styling, CSS, or user preference media queries in Phase 5.
 user-invocable: false
 ---
 

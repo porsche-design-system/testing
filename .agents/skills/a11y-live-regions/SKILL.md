@@ -1,6 +1,6 @@
 ---
 name: a11y-live-regions
-description: "Live regions, toasts, loading states, and dynamic content announcements for audits."
+description: Audits ARIA live regions, status messages, toast notifications, loading states, and dynamic content announcements (WCAG 4.1.3). Use when reviewing asynchronous UI updates in Phase 6.
 user-invocable: false
 ---
 

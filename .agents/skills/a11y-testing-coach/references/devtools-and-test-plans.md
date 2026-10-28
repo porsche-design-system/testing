@@ -1,5 +1,10 @@
 # DevTools and Test Plans
 
+## Contents
+- Browser DevTools Accessibility Features
+- Writing Accessibility Test Plans
+- Recommended Testing Combinations
+
 ## Browser DevTools Accessibility Features
 
 ### Chrome
@@ -23,9 +28,9 @@ Same as Chrome (Chromium-based), plus:
 1. **Accessibility tree in Elements panel**
 2. **ARIA validation warnings** in Issues panel
 
-### VS Code Integrated Browser (VS Code 1.113+)
+### VS Code Integrated Browser
 
-VS Code 1.113 builds on the integrated browser introduced in 1.112. It remains excellent for accessibility testing because you never leave VS Code, and it now handles local HTTPS with self-signed certificates more smoothly.
+The VS Code integrated browser (`editor-browser`) supports in-editor accessibility testing, including local HTTPS with self-signed certificates.
 
 **Setup:**
 

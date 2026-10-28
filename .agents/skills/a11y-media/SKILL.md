@@ -1,6 +1,6 @@
 ---
 name: a11y-media
-description: "Video, audio, captions, audio description, and media alternatives (WCAG 1.2.x) for accessibility audits."
+description: Reviews video, audio, captions, audio description, transcripts, and media player accessibility (WCAG 1.2.x). Use when auditing pages with time-based media in Phase 2.
 user-invocable: false
 ---
 

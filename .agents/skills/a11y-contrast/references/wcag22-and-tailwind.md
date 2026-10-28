@@ -1,5 +1,9 @@
 # WCAG 2.2 Visual Requirements and Tailwind
 
+## Contents
+- WCAG 2.2 Visual Requirements
+- Tailwind-Specific Guidance
+
 ## WCAG 2.2 Visual Requirements
 
 ### Focus Appearance (2.4.13 -- Level AAA, recommended)

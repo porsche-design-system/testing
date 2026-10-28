@@ -1,6 +1,6 @@
 ---
 name: accessible-frontend
-description: Use when generating or modifying HTML, CSS/SCSS, JavaScript/TypeScript, JSX/TSX, Vue SFC, Astro, or MDX frontend UI (pages, forms, dialogs, tables, navigation). Targets WCAG 2.2 AA and applicable EN 301 549 requirements. Use separately installed design-system skills for component APIs when available. Svelte is not currently supported.
+description: Provides WCAG 2.2 AA and EN 301 549 accessibility guardrails and pattern rules for frontend UI code. Use when generating or modifying HTML, CSS/SCSS, JavaScript/TypeScript, JSX/TSX, Vue SFC, Astro, or MDX frontend UI (pages, forms, dialogs, tables, navigation). Use separately installed design-system skills for component APIs when available. Svelte is not currently supported.
 ---
 
 # Accessible frontend

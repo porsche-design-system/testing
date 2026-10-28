@@ -1,6 +1,6 @@
 ---
 name: a11y-severity-scoring
-description: Compute web accessibility scores (0-100, A-F grades) with severity scoring, confidence levels, and remediation tracking across audits.
+description: Normalizes accessibility findings against the rule catalog and computes web accessibility scores (0-100, A-F grades), confidence levels, and remediation deltas. Use at audit start for the finding schema and in Phase 11 for scoring and report assembly.
 user-invocable: false
 ---
 
@@ -64,15 +64,12 @@ For code review or a scanner without a native parser, write an intermediate batc
   "phase": "2",
   "findings": [
     {
-      "rule_id": "heading-order",
-      "severity": "moderate",
-      "confidence": "high",
-      "location": {"selector": "main h3"},
-      "description": "Heading level skips from h1 to h3.",
-      "impact": "Screen-reader heading navigation does not reflect the page hierarchy.",
-      "remediation": "Use an h2 for the section heading.",
-      "wcag": "1.3.1",
-      "wcag_level": "A"
+      "rule_id": "alt-text-quality",
+      "location": {"selector": "main img.hero"},
+      "description": "Hero image alt text is generic (\"image\").",
+      "impact": "Screen-reader users do not learn what the hero image conveys.",
+      "remediation": "Replace the generic alt text with a concise description of the image purpose.",
+      "phase": "2"
     }
   ]
 }

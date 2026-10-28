@@ -1,5 +1,12 @@
 # Headings, Landmarks, Titles, and Language
 
+## Contents
+- Heading Structure -- The Rules
+- Document Outline Verification
+- Page Titles
+- Language Attributes (WCAG 3.1.1 / 3.1.2)
+- Landmark Structure
+
 ## Heading Structure -- The Rules
 
 ### Rule 1: Exactly One H1 Per Page

@@ -1,6 +1,6 @@
 ---
 name: a11y-design-system
-description: "Design token contrast, focus rings, motion, and spacing for accessibility audits."
+description: Audits design tokens, CSS custom properties, and theme configs for color contrast, focus rings, touch target spacing, and motion tokens. Use when reviewing token files or theme configurations in Phase 5.
 user-invocable: false
 ---
 
@@ -51,19 +51,14 @@ Ask the user before reading any files:
 
 ## Step 2: Color Token Analysis
 
-### 1.1 WCAG Contrast Ratio Formula
+### 1.1 WCAG Contrast Thresholds and Measurement
 
-**Relative luminance** of an sRGB color `(R, G, B)` in `[0,255]`:
+Measure declared token pairs with `<a11y-contrast>/scripts/contrast.py` rather than computing luminance ratios by hand:
 
-$$L = 0.2126 \cdot R_{lin} + 0.7152 \cdot G_{lin} + 0.0722 \cdot B_{lin}$$
-
-where $C_{lin} = (C/255) / 12.92$ if $C/255 \le 0.04045$, else $((C/255 + 0.055) / 1.055)^{2.4}$
-
-**Contrast ratio:**
-
-$$\text{ratio} = \frac{L_{lighter} + 0.05}{L_{darker} + 0.05}$$
-
-**WCAG thresholds:**
+```bash
+python3 <a11y-contrast>/scripts/contrast.py "#6B7280" "#FFFFFF" --suggest
+python3 <a11y-contrast>/scripts/contrast.py --batch $SCRATCH/token-pairs.json --suggest
+```
 
 | Use case | AA minimum | AAA minimum |
 |----------|-----------|------------|

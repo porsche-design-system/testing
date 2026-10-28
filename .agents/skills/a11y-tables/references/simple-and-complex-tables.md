@@ -1,5 +1,9 @@
 # Simple and Complex Tables
 
+## Contents
+- Simple Data Tables
+- Complex Tables
+
 ## Simple Data Tables
 
 ### The Basics

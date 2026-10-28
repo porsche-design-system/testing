@@ -1,5 +1,13 @@
 # Alt Text Patterns
 
+## Contents
+- W3C Image Categories
+- The `<picture>` Element
+- CSS Background Images
+- Logo Alt Text
+- Form Image Buttons
+- Alternative Text -- The Rules
+
 ## W3C Image Categories
 
 The W3C WAI Images Tutorial defines seven image categories. Identifying the category determines the correct alt text approach:

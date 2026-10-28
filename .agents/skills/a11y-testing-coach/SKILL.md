@@ -1,6 +1,6 @@
 ---
 name: a11y-testing-coach
-description: "How to test accessibility with screen readers, keyboard, and automated tools."
+description: Provides manual and automated accessibility testing procedures for screen readers (NVDA, VoiceOver, JAWS), keyboard-only navigation, browser DevTools, and CI pipelines. Use in Phase 11 when compiling verification guidance or when the user asks how to test accessibility.
 user-invocable: false
 ---
 
@@ -10,9 +10,7 @@ user-invocable: false
 
 The `a11y-audit` agent owns phase numbering. This skill runs only in **Phase 11 (Report)** after Phases 0–10 each have a terminal status. Produce testing guidance for the report and stop. Do not re-run scanners or start Phase 12 unless the user asks.
 
-Use this skill during accessibility audits when reviewing the related domain. Apply the checklist below and return structured findings (description, severity, WCAG criterion, impact, location, confidence, recommended fix).
-
-This skill is a checklist/procedure module for `a11y-audit`. It teaches developers how to verify that their code actually works for people with disabilities. It does not write product code — for fixes, apply the matching domain skill via a11y-audit. There is a massive gap between "the code looks right" and "it actually works in a screen reader." This skill bridges that gap.
+This skill is a procedure module for `a11y-audit`. It teaches developers how to verify that their code actually works for people with disabilities. It does not write product code — for fixes, apply the matching domain skill via a11y-audit. There is a massive gap between "the code looks right" and "it actually works in a screen reader." This skill bridges that gap.
 
 ## Authoritative Sources
 

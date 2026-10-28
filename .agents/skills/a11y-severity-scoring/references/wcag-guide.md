@@ -1,6 +1,15 @@
-# A11y Wcag Guide
+# WCAG Guide
 
-Use this skill during accessibility audits when reviewing the related domain. Apply the checklist below and return structured findings (description, severity, WCAG criterion, impact, location, confidence, recommended fix).
+Plain-language reference for Web Content Accessibility Guidelines (WCAG 2.0, 2.1, and 2.2) success criteria, conformance levels, version diffs, and common misconceptions. Use when explaining criteria in Phase 11 reports, deep-dive audits, or developer "why?" questions. Never make legal compliance claims, and cover AAA only when asked.
+
+## Contents
+- Authoritative Sources
+- WCAG Structure
+- Complete WCAG 2.2 AA Success Criteria Reference
+- What Changed in WCAG 2.2 (vs 2.1)
+- Common WCAG Misconceptions
+- Understanding "Sufficient Techniques" vs "Advisory Techniques"
+- How to Answer WCAG Questions
 
 ## Authoritative Sources
 
@@ -10,29 +19,6 @@ Use this skill during accessibility audits when reviewing the related domain. Ap
 - **Understanding WCAG 2.2** — https://www.w3.org/WAI/WCAG22/Understanding/
 - **WCAG 2.2 What's New** — https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/
 - **Techniques for WCAG 2.2** — https://www.w3.org/WAI/WCAG22/Techniques/
-
-# WCAG Guide
-
-This skill is a checklist/procedure module for `a11y-audit`. It teaches the Web Content Accessibility Guidelines in plain language with practical examples. It does not write or review code — for implementation guidance, apply the matching domain skill via a11y-audit. When a developer asks "what does WCAG 1.4.11 mean?" or "what changed in WCAG 2.2?", give a clear, actionable answer - not a link to the W3C spec wall.
-
-## Your Scope
-
-- WCAG 2.0, 2.1, and 2.2 success criteria explanations
-- Conformance levels (A, AA, AAA) and what they mean
-- What changed between WCAG versions
-- When specific criteria apply and don't apply
-- Common misconceptions about WCAG
-- The intent behind criteria (why the rules exist)
-- Sufficient techniques vs advisory techniques
-- Understanding statements of conformance
-- How WCAG applies to different content types (web apps, SPAs, mobile web, documents)
-
-## You Do NOT
-
-- Write or review code (apply the matching domain skill via a11y-audit)
-- Run tests (apply a11y-testing-coach via a11y-audit)
-- Make legal claims about compliance
-- Cover WCAG AAA unless specifically asked (the team targets AA)
 
 ---
 
@@ -54,7 +40,7 @@ Everything in WCAG falls under one of four principles:
 | Level | Meaning | Required? |
 |-------|---------|-----------|
 | **A** | Bare minimum. Without this, some users literally cannot access the content. | Yes - always required |
-| **AA** | The standard target. Covers the majority of accessibility barriers. Most laws reference AA. | Yes - the A11y Agent Team targets AA |
+| **AA** | The standard target. Covers the majority of accessibility barriers. Most laws reference AA. | Yes - standard target |
 | **AAA** | Enhanced. Ideal but not always achievable for all content types. | Optional - nice to have |
 
 **Important:** Conformance is inclusive. "Conforms to AA" means ALL Level A criteria AND all Level AA criteria are met. You cannot claim AA while failing any Level A criteria.
@@ -416,6 +402,6 @@ ratio 1.6:1 - the border is nearly invisible).
 Does NOT apply to: Disabled/inactive controls, purely decorative elements, 
 photographs, logos.
 
-For code-level contrast checking, use @a11y-contrast.
+For code-level contrast checking, apply `a11y-contrast` via `a11y-audit`.
 ```
 
