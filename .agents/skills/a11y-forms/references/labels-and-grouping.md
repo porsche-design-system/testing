@@ -1,5 +1,11 @@
 # Labels, Help Text, Required Fields, and Grouping
 
+## Contents
+- Labels -- The Foundation
+- Help Text and Descriptions
+- Required Fields
+- Grouping with Fieldset and Legend
+
 ## Labels -- The Foundation
 
 Every form control MUST have a programmatically associated label. Visual proximity is not enough -- screen readers need explicit association.

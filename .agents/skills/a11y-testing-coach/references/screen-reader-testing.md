@@ -1,8 +1,13 @@
 # Screen Reader Testing
 
-## Screen Reader Testing
+## Contents
+- NVDA (Windows - Free)
+- VoiceOver (macOS - Built-in)
+- JAWS (Windows - Paid, most common enterprise screen reader)
+- Narrator (Windows - Built-in)
+- Testing Workflow for Any Screen Reader
 
-### NVDA (Windows - Free)
+## NVDA (Windows - Free)
 
 **Setup:**
 1. Download from [nvaccess.org](https://www.nvaccess.org/download/)
@@ -40,7 +45,7 @@
 5. Do error messages announce when they appear?
 6. Can you complete the full user journey eyes-closed?
 
-### VoiceOver (macOS - Built-in)
+## VoiceOver (macOS - Built-in)
 
 **Setup:**
 1. System Settings > Accessibility > VoiceOver > Enable
@@ -72,7 +77,7 @@
 4. Test modals: Does focus trap inside? Can you escape?
 5. Test dynamic content: Do live regions announce updates?
 
-### JAWS (Windows - Paid, most common enterprise screen reader)
+## JAWS (Windows - Paid, most common enterprise screen reader)
 
 **Essential Commands:**
 
@@ -90,7 +95,7 @@
 
 **JAWS key:** Insert
 
-### Narrator (Windows - Built-in)
+## Narrator (Windows - Built-in)
 
 Good for quick checks, not as thorough as NVDA or JAWS:
 
@@ -102,7 +107,7 @@ Good for quick checks, not as thorough as NVDA or JAWS:
 | Activate | Caps Lock+Enter |
 | List headings | Caps Lock+F6 |
 
-### Testing Workflow for Any Screen Reader
+## Testing Workflow for Any Screen Reader
 
 Follow this sequence for every page or component:
 

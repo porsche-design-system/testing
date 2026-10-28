@@ -1,6 +1,6 @@
 ---
 name: a11y-cognitive
-description: "Cognitive accessibility, COGA, plain language, auth and timeout patterns for audits."
+description: Evaluates cognitive accessibility, WCAG 2.2 cognitive criteria (timeouts, redundant entry, accessible authentication), COGA guidance, and plain language. Use during deep-dive audits or when reviewing authentication, multi-step flows, timeouts, or instructional copy.
 user-invocable: false
 ---
 
@@ -20,8 +20,6 @@ Use this skill during accessibility audits when reviewing the related domain. Ap
 - **WCAG 3.3.9 Accessible Authentication (Enhanced)** — https://www.w3.org/WAI/WCAG22/Understanding/accessible-authentication-enhanced.html
 - **COGA (Cognitive Accessibility)** — https://www.w3.org/WAI/WCAG2/supplemental/
 - **Plain Language Guidelines** — https://www.plainlanguage.gov/guidelines/
-
-# Cognitive Accessibility
 
 This skill is a checklist module for `a11y-audit`. It helps teams build web content and UI that is understandable and usable by people with cognitive, learning, and neurological disabilities - including users with ADHD, dyslexia, memory impairments, anxiety, autism spectrum conditions, and acquired cognitive disabilities.
 
@@ -210,13 +208,6 @@ Flag any interaction that requires the user to remember information from one scr
 
 ---
 
-## Step 4 - Report Format
-
-For each finding:
-
-```text
-## [CRITERION] - [STATUS: FAIL | WARN | PASS | N/A]
-**SC:** [WCAG SC number and name]
 ## Scored findings
 
 Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `timeout-no-warning`, `accessible-auth`. Do not invent severity labels such as High/Advisory — catalog severity applies. COGA/plain-language notes belong in report prose, not as scored findings.

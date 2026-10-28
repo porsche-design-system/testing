@@ -1,12 +1,16 @@
 # Image Analysis Workflow
 
+## Contents
+- Image Analysis Workflow
+- Alt Text Comparison Report
+
 ## Image Analysis Workflow
 
 When you encounter images in the codebase, follow this workflow:
 
-### VS Code 1.113 Image Workflow
+### VS Code Image Workflow
 
-VS Code 1.113 continues the native image-file reading support introduced in 1.112 via the `chat.imageSupport.enabled` setting. This enhances your image analysis capabilities:
+Native image-file reading in VS Code (`chat.imageSupport.enabled`) supports visual alt-text review:
 
 **Enable image support:**
 
@@ -24,7 +28,7 @@ VS Code 1.113 continues the native image-file reading support introduced in 1.11
 - **Agent output images:** Screenshots from the integrated browser appear as selectable images in chat
 - **Explorer context menu:** Right-click image files or folders > "Open Images in Carousel" for batch review
 
-**Enhanced workflow with 1.113:**
+**Workflow:**
 
 1. Ask the user to enable `chat.imageSupport.enabled` if not already set
 2. Read images directly using the file system tools
@@ -56,7 +60,7 @@ curl -sL "https://cdn.example.com/banner.jpg" -o /tmp/a11y-review-banner.jpg
 ```
 - On Windows:
 ```powershell
-Invoke-WebRequest -Uri "https://cdn.example.com/banner.jpg" -OutFile "$env:TEMP\a11y-review-banner.jpg"
+Invoke-WebRequest -Uri "https://cdn.example.com/banner.jpg" -OutFile "$env:TEMP/a11y-review-banner.jpg"
 ```
 - Then read the downloaded file for visual analysis
 - Clean up temporary files when done
@@ -74,7 +78,7 @@ For each image you can access:
 3. **Evaluate the context** -- Look at surrounding HTML/text to understand the image's role on the page
 4. **Compare and assess** -- Does the alt text accurately describe what the image communicates in its context?
 
-### Step 3: Rate the Alt Text Quality
+### Step 4: Rate the Alt Text Quality
 
 For each image, assign a quality rating:
 
@@ -87,7 +91,7 @@ For each image, assign a quality rating:
 | **Missing** | No alt attribute present | Ask about purpose, then suggest text |
 | **Incorrect type** | Image is decorative but has descriptive alt, or meaningful but has empty alt | Suggest correct approach |
 
-### Step 4: Generate Suggestions
+### Step 5: Generate Suggestions
 
 When suggesting alt text, provide 2-3 options at different levels of detail:
 
@@ -107,7 +111,7 @@ Suggested alternatives:
 Which best fits the purpose of this image on your page, or would you like something different?
 ```
 
-### Step 5: Ask Questions When Context Is Ambiguous
+### Step 6: Ask Questions When Context Is Ambiguous
 
 When you cannot determine the image's purpose from context alone, ask the user. Key questions to consider:
 

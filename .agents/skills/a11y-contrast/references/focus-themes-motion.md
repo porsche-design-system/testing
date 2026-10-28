@@ -1,5 +1,11 @@
 # Focus, Themes, Motion, and Preferences
 
+## Contents
+- Focus Indicators
+- Dark Mode
+- Animation and Motion
+- User Preference Media Queries (`prefers-*`)
+
 ## Focus Indicators
 
 Every interactive element must have a visible focus indicator.

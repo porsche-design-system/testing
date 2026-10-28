@@ -1,6 +1,6 @@
 ---
 name: a11y-text-quality
-description: "Quality of alt text, aria-labels, and accessible names for accessibility audits."
+description: Evaluates the quality of non-visual text strings (alt text, aria-label, accessible names) for unresolved template variables, code identifiers, placeholder tokens, and filenames. Use when auditing text alternatives and accessible names in Phase 2.
 user-invocable: false
 ---
 
@@ -401,6 +401,3 @@ If the image is truly decorative and needs no alt text:
 Return catalog-valid finding objects to `a11y-audit`; do not write a shared batch file. The orchestrator writes immutable `$SCRATCH/findings-agent-phase-<N>-page-<M>.json` batches. **May emit:** `accessible-name-quality`, `alt-text-quality`. Map template syntax, an entire placeholder token, or a dotted identifier to `accessible-name-quality`; generic or filename alt to `alt-text-quality`. Do not invent TQR-* ids. Do not treat brand camelCase such as `iPhone` as a failure.
 
 Skip findings whose accessible name is inside a code editor, code sample, or developer-tools UI.
-
-## How to Report Issues
-

@@ -1,6 +1,6 @@
 ---
 name: a11y-keyboard
-description: "Keyboard navigation, tab order, focus management, and shortcuts for accessibility audits."
+description: Reviews keyboard navigation, tab order, focus management, roving tabindex, skip links, and shortcut conflicts. Use when auditing keyboard operability and focus behavior in Phase 3.
 user-invocable: false
 ---
 

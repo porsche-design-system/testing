@@ -1,6 +1,6 @@
 ---
 name: a11y-forms
-description: "Forms, labels, validation, errors, and multi-step wizards for accessibility audits."
+description: Audits form inputs, labels, fieldsets, validation errors, autocomplete attributes, and multi-step wizards. Use when reviewing forms or interactive input controls in Phase 4.
 user-invocable: false
 ---
 

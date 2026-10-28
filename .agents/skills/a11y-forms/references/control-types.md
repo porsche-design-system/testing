@@ -1,5 +1,13 @@
 # Control Types
 
+## Contents
+- Select Elements
+- Checkboxes and Radio Buttons
+- Password Fields
+- File Uploads
+- Search Forms
+- Date and Time Inputs
+
 ## Select Elements
 
 ```html

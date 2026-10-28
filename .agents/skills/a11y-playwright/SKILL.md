@@ -1,6 +1,6 @@
 ---
 name: a11y-playwright
-description: Browser behavioural accessibility testing using Playwright and @axe-core/playwright. Focus order, keyboard traps, viewport reflow, target geometry, accessibility tree snapshots, coverage gaps, and post-fix verification.
+description: Runs browser behavioural accessibility scans using Playwright and @axe-core/playwright for axe baselines, accessibility tree snapshots, keyboard traversal, viewport reflow, target geometry, and post-fix verification. Use in Phase 1, Phase 10, and Phase 12 verification.
 user-invocable: false
 ---
 

@@ -2,6 +2,11 @@
 
 Load this reference only when `scripts/a11y-scan.mjs` does not cover the case — a bespoke interaction sequence, a scoped scan of one widget, or a single-rule re-check. For standard page scans, run the script instead of writing new code.
 
+## Contents
+- @axe-core/playwright Patterns
+- Keyboard Traversal Patterns
+- Focus Management Test Templates
+
 ## @axe-core/playwright Patterns
 
 ### Full Page Scan

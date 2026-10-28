@@ -10,8 +10,10 @@ targets:
   - cursor
 dependencies:
   apm:
-    - porsche-design-system/skills/packages/web-accessibility-codegen#web-accessibility-codegen--v0.2.0
-    - porsche-design-system/skills/packages/web-accessibility-audit#web-accessibility-audit--v0.4.0
+    # Quote entries so YAML does not treat # as a comment.
+    # Prefer ">=x.y.0 <1.0.0" over ^x.y.0: for 0.x, caret only allows patch bumps.
+    - "porsche-design-system/skills/packages/web-accessibility-codegen#>=0.2.0 <1.0.0"
+    - "porsche-design-system/skills/packages/web-accessibility-audit#>=0.4.0 <1.0.0"
   mcp: []
 includes: auto
 scripts: {}

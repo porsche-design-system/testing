@@ -1,5 +1,10 @@
 # Responsive Tables, Pagination, and Empty States
 
+## Contents
+- Responsive Tables
+- Pagination
+- Empty States
+
 ## Responsive Tables
 
 ### Approach 1: Horizontal Scroll

@@ -1,6 +1,6 @@
 ---
 name: a11y-testing-strategy
-description: Accessibility testing decision trees, browser/AT compatibility matrices, manual vs. automated test coverage, regression testing patterns, and acceptance criteria templates for user stories.
+description: Provides accessibility testing decision trees, browser and screen-reader compatibility matrices, manual vs. automated coverage boundaries, and user-story acceptance criteria templates. Use in Phase 11 when assembling test strategy recommendations.
 user-invocable: false
 ---
 

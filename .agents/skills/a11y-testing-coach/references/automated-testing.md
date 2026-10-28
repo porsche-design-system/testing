@@ -1,5 +1,12 @@
 # Automated Testing
 
+## Contents
+- What Automation Catches (~30% of issues)
+- What Automation Cannot Catch (~70% of issues)
+- axe-core (The Gold Standard)
+- Pa11y (CLI and CI)
+- CI/CD Pipeline
+
 ## Automated Testing
 
 ### What Automation Catches (~30% of issues)

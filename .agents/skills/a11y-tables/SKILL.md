@@ -1,6 +1,6 @@
 ---
 name: a11y-tables
-description: "Data tables, grids, headers, scope, caption, and sortable tables for audits."
+description: Audits data tables, ARIA grids, headers, scope, captions, sortable columns, row selection, pagination, and layout tables. Use when reviewing tabular data or visual data grids in Phase 8.
 user-invocable: false
 ---
 

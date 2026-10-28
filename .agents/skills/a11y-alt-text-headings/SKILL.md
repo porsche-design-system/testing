@@ -1,6 +1,6 @@
 ---
 name: a11y-alt-text-headings
-description: "Images, alt text, headings, landmarks, and document outline for accessibility audits."
+description: Reviews images, alt text, SVGs, headings, landmarks, page titles, and language attributes for accessibility audits. Use when auditing document structure, heading hierarchy, landmarks, or image text alternatives in Phase 2.
 user-invocable: false
 ---
 

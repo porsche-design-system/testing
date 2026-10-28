@@ -1,6 +1,6 @@
 ---
 name: a11y-links
-description: "Ambiguous link text and link purpose (WCAG 2.4.4 / 2.4.9) for accessibility audits."
+description: Reviews link text clarity, ambiguous link names, repeated links, and link purpose (WCAG 2.4.4 / 2.4.9). Use when auditing navigation and hyperlinks in Phase 9.
 user-invocable: false
 ---
 
@@ -411,6 +411,3 @@ Chat summary (optional, not scored):
 ## Link Checker Findings Summary
 - **Issues found:** [count]
 ```
-
-## How to Report Issues
-
